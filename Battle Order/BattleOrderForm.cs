@@ -3,69 +3,73 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Battle_Order
+namespace BattleOrder
 {
     public partial class BattleOrderForm : Form
     {
-        private List<Participant> party = new List<Participant>();
-        private List<Participant> enemies = new List<Participant>();
-        private List<Participant> monsterDatabase = new List<Participant>();
-        private Random random = new Random();
-        private Int32 roundCount = 0;
-        private Double minimum;
-        private Boolean stop = false;
+        private List<Participant> party;
+        private List<Participant> enemies;
+        private List<Participant> monsterDatabase;
+        private Random random;
+        private Int32 roundCount;
+        private Double min;
+        private Boolean stop;
         private String partyFileName;
         private String currentPartyMember;
         private String currentEnemy;
         private FileAccessor fileAccessor;
 
-        //****************************************************************************************************
-        //Controls resetting of minimum value for placement
-        public double Minimum
+        private Double minimum
         {
-            get { return minimum; }
+            get { return min; }
             set
             {
-                if (value < minimum)
-                    minimum = value;
+                if (value < min)
+                    min = value;
+                else if (value == 11)
+                    min = 11;
                 else if (value > 10)
-                {
-                    if (value == 11)
-                        minimum = 11;
-                    else
-                        MessageBox.Show("Error: Placement over 10", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                    MessageBox.Show("Error: Placement over 10", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        //**************************************************
-        //Constructor for form, loads monster database, sees if want to load party from onset
         public BattleOrderForm()
         {
+            party = new List<Participant>();
+            enemies = new List<Participant>();
+            monsterDatabase = new List<Participant>();
+            random = new Random();
+            roundCount = 0;
+            stop = false;
             InitializeComponent();
-            var saveDirectory = FileAccessor.GetSaveDirectoryFromWorkingDirectory();
-            fileAccessor = new FileAccessor();
-            FileStream input;
-            BinaryFormatter binary = new BinaryFormatter();
 
-            try { input = new FileStream("C:\\Users\\Andrew Wiggin\\Documents\\Dungeons and Dragons\\Battle Order Parties\\MonsterDatabase", FileMode.Open, FileAccess.Read); }
+            var saveDirectory = FileAccessor.GetSaveDirectoryFromWorkingDirectory();
+            fileAccessor = new FileAccessor(saveDirectory);
+            FileStream input;
+
+            try
+            {
+                input = new FileStream(saveDirectory, FileMode.Open, FileAccess.Read);
+            }
             catch (FileNotFoundException)
             {
-                FileStream output = new FileStream("C:\\Users\\Andrew Wiggin\\Documents\\Dungeons and Dragons\\Battle Order Parties\\MonsterDatabase", FileMode.OpenOrCreate, FileAccess.Read);
+                FileStream output = new FileStream(saveDirectory, FileMode.OpenOrCreate, FileAccess.Read);
                 output.Close();
-                input = new FileStream("C:\\Users\\Andrew Wiggin\\Documents\\Dungeons and Dragons\\Battle Order Parties\\MonsterDatabase", FileMode.Open, FileAccess.Read);
+                input = new FileStream(saveDirectory, FileMode.Open, FileAccess.Read);
             }
 
             while (true)
             {
                 try
                 {
+                    var binary = new BinaryFormatter();
                     var New = (Participant)binary.Deserialize(input);
                     AddParticipant(monsterDatabase, New);
                     MonsterNameCombo.Items.Add(New.Name);
@@ -80,7 +84,62 @@ namespace Battle_Order
 
             var result = MessageBox.Show("Load a party?", "Load?", MessageBoxButtons.YesNo, MessageBoxIcon.None);
             if (result == DialogResult.Yes)
-                LoadMethod();
+                LoadParty();
+        }
+
+        private void LoadParty()
+        {
+            var binary = new BinaryFormatter();
+            var open = new OpenFileDialog();
+            var result = open.ShowDialog();
+
+            if (result == DialogResult.Cancel)
+                return;
+            partyFileName = open.FileName;
+
+            if (partyFileName == "" || partyFileName == null)
+            {
+                MessageBox.Show("Empty file name.  Cannot open the file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var input = new FileStream(partyFileName, FileMode.Open, FileAccess.Read);
+
+            party = new List<Participant>();
+            PartyChecklist.Items.Clear();
+
+            while (true)
+            {
+                try
+                {
+                    var New = (Participant)binary.Deserialize(input);
+                    AddParticipant(party, New);
+                    PartyChecklist.Items.Add(New.Name, true);
+                }
+                catch (SerializationException)
+                {
+                    break;
+                }
+            }
+
+            input.Close();
+
+            foreach (Participant goodguy in party)
+            {
+                foreach (Attack attack in goodguy.Attacks)
+                {
+                    if (attack.Name == "(None)")
+                        goodguy.Attacks.Remove(attack);
+                    break;
+                }
+                goodguy.TotalReset();
+            }
+
+            PartyAttackCombo.Items.Clear();
+            PartyAttackCombo.Text = "";
+            PartyNameText.Text = "";
+            PartyPerRoundText.Text = "";
+            PartySpeedText.Text = "";
         }
 
         //***********************************************************************
@@ -136,7 +195,7 @@ namespace Battle_Order
                             {
                                 if (attack.Prepped)
                                 {
-                                    if (goodguy.CurrentAttacks.Length == 1)
+                                    if (goodguy.CurrentAttacks.Count() == 1)
                                     {
                                         MessageBox.Show("This attack has been already entered, and is prepped as the current attack.  You're being of the redundant, dufus.", "Error, dufus.");
                                         stop = true;
@@ -158,7 +217,7 @@ namespace Battle_Order
                                 }
                                 else
                                 {
-                                    if (goodguy.CurrentAttacks.Length > 0)
+                                    if (goodguy.CurrentAttacks.Any())
                                     {
                                         string message = String.Format("This attack has already been entered.  Make it a current attack?\n\nPress \"Yes\" to switch {0}'s current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s attacks, in addition to {1}.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", goodguy.Name, goodguy.CurrentAttacksToString(), NewAttack.Name);
                                         DialogResult result = MessageBox.Show(message, "Switch?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
@@ -190,7 +249,7 @@ namespace Battle_Order
                                 {
                                     goodguy.Attacks.Remove(attack);
 
-                                    if (goodguy.CurrentAttacks.Length > 0)
+                                    if (goodguy.CurrentAttacks.Any())
                                     {
                                         var message = String.Format("{0} already has an attack prepared.  Switch attack to new attack?\n\nPress \"Yes\" to switch {0}'s current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s attacks, in addition to {1}.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", goodguy.Name, goodguy.CurrentAttacksToString(), NewAttack.Name);
                                         result = MessageBox.Show(message, "Attack already there", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
@@ -214,7 +273,7 @@ namespace Battle_Order
                         }
                         if (!stop)
                         {
-                            if (goodguy.CurrentAttacks.Length > 0)
+                            if (goodguy.CurrentAttacks.Any())
                             {
                                 var message = String.Format("{0} already has an attack prepared.  Switch attack to new attack?\n\nPress \"Yes\" to switch {0}'s current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s attacks, in addition to {1}.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", goodguy.Name, goodguy.CurrentAttacksToString(), NewAttack.Name);
                                 var result = MessageBox.Show(message, "Attack already there", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
@@ -442,14 +501,14 @@ namespace Battle_Order
                         bool AttackThere = false;
                         foreach (Attack attack in databaseEntry.Attacks)
                         {
-                            if (SameTest(NewAttack, attack))
+                            if (NewAttack.Equals(attack))
                             {
                                 if (EditMonsterDatabaseCheckbox.Checked)
                                 {
-                                    if (databaseEntry.CurrentAttacks.Length > 0)
+                                    if (databaseEntry.CurrentAttacks.Any())
                                     {
-                                        string message = String.Format("Make {2} a standard current attack for {0}s?\n\nPress \"Yes\" to switch {0}'s standard current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s standard current attacks, in addition to {1}.\nPress \"Cancel\" to not make {2} a standard current attack for {0}s.", databaseEntry.Name, databaseEntry.CurrentAttacksToString(), NewAttack.Name);
-                                        DialogResult result = MessageBox.Show(message, "Edit the Monster Database?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
+                                        var message = String.Format("Make {2} a standard current attack for {0}s?\n\nPress \"Yes\" to switch {0}'s standard current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s standard current attacks, in addition to {1}.\nPress \"Cancel\" to not make {2} a standard current attack for {0}s.", databaseEntry.Name, databaseEntry.CurrentAttacksToString(), NewAttack.Name);
+                                        var result = MessageBox.Show(message, "Edit the Monster Database?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
                                         if (result == DialogResult.Yes)
                                         {
                                             foreach (Attack attack2 in databaseEntry.Attacks)
@@ -465,7 +524,7 @@ namespace Battle_Order
                                 AttackThere = true;
                                 break;
                             }
-                            else if (!SameTest(NewAttack, attack) && NewAttack.Name == attack.Name && EditMonsterDatabaseCheckbox.Checked)
+                            else if (!NewAttack.Equals(attack) && NewAttack.Name == attack.Name && EditMonsterDatabaseCheckbox.Checked)
                             {
                                 AttackThere = true;
                                 string message = String.Format("The attack data for {1} in the Monster Database is different than what you entered.  Did you mean to edit the attack data?  (This will also change the data for any monsters currently in battle)", attack.Name, databaseEntry.Name);
@@ -515,7 +574,7 @@ namespace Battle_Order
                         }
                         if (!AttackThere)
                         {
-                            if (databaseEntry.CurrentAttacks.Length > 0 && EditMonsterDatabaseCheckbox.Checked)
+                            if (databaseEntry.CurrentAttacks.Any() && EditMonsterDatabaseCheckbox.Checked)
                             {
                                 var message = String.Format("Make {2} a standard current attack for {0}s?\n\nPress \"Yes\" to switch {0}'s standard current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s standard current attacks, in addition to {1}.\nPress \"Cancel\" to not make {2} a standard current attack for {0}s.", databaseEntry.Name, databaseEntry.CurrentAttacksToString(), NewAttack.Name);
                                 var result = MessageBox.Show(message, "Edit the Monster Database?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
@@ -558,11 +617,11 @@ namespace Battle_Order
 
                             foreach (var attack in badguy.Attacks)
                             {
-                                if (SameTest(attack, NewAttack))
+                                if (NewAttack.Equals(attack))
                                 {
                                     if (attack.Prepped)
                                     {
-                                        if (badguy.CurrentAttacks.Length == 1)
+                                        if (badguy.CurrentAttacks.Count() == 1)
                                         {
                                             var message = String.Format("This attack has been already entered, and is prepped as {0}'s current attack.  You're being of the redundant, dufus.", badguy.Name);
                                             MessageBox.Show(message, "Error, dufus.");
@@ -585,7 +644,7 @@ namespace Battle_Order
                                     }
                                     else
                                     {
-                                        if (badguy.CurrentAttacks.Length > 0)
+                                        if (badguy.CurrentAttacks.Any())
                                         {
                                             var message = String.Format("This attack has already been entered.  Make it a current attack?\n\nPress \"Yes\" to switch {0}'s current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s attacks, in addition to {1}.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", badguy.Name, badguy.CurrentAttacksToString(), NewAttack.Name);
                                             var result = MessageBox.Show(message, "Switch?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
@@ -609,7 +668,7 @@ namespace Battle_Order
                                         break;
                                     }
                                 }
-                                else if (!SameTest(attack, NewAttack) && attack.Name == NewAttack.Name)
+                                else if (!NewAttack.Equals(attack) && attack.Name == NewAttack.Name)
                                 {
                                     stop = true;
                                     var message = String.Format("The attack data does not match.  Did you mean to edit the attack data for {1}'s {0}?", attack.Name, badguy.Name);
@@ -617,9 +676,9 @@ namespace Battle_Order
                                     if (result == DialogResult.Yes)
                                     {
                                         badguy.Attacks.Remove(attack);
-                                        badguy.AddAttack(newbadguy.Attacks.Last.Value);
-                                        badguy.Attacks.Find(newbadguy.Attacks.Last.Value).Value.Prepped = false;
-                                        if (badguy.CurrentAttacks.Length > 0)
+                                        badguy.AddAttack(newbadguy.Attacks.Last());
+                                        badguy.Attacks[badguy.Attacks.Count - 1].Prepped = false;
+                                        if (badguy.CurrentAttacks.Any())
                                         {
                                             message = String.Format("{0} already has an attack prepared.  Switch attack to new attack?\n\nPress \"Yes\" to switch {0}'s current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s attacks, in addition to {1}.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", badguy.Name, badguy.CurrentAttacksToString(), NewAttack.Name);
                                             result = MessageBox.Show(message, "Add to current attacks?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
@@ -627,13 +686,13 @@ namespace Battle_Order
                                             if (result == DialogResult.Yes)
                                                 foreach (var attack2 in badguy.Attacks)
                                                     attack2.Prepped = false;
-                                            
+
                                             if (result == DialogResult.No || result == DialogResult.Yes)
-                                                badguy.Attacks.Find(newbadguy.Attacks.Last.Value).Value.Prepped = true;
+                                                badguy.Attacks[badguy.Attacks.Count - 1].Prepped = true;
                                         }
                                         else
                                         {
-                                            badguy.Attacks.Find(newbadguy.Attacks.Last.Value).Value.Prepped = true;
+                                            badguy.Attacks[badguy.Attacks.Count - 1].Prepped = true;
                                         }
                                         break;
                                     }
@@ -642,23 +701,23 @@ namespace Battle_Order
 
                             if (!stop)
                             {
-                                badguy.AddAttack(newbadguy.Attacks.Last.Value);
-                                badguy.Attacks.Find(newbadguy.Attacks.Last.Value).Value.Prepped = false;
-                                if (badguy.CurrentAttacks.Length > 0)
+                                badguy.AddAttack(newbadguy.Attacks.Last());
+                                badguy.Attacks[badguy.Attacks.Count - 1].Prepped = false;
+                                if (badguy.CurrentAttacks.Any())
                                 {
-                                    string message = String.Format("{0} already has an attack prepared.  Switch attack to new attack?\n\nPress \"Yes\" to switch {0}'s current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s attacks, in addition to {1}.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", badguy.Name, badguy.CurrentAttacksToString(), NewAttack.Name);
-                                    DialogResult result = MessageBox.Show(message, "Add to current attacks?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
+                                    var message = String.Format("{0} already has an attack prepared.  Switch attack to new attack?\n\nPress \"Yes\" to switch {0}'s current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s attacks, in addition to {1}.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", badguy.Name, badguy.CurrentAttacksToString(), NewAttack.Name);
+                                    var result = MessageBox.Show(message, "Add to current attacks?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
                                     if (result == DialogResult.Yes)
                                     {
                                         foreach (Attack attack in badguy.Attacks)
                                             attack.Prepped = false;
-                                        badguy.Attacks.Find(newbadguy.Attacks.Last.Value).Value.Prepped = true;
+                                        badguy.Attacks[badguy.Attacks.Count - 1].Prepped = true;
                                     }
                                     else if (result == DialogResult.No)
-                                        badguy.Attacks.Find(newbadguy.Attacks.Last.Value).Value.Prepped = true;
+                                        badguy.Attacks[badguy.Attacks.Count - 1].Prepped = true;
                                 }
                                 else
-                                    badguy.Attacks.Find(newbadguy.Attacks.Last.Value).Value.Prepped = true;
+                                    badguy.Attacks[badguy.Attacks.Count - 1].Prepped = true;
                             }
                             else
                                 break;
@@ -689,62 +748,60 @@ namespace Battle_Order
             Save();
         }
 
-        //*************************************************************************
-        //Figures out proper placement for all participants and prompts with messages who should go when
         private void ComputeRound()
         {
-            string output = "";
-            Queue<Participant> OrderedAttacks = new Queue<Participant>();
+            var output = String.Empty;
+            var orderedAttacks = new Queue<Participant>();
 
-            foreach (Participant goodguy in party)
-                if (PartyChecklist.CheckedItems.Contains(goodguy.Name))
-                    foreach (Attack attack in goodguy.CurrentAttacks)
-                        attack.SetPlacement(goodguy.Initiative);
-            foreach (Participant badguy in enemies)
-                if (MonsterChecklist.CheckedItems.Contains(badguy.Name))
-                    foreach (Attack attack in badguy.CurrentAttacks)
-                        attack.SetPlacement(badguy.Initiative);
+            var activeParticipants = new List<Participant>();
+
+            var activeGoodGuys = party.Where(x => PartyChecklist.CheckedItems.Contains(x.Name));
+            activeParticipants.AddRange(activeGoodGuys);
+
+            var activeBadGuys = enemies.Where(x => MonsterChecklist.CheckedItems.Contains(x.Name));
+            activeParticipants.AddRange(activeBadGuys);
+
+            foreach (var participant in activeParticipants)
+                foreach (var attack in participant.CurrentAttacks)
+                    attack.SetPlacement(participant.Initiative);
+
 
             while(true)
             {
-                Minimum = 11;
+                minimum = 11;
 
-                foreach (Participant goodguy in party)
-                    foreach (Attack attack in goodguy.CurrentAttacks)
+                foreach (var participant in activeParticipants)
+                    foreach (var attack in participant.CurrentAttacks)
                         if (attack.Placement != 11)
-                            Minimum = attack.Placement;
+                            minimum = attack.Placement;
 
-                foreach (Participant badguy in enemies)
-                    foreach (Attack attack in badguy.CurrentAttacks)
-                        if (attack.Placement != 11)
-                            Minimum = attack.Placement;
-
-                if (Minimum == 11)
+                if (minimum == 11)
                     break;
 
                 foreach (Participant goodguy in party)
                     if (PartyChecklist.CheckedItems.Contains(goodguy.Name))
                         foreach (Attack attack in goodguy.CurrentAttacks)
-                            if (attack.Placement == Minimum)
-                                OrderedAttacks.Enqueue(new Participant(goodguy.Name, goodguy.Initiative, attack));
+                            if (attack.Placement == minimum)
+                                orderedAttacks.Enqueue(new Participant(goodguy.Name, goodguy.Initiative, attack));
+
                 foreach (Participant badguy in enemies)
                     if (MonsterChecklist.CheckedItems.Contains(badguy.Name))
                         foreach (Attack attack in badguy.CurrentAttacks)
-                            if (attack.Placement == Minimum)
-                                OrderedAttacks.Enqueue(new Participant(badguy.Name, badguy.Initiative, attack));
+                            if (attack.Placement == minimum)
+                                orderedAttacks.Enqueue(new Participant(badguy.Name, badguy.Initiative, attack));
 
                 output = String.Format("The following attacks may go:\n");
-                string title = String.Format("Round {0}: {1}", roundCount, OrderedAttacks.Peek().SingleAttack.Placement);
+                string title = String.Format("Round {0}: {1}", roundCount, orderedAttacks.Peek().SingleAttack.Placement);
                 
-                while (OrderedAttacks.Count != 0)
+                while (orderedAttacks.Count != 0)
                 {
-                    if (OrderedAttacks.Peek().SingleAttack.ThisRound == 1)
-                        output += String.Format("\n\t{0}'s {1}", OrderedAttacks.Peek().Name, OrderedAttacks.Peek().SingleAttack.Name);
+                    if (orderedAttacks.Peek().SingleAttack.ThisRound == 1)
+                        output += String.Format("\n\t{0}'s {1}", orderedAttacks.Peek().Name, orderedAttacks.Peek().SingleAttack.Name);
                     else
-                        output += String.Format("\n\t{0}'s {1} {2}", OrderedAttacks.Peek().Name, numtoword(OrderedAttacks.Peek().SingleAttack.AttacksUsed + 1), OrderedAttacks.Peek().SingleAttack.Name);
-                    OrderedAttacks.Peek().SingleAttack.AttackFinished();
-                    OrderedAttacks.Peek().SingleAttack.SetPlacement(OrderedAttacks.Peek().Initiative);
-                    OrderedAttacks.Dequeue();
+                        output += String.Format("\n\t{0}'s {1} {2}", orderedAttacks.Peek().Name, numtoword(orderedAttacks.Peek().SingleAttack.AttacksUsed + 1), orderedAttacks.Peek().SingleAttack.Name);
+                    orderedAttacks.Peek().SingleAttack.FinishAttack();
+                    orderedAttacks.Peek().SingleAttack.SetPlacement(orderedAttacks.Peek().Initiative);
+                    orderedAttacks.Dequeue();
                 }
 
                 output += String.Format("\n\n(Click \"Cancel\" to end the round early.)");
@@ -802,10 +859,10 @@ namespace Battle_Order
         //Checks to make sure initiatives and per round values are filled
         private void CheckInitiative()
         {
-            foreach (Participant goodguy in party)
+            foreach (var goodguy in party)
                 if (PartyChecklist.CheckedItems.Contains(goodguy.Name))
                 {
-                    foreach (Attack attack in goodguy.CurrentAttacks)
+                    foreach (var attack in goodguy.CurrentAttacks)
                         if (attack.ThisRound == -1)
                         {
                             if (attack.DifferingPerRound)
@@ -820,9 +877,11 @@ namespace Battle_Order
                                     PartyAttackCombo.Enabled = false;
                                     PartyPerRoundText.Enabled = false;
                                     PartySpeedText.Enabled = false;
-                                    InitiativeText.Enabled = true; InitiativeText.Visible = true;
+                                    InitiativeText.Enabled = true; 
+                                    InitiativeText.Visible = true;
                                     InitiativeNameLabel.Visible = true;
-                                    InitiativeButton.Enabled = true; InitiativeButton.Visible = true;
+                                    InitiativeButton.Enabled = true; 
+                                    InitiativeButton.Visible = true;
                                     InitiativeTitle.Visible = true;
                                     PartyChecklist.Enabled = false;
                                     MonsterChecklist.Enabled = false;
@@ -845,7 +904,7 @@ namespace Battle_Order
                                     return;
                                 }
                             }
-                            else { attack.ThisRound = (int)attack.PerRound; }
+                            else { attack.ThisRound = (Int32)attack.PerRound; }
                         }
                     if (goodguy.Initiative == 0)
                     {
@@ -853,9 +912,11 @@ namespace Battle_Order
                         PartyAttackCombo.Enabled = false;
                         PartyPerRoundText.Enabled = false;
                         PartySpeedText.Enabled = false;
-                        InitiativeText.Enabled = true; InitiativeText.Visible = true;
+                        InitiativeText.Enabled = true; 
+                        InitiativeText.Visible = true;
                         InitiativeNameLabel.Visible = true;
-                        InitiativeButton.Enabled = true; InitiativeButton.Visible = true;
+                        InitiativeButton.Enabled = true; 
+                        InitiativeButton.Visible = true;
                         InitiativeTitle.Visible = true;
                         PartyChecklist.Enabled = false;
                         MonsterChecklist.Enabled = false;
@@ -876,10 +937,12 @@ namespace Battle_Order
                     }
                 }
 
-            InitiativeButton.Enabled = false; InitiativeButton.Visible = false;
+            InitiativeButton.Enabled = false; 
+            InitiativeButton.Visible = false;
             InitiativeNameLabel.Visible = false;
             InitiativeAttackLabel.Visible = false;
-            InitiativeText.Enabled = false; InitiativeText.Visible = false;
+            InitiativeText.Enabled = false; 
+            InitiativeText.Visible = false;
             InitiativeTitle.Visible = false;
 
             foreach (Participant badguy in enemies)
@@ -1165,64 +1228,6 @@ namespace Battle_Order
                         }
 
             MessageBox.Show(output, "All Attacks");
-        }
-
-        //*****************************************************************************************************
-        //loads a party from a binary file
-        private void LoadMethod()
-        {
-            BinaryFormatter binary = new BinaryFormatter();
-            DialogResult result;            
-            OpenFileDialog open = new OpenFileDialog();
-            result = open.ShowDialog();
-
-            if (result == DialogResult.Cancel)
-                return;
-            partyFileName = open.FileName;
-
-            if (partyFileName == "" || partyFileName == null)
-            {
-                MessageBox.Show("Empty file name.  Cannot open the file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            FileStream input = new FileStream(partyFileName, FileMode.Open, FileAccess.Read);
-
-            party = new LinkedList<Participant>();
-            PartyChecklist.Items.Clear();
-
-            while (true)
-            {
-                try
-                {
-                    Participant New = (Participant)binary.Deserialize(input);
-                    AddParticipant(party, New);
-                    PartyChecklist.Items.Add(New.Name, true);
-                }
-                catch (SerializationException)
-                {
-                    break;
-                }
-            }
-
-            input.Close();
-
-            foreach (Participant goodguy in party)
-            {
-                foreach (Attack attack in goodguy.Attacks)
-                {
-                    if (attack.Name == "(None)")
-                        goodguy.Attacks.Remove(attack);
-                    break;
-                }
-                goodguy.TotalReset();
-            }
-
-            PartyAttackCombo.Items.Clear();
-            PartyAttackCombo.Text = "";
-            PartyNameText.Text = "";
-            PartyPerRoundText.Text = "";
-            PartySpeedText.Text = "";
         }
 
         //********************************************************************************************
@@ -1648,7 +1653,7 @@ namespace Battle_Order
         //Loads a party from a file
         private void loadAPartyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LoadMethod();
+            LoadParty();
         }
 
         //********************************************************************************************

@@ -6,7 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Battle_Order
+namespace BattleOrder
 {
     public class FileAccessor
     {
@@ -21,27 +21,37 @@ namespace Battle_Order
 
         public static String GetSaveDirectoryFromWorkingDirectory()
         {
-            var fileInput = new FileStream();
-            var binaryFormatter = new BinaryFormatter();
-            String directory;
+            var directory = String.Empty;
 
             try
             {
-                fileInput = new FileStream("SaveDirectory", FileMode.Open, FileAccess.Read);
-                directory = (String)binaryFormatter.Deserialize(fileInput);
+                var fileStream = new FileStream("SaveDirectory", FileMode.Open, FileAccess.Read);
+                var binaryFormatter = new BinaryFormatter();
+
+                directory = Convert.ToString(binaryFormatter.Deserialize(fileStream));
+
+                fileStream.Close();
             }
             catch (FileNotFoundException)
             {
                 MessageBox.Show("No save directory was found for the monster database and parties.  Please select a save directory.", "No save directory", MessageBoxButtons.OK);
-                var open = new OpenFileDialog();
-                var result = open.ShowDialog();
-            }
-            finally
-            {
-                fileInput.Close();
+
+                directory = GetDirectoryFromDialog();
+
+                var fileStream = new FileStream("SaveDirectory", FileMode.Create, FileAccess.Write);
+                var binaryFormatter = new BinaryFormatter();
+                binaryFormatter.Serialize(fileStream, directory);
+                fileStream.Close();
             }
 
             return directory;
+        }
+
+        private static String GetDirectoryFromDialog()
+        {
+            var folderBrowser = new FolderBrowserDialog();
+            folderBrowser.ShowDialog();
+            return folderBrowser.SelectedPath;
         }
     }
 }

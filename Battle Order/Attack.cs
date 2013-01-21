@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Battle_Order
+namespace BattleOrder
 {
     [Serializable]
     public class Attack
@@ -13,12 +13,21 @@ namespace Battle_Order
         public Int32 Speed { get; private set; }
         public Double Placement { get; private set; }
         public Boolean AllUsable { get; set; }
-        public Int32 ThisRound { get; set; }
         public Boolean Prepped { get; set; }
         public Boolean DifferingPerRound { get { return (PerRound - Math.Floor(PerRound)) != 0; } }
         public Int32 AttacksUsed { get { return used.Count(x => x); } }
 
         private Boolean[] used;
+
+        public Int32 ThisRound
+        {
+            get
+            {
+                if (AllUsable)
+                    return Convert.ToInt32(Math.Ceiling(PerRound));
+                return Convert.ToInt32(Math.Floor(PerRound));
+            }
+        }
 
         public Int32 AttacksLeft
         {
@@ -30,19 +39,6 @@ namespace Battle_Order
             }
         }
 
-        public Attack(String name, Double perRound, Int32 speed, Boolean[] used, Double placement = 11, Boolean allUsable = true, Int32 thisRound = -1)
-        {
-            Name = name;
-            PerRound = perRound;
-            Speed = speed;
-            AllUsable = allUsable;
-            ThisRound = thisRound;
-
-            used = new Boolean[Convert.ToInt16(perRound)];
-            if (DifferingPerRound && !RoundUp(perRound))
-                used = new Boolean[Convert.ToInt16(perRound) + 1];
-        }
-
         public Attack(String name, Double perRound, Int32 speed, Boolean prepped = true)
         {
             Name = name;
@@ -50,9 +46,7 @@ namespace Battle_Order
             Speed = speed;
             Prepped = prepped;
 
-            used = new Boolean[Convert.ToInt16(perRound)];
-            if (DifferingPerRound && !RoundUp(perRound))
-                used = new Boolean[Convert.ToInt16(perRound) + 1];
+            used = new Boolean[Convert.ToInt32(Math.Ceiling(PerRound))];
         }
 
         public void SetPlacement(Int32 initiative)
@@ -63,47 +57,30 @@ namespace Battle_Order
                 return;
             }
 
+            var denominator = Convert.ToDouble(ThisRound - initiative);
+            if (denominator == 0)
+            {
+                Placement = 11;
+                return;
+            }
+
             var currentPartOfAttack = used.Count(x => x);
-
-            if (DifferingPerRound)
-            {
-                try
-                {
-                    Placement = (Double)(currentPartOfAttack + 1) * (Double)Speed / (Double)ThisRound - (Double)initiative;
-                }
-                catch (DivideByZeroException)
-                {
-                    Placement = 11;
-                }
-            }
-            else
-            {
-                Placement = (Double)(currentPartOfAttack + 1) * (Double)Speed / PerRound - (Double)initiative;
-            }
+            var numerator = Convert.ToDouble((currentPartOfAttack + 1) * Speed);
+            Placement = numerator / denominator;
         }
 
-        public Boolean RoundUp(Double test)
-        {
-            var decimalPortion = test - Math.Floor(test);
-
-            if (decimalPortion < .5 && test % 2 != 0)
-                return false;
-            else if (decimalPortion <= .5 && test % 2 == 0)
-                return false;
-            return true;
-        }
-
-        public void AttackFinished()
+        public void FinishAttack()
         {
             if (used[used.Length - 1])
                 return;
 
-            var firstUnused = used.Where(x => !x).First();
-            firstUnused = true;
+            var firstUnusedIndex = used.Count(x => x);
+            used[firstUnusedIndex] = true;
 
-            AllUsable = true;
             if (DifferingPerRound && AllUsable && used[used.Length - 1])
                 AllUsable = false;
+            else
+                AllUsable = true;
         }
 
         public void Reset()
@@ -113,7 +90,6 @@ namespace Battle_Order
 
             AllUsable = true;
             Placement = 11;
-            ThisRound = -1;
         }
 
         public void ResetPartial()
@@ -122,7 +98,6 @@ namespace Battle_Order
                 used[i] = false;
 
             Placement = 11;
-            ThisRound = -1;
         }
 
         public Boolean Equals(Attack toCompare)

@@ -1,4 +1,4 @@
-namespace Battle_Order
+namespace BattleOrder
 {
     partial class BattleOrderForm
     {
@@ -756,7 +756,7 @@ namespace Battle_Order
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::Battle_Order.Properties.Resources.Suggestion07_copy;
+            this.BackgroundImage = global::BattleOrder.Properties.Resources.Suggestion07_copy;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(767, 443);
             this.Controls.Add(this.menuStrip1);

@@ -8,12 +8,12 @@
     <ProjectGuid>{C370BFD6-D647-48E0-885B-700DE6FFF171}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Battle_Order</RootNamespace>
+    <RootNamespace>BattleOrder</RootNamespace>
     <AssemblyName>Battle Order</AssemblyName>
     <ManifestCertificateThumbprint>D649AA7E67F30D597A83C9590BEE89BD0D71DF0E</ManifestCertificateThumbprint>
     <ManifestKeyFile>Battle Order_1_TemporaryKey.pfx</ManifestKeyFile>
-    <GenerateManifests>true</GenerateManifests>
-    <SignManifests>true</SignManifests>
+    <GenerateManifests>false</GenerateManifests>
+    <SignManifests>false</SignManifests>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <ApplicationIcon>20 sided die.ico</ApplicationIcon>
     <PublishUrl>C:\Users\Andrew Wiggin\Documents\Programming\Visual Studio 2005\Projects\Battle Order\Battle Order\publish\</PublishUrl>
@@ -56,6 +56,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -91,6 +98,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -102,7 +110,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Battle Order_TemporaryKey.pfx" />
     <None Include="Resources\dice.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -116,7 +123,6 @@
     <None Include="Resources\Suggestion07.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Battle Order_1_TemporaryKey.pfx" />
     <None Include="Resources\Suggestion07 copy.jpg" />
   </ItemGroup>
   <ItemGroup>

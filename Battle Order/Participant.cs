@@ -3,25 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Battle_Order
+namespace BattleOrder
 {
     [Serializable]
-    class Participant
+    public class Participant
     {
         public String Name { get; set; }
         public Int32 Initiative { get; private set; }
         public List<Attack> Attacks { get; private set; }
         public Attack SingleAttack { get; private set; }
         public Boolean NPC { get; private set; }
-
-        public Attack[] CurrentAttacks
-        {
-            get
-            {
-                var currentAttacks = Attacks.Where(x => x.Prepped);
-                return currentAttacks as Attack[];
-            }
-        }
+        public IEnumerable<Attack> CurrentAttacks { get { return Attacks.Where(x => x.Prepped); } }
 
         public Participant(String name, Boolean npc, Attack currentAttack, Int32 initiative = 0)
         {
@@ -41,13 +33,13 @@ namespace Battle_Order
                 Attacks.Add(new Attack(attack.Name, attack.PerRound, attack.Speed, attack.Prepped));
         }
 
-        public Participant(String name, Attack NewAttack)
+        public Participant(String name, Attack newAttack)
         {
             Attacks = new List<Attack>();
             NPC = true;
             Name = name;
-            NewAttack.Prepped = true;
-            Attacks.Add(NewAttack);
+            newAttack.Prepped = true;
+            Attacks.Add(newAttack);
         }
 
         public Participant(String name, String attackName, Int32 attackSpeed, Double perRound)
@@ -61,7 +53,7 @@ namespace Battle_Order
 
         public String CurrentAttacksToString()
         {
-            String output = String.Empty;
+            var output = String.Empty;
             foreach (var attack in CurrentAttacks)
             {
                 if (!String.IsNullOrEmpty(output))
