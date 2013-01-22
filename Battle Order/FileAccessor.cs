@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
@@ -10,48 +11,101 @@ namespace BattleOrder
 {
     public class FileAccessor
     {
-        private String saveDirectory;
-        private FileStream input;
-        private BinaryFormatter binary;
+        public String SaveDirectory { get; private set; }
+        private String partyFileName;
+        private const String monsterDbFileName = "MonsterDatabase";
+        private String monsterDbLocation { get { return Path.Combine(SaveDirectory, monsterDbFileName); } }
         
         public FileAccessor(String saveDirectory)
         {
-            this.saveDirectory = saveDirectory;
+            this.SaveDirectory = saveDirectory;
         }
 
         public static String GetSaveDirectoryFromWorkingDirectory()
         {
-            var directory = String.Empty;
-
-            try
-            {
-                var fileStream = new FileStream("SaveDirectory", FileMode.Open, FileAccess.Read);
-                var binaryFormatter = new BinaryFormatter();
-
-                directory = Convert.ToString(binaryFormatter.Deserialize(fileStream));
-
-                fileStream.Close();
-            }
-            catch (FileNotFoundException)
-            {
-                MessageBox.Show("No save directory was found for the monster database and parties.  Please select a save directory.", "No save directory", MessageBoxButtons.OK);
-
-                directory = GetDirectoryFromDialog();
-
-                var fileStream = new FileStream("SaveDirectory", FileMode.Create, FileAccess.Write);
-                var binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(fileStream, directory);
-                fileStream.Close();
-            }
-
-            return directory;
+            return File.ReadAllText("SaveDirectory");
         }
 
-        private static String GetDirectoryFromDialog()
+        public static void MakeSaveDirectoryFile(String saveDirectory)
         {
-            var folderBrowser = new FolderBrowserDialog();
-            folderBrowser.ShowDialog();
-            return folderBrowser.SelectedPath;
+            File.WriteAllText("SaveDirectory", saveDirectory);
+        }
+
+        public IEnumerable<Participant> LoadMonsterDatabase()
+        {
+            if (!File.Exists(monsterDbLocation))
+                File.Create(monsterDbLocation);
+
+            var monsterDb = new List<Participant>();
+            var binary = new BinaryFormatter();
+
+            using (var input = new FileStream(monsterDbLocation, FileMode.Open, FileAccess.Read))
+            {
+                while (true)
+                {
+                    try
+                    {
+                        var newParticipant = (Participant)binary.Deserialize(input);
+                        monsterDb.Add(newParticipant);
+                    }
+                    catch (SerializationException)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return monsterDb;
+        }
+
+        public IEnumerable<Participant> LoadParty(String partyFileName)
+        {
+            var party = new List<Participant>();
+            var binary = new BinaryFormatter();
+
+            using (var input = new FileStream(partyFileName, FileMode.Open, FileAccess.Read))
+            {
+                while (true)
+                {
+                    try
+                    {
+                        var newParticipant = (Participant)binary.Deserialize(input);
+                        party.Add(newParticipant);
+                    }
+                    catch (SerializationException)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return party;
+        }
+
+        public void SaveMonsterDb(IEnumerable<Participant> dbToSave)
+        {
+            var binary = new BinaryFormatter();
+            
+            using (var output = new FileStream(monsterDbLocation, FileMode.OpenOrCreate, FileAccess.Write))
+                foreach (var databaseEntry in dbToSave)
+                    binary.Serialize(output, databaseEntry);
+        }
+
+        public void SaveParty(IEnumerable<Participant> partyToSave)
+        {
+            var binary = new BinaryFormatter();
+
+            using (var output = new FileStream(partyFileName, FileMode.OpenOrCreate, FileAccess.Write))
+                foreach (var goodguy in partyToSave)
+                    binary.Serialize(output, goodguy);
+        }
+
+        public void SaveParty(IEnumerable<Participant> partyToSave, String newPartyFileName)
+        {
+            if (!String.IsNullOrEmpty(newPartyFileName)) 
+                partyFileName = newPartyFileName;
+
+            SaveParty(partyToSave);
         }
     }
 }

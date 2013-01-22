@@ -49,6 +49,19 @@ namespace BattleOrder
             used = new Boolean[Convert.ToInt32(Math.Ceiling(PerRound))];
         }
 
+        public void SetPlacementForNextPartOfAttack()
+        {
+            if (ThisRound == -1 || used[ThisRound - 1])
+            {
+                Placement = 11;
+                return;
+            }
+
+            var currentPartOfAttack = used.Count(x => x);
+            Placement += Placement / currentPartOfAttack;
+
+        }
+
         public void SetPlacement(Int32 initiative)
         {
             if (ThisRound == -1 || used[ThisRound - 1])
@@ -69,7 +82,7 @@ namespace BattleOrder
             Placement = numerator / denominator;
         }
 
-        public void FinishAttack()
+        public void FinishCurrentPartOfAttack()
         {
             if (used[used.Length - 1])
                 return;

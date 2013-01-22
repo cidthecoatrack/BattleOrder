@@ -34,7 +34,7 @@ namespace BattleOrder
             this.MonsterQuantText = new System.Windows.Forms.TextBox();
             this.MonsterChecklist = new System.Windows.Forms.CheckedListBox();
             this.badguycontextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.ConvertToGoodGuy = new System.Windows.Forms.ToolStripMenuItem();
             this.displayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.makeAnNPCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectAllToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -134,7 +134,7 @@ namespace BattleOrder
             // badguycontextMenuStrip1
             // 
             this.badguycontextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem1,
+            this.ConvertToGoodGuy,
             this.displayToolStripMenuItem,
             this.makeAnNPCToolStripMenuItem,
             this.selectAllToolStripMenuItem1,
@@ -144,12 +144,12 @@ namespace BattleOrder
             this.badguycontextMenuStrip1.Size = new System.Drawing.Size(232, 136);
             this.badguycontextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.badguycontextMenuStrip1_Opening);
             // 
-            // toolStripMenuItem1
+            // ConvertToGoodGuy
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(231, 22);
-            this.toolStripMenuItem1.Text = "Make selected a good guy";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            this.ConvertToGoodGuy.Name = "ConvertToGoodGuy";
+            this.ConvertToGoodGuy.Size = new System.Drawing.Size(231, 22);
+            this.ConvertToGoodGuy.Text = "Make selected a good guy";
+            this.ConvertToGoodGuy.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // displayToolStripMenuItem
             // 
@@ -649,8 +649,8 @@ namespace BattleOrder
             this.InAdditionCheckBox.TabIndex = 9;
             this.InAdditionCheckBox.Text = "in addition";
             this.toolTip1.SetToolTip(this.InAdditionCheckBox, "Only use this when adding additional monsters to a number of monsters already in " +
-                    "battle.  i.e., if you\'ve already got 3 werewolves and want 5 more, use the \"in a" +
-                    "ddition\" checkbox");
+        "battle.  i.e., if you\'ve already got 3 werewolves and want 5 more, use the \"in a" +
+        "ddition\" checkbox");
             this.InAdditionCheckBox.UseVisualStyleBackColor = false;
             // 
             // EditMonsterDatabaseCheckbox
@@ -663,7 +663,7 @@ namespace BattleOrder
             this.EditMonsterDatabaseCheckbox.TabIndex = 1016;
             this.EditMonsterDatabaseCheckbox.Text = "Edit the Monster Database";
             this.toolTip1.SetToolTip(this.EditMonsterDatabaseCheckbox, "Only use this when you want to change the standard attack for a monster as saved " +
-                    "in the Monster Database");
+        "in the Monster Database");
             this.EditMonsterDatabaseCheckbox.UseVisualStyleBackColor = false;
             // 
             // menuStrip1
@@ -752,7 +752,7 @@ namespace BattleOrder
             this.toolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.toolTip1.ToolTipTitle = "When to Use";
             // 
-            // Form1
+            // BattleOrderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -802,8 +802,8 @@ namespace BattleOrder
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.Name = "Form1";
-            this.Text = "Battle Order 2.0.8";
+            this.Name = "BattleOrderForm";
+            this.Text = "Battle Order";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.badguycontextMenuStrip1.ResumeLayout(false);
             this.goodguycontextMenuStrip2.ResumeLayout(false);
@@ -856,7 +856,7 @@ namespace BattleOrder
         private System.Windows.Forms.ComboBox MonsterNameCombo;
         private System.Windows.Forms.CheckBox InAdditionCheckBox;
         private System.Windows.Forms.ContextMenuStrip badguycontextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem ConvertToGoodGuy;
         private System.Windows.Forms.ContextMenuStrip goodguycontextMenuStrip2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem displayToolStripMenuItem;
