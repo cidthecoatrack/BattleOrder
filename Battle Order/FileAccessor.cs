@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Windows.Forms;
 
 namespace BattleOrder
 {
@@ -69,8 +66,9 @@ namespace BattleOrder
         {
             var party = new List<Participant>();
             var binary = new BinaryFormatter();
+            var path = Path.Combine(SaveDirectory, partyFileName);
 
-            using (var input = new FileStream(partyFileName, FileMode.Open, FileAccess.Read))
+            using (var input = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 while (true)
                 {
@@ -101,8 +99,9 @@ namespace BattleOrder
         public void SaveParty(IEnumerable<Participant> partyToSave)
         {
             var binary = new BinaryFormatter();
+            var path = Path.Combine(SaveDirectory, partyFileName);
 
-            using (var output = new FileStream(partyFileName, FileMode.OpenOrCreate, FileAccess.Write))
+            using (var output = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write))
                 foreach (var goodguy in partyToSave)
                     binary.Serialize(output, goodguy);
         }

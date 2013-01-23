@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace BattleOrder
+namespace BattleOrder.Attacks
 {
     [Serializable]
     public class Attack
@@ -78,13 +76,6 @@ namespace BattleOrder
         {
             for (var i = 0; i < used.Length; i++)
                 used[i] = false;
-        }
-
-        public Boolean Equals(Attack toCompare)
-        {
-            return Name == toCompare.Name
-                   && PerRound == toCompare.PerRound
-                   && Speed == toCompare.Speed;
         }
     }
 }

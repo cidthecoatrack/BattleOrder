@@ -1,5 +1,4 @@
-﻿using System;
-using BattleOrder;
+﻿using BattleOrder.Attacks;
 using NUnit.Framework;
 
 namespace BattleOrderTests

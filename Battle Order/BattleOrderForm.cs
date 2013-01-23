@@ -1,16 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Reflection;
 using System.Deployment.Application;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using BattleOrder.Attacks;
 
 namespace BattleOrder
 {
@@ -146,16 +141,13 @@ namespace BattleOrder
         private void PartyAdd_Click(object sender, EventArgs e)
         {
             TrimPartyInputFields();
-            Attack newAttack;
-            var attackName = PartyAttackCombo.Text;
-            var partyMemberName = PartyNameText.Text;
+            Double perRound;
+            Int32 speed;
 
             try
             {
-                var perRound = Convert.ToDouble(PartyPerRoundText.Text);
-                var speed = Convert.ToInt16(PartySpeedText.Text);
-
-                newAttack = new Attack(attackName, perRound, speed);
+                perRound = Convert.ToDouble(PartyPerRoundText.Text);
+                speed = Convert.ToInt16(PartySpeedText.Text);
             }
             catch (FormatException)
             {
@@ -163,123 +155,15 @@ namespace BattleOrder
                 return;
             }
 
-            var goodGuyAlreadyThere = party.Any(x => x.Name == partyMemberName);
-            if (!goodGuyAlreadyThere)
-            {
-                var result = MessageBox.Show("Is this character an NPC?", "NPC?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                var npc = (result != DialogResult.No);
-                var newPerson = new Participant(PartyNameText.Text, npc, newAttack);
+            var attackName = PartyAttackCombo.Text;
+            var partyMemberName = PartyNameText.Text;
+            var newAttack = new Attack(attackName, perRound, speed);
 
-                party.Add(newPerson);
-                PartyChecklist.Items.Add(PartyNameText.Text, true);
-            }
-            else
-            {
-                var goodguy = party.First(x => x.Name == partyMemberName);
+            var partyHandler = new PartyHandler(party);
+            party = partyHandler.AddNewAttackToParty(newAttack, partyMemberName);
 
-                var attackExists = goodguy.Attacks.Any(x => x.Name == attackName);
-                if (!attackExists)
-                {
-                    if (goodguy.CurrentAttacks.Any())
-                    {
-                        var message = String.Format("{0} already has an attack prepared.  Switch attack to new attack?\n\nPress \"Yes\" to switch {0}'s current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s attacks, in addition to {1}.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", goodguy.Name, goodguy.CurrentAttacksToString(), newAttack.Name);
-                        var result = MessageBox.Show(message, "Attack already there", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
-
-                        if (result == DialogResult.Yes)
-                            foreach (var attack in goodguy.Attacks)
-                                attack.Prepped = false;
-
-                        if (result == DialogResult.No || result == DialogResult.Yes)
-                            newAttack.Prepped = true;
-                    }
-                    else
-                    {
-                        newAttack.Prepped = true;
-                    }
-
-                    goodguy.AddAttack(newAttack);
-                }
-                else
-                {
-                    var attack = goodguy.Attacks.First(x => x.Name == attackName);
-
-                    if (attack.Equals(newAttack))
-                    {
-                        if (attack.Prepped)
-                        {
-                            if (goodguy.CurrentAttacks.Count() == 1)
-                            {
-                                MessageBox.Show("This attack has been already entered, and is prepped as the current attack.  You're being of the redundant, dufus.", "Error, dufus.");
-                            }
-                            else
-                            {
-                                var message = "This attack has already been entered and is prepped as a current attack.  Make it the only current attack?";
-                                var result = MessageBox.Show(message, "Switch?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                                if (result == DialogResult.Yes)
-                                {
-                                    foreach (var currentAttack in goodguy.CurrentAttacks)
-                                        currentAttack.Prepped = false;
-                                    attack.Prepped = true;
-                                }
-
-                                goodguy.AddAttack(newAttack);
-                            }
-                        }
-                        else
-                        {
-                            if (goodguy.CurrentAttacks.Any())
-                            {
-                                var message = String.Format("This attack has already been entered.  Make it a current attack?\n\nPress \"Yes\" to switch {0}'s current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s attacks, in addition to {1}.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", goodguy.Name, goodguy.CurrentAttacksToString(), newAttack.Name);
-                                var result = MessageBox.Show(message, "Switch?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
-                                if (result == DialogResult.Yes)
-                                {
-                                    foreach (var currentAttack in goodguy.CurrentAttacks)
-                                        currentAttack.Prepped = false;
-                                    attack.Prepped = true;
-                                }
-                                else if (result == DialogResult.No)
-                                    attack.Prepped = true;
-                            }
-                            else
-                            {
-                                var message = String.Format("This attack has already been entered.  Make it {0}'s current attack?", goodguy.Name);
-                                var result = MessageBox.Show(message, "Prep as current attack?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                                if (result == DialogResult.Yes)
-                                    attack.Prepped = true;
-                            }
-
-                            goodguy.AddAttack(newAttack);
-                        }
-                    }
-                    else
-                    {
-                        var result = MessageBox.Show("The attack data does not match.  Did you mean to edit the attack data?", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                        if (result == DialogResult.Yes)
-                        {
-                            goodguy.Attacks.Remove(attack);
-
-                            if (goodguy.CurrentAttacks.Any())
-                            {
-                                var message = String.Format("{0} already has an attack prepared.  Switch attack to new attack?\n\nPress \"Yes\" to switch {0}'s current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s attacks, in addition to {1}.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", goodguy.Name, goodguy.CurrentAttacksToString(), newAttack.Name);
-                                result = MessageBox.Show(message, "Attack already there", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
-
-                                if (result == DialogResult.Yes)
-                                    foreach (var attack2 in goodguy.Attacks)
-                                        attack2.Prepped = false;
-
-                                if (result == DialogResult.No || result == DialogResult.Yes)
-                                    newAttack.Prepped = true;
-                            }
-                            else
-                            {
-                                newAttack.Prepped = true;
-                            }
-
-                            goodguy.AddAttack(newAttack);
-                        }
-                    }
-                }
-            }
+            if (!PartyChecklist.Items.Contains(partyMemberName))
+                PartyChecklist.Items.Add(partyMemberName, true);
 
             ClearPartyInputFields();
             fileAccessor.SaveParty(party);
