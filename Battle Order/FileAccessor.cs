@@ -19,6 +19,13 @@ namespace BattleOrder
         public FileAccessor(String saveDirectory)
         {
             this.SaveDirectory = saveDirectory;
+            VerifyExistenceOfSaveDirectory();
+        }
+
+        private void VerifyExistenceOfSaveDirectory()
+        {
+            if (!Directory.Exists(SaveDirectory))
+                Directory.CreateDirectory(SaveDirectory);
         }
 
         public static String GetSaveDirectoryFromWorkingDirectory()
@@ -82,7 +89,7 @@ namespace BattleOrder
             return party;
         }
 
-        public void SaveMonsterDb(IEnumerable<Participant> dbToSave)
+        public void SaveMonsterDatabase(IEnumerable<Participant> dbToSave)
         {
             var binary = new BinaryFormatter();
             

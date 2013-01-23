@@ -25,18 +25,6 @@ namespace BattleOrder
         private String currentEnemy;
         private FileAccessor fileAccessor;
 
-        private String GetVersion()
-        {
-            if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                var cd = ApplicationDeployment.CurrentDeployment;
-                var version = cd.CurrentVersion;
-                return String.Format("Battle Order {0}.{1}.{2}", version.Major, version.Minor, version.Revision);
-            }
-
-            return "Battle Order IN DEVELOPMENT";
-        }
-
         public BattleOrderForm()
         {
             party = new List<Participant>();
@@ -47,11 +35,36 @@ namespace BattleOrder
 
             this.Text = GetVersion();
 
+            SetupFileAccessor();
+            SetupMonsterDatabase();
+            SetupParty();
+        }
+
+        private void SetupParty()
+        {
+            var result = MessageBox.Show("Load a party?", "Load?", MessageBoxButtons.YesNo, MessageBoxIcon.None);
+            if (result == DialogResult.Yes)
+            {
+                var partyFileName = GetPartyFileNameFromUser();
+                party = fileAccessor.LoadParty(partyFileName) as List<Participant>;
+                LoadPartyIntoUi();
+            }
+        }
+
+        private void SetupMonsterDatabase()
+        {
+            monsterDatabase = fileAccessor.LoadMonsterDatabase() as List<Participant>;
+            foreach (var monster in monsterDatabase)
+                MonsterNameCombo.Items.Add(monster.Name);
+        }
+
+        private void SetupFileAccessor()
+        {
             if (!File.Exists("SaveDirectory"))
             {
                 var message = "No save directory was found for the monster database and parties.  Please select a save directory.";
                 MessageBox.Show(message, "No save directory", MessageBoxButtons.OK);
-                
+
                 var folderBrowser = new FolderBrowserDialog();
                 folderBrowser.ShowDialog();
                 var directory = folderBrowser.SelectedPath;
@@ -61,18 +74,18 @@ namespace BattleOrder
 
             var saveDirectory = FileAccessor.GetSaveDirectoryFromWorkingDirectory();
             fileAccessor = new FileAccessor(saveDirectory);
+        }
 
-            monsterDatabase = fileAccessor.LoadMonsterDatabase() as List<Participant>;
-            foreach (var monster in monsterDatabase)
-                MonsterNameCombo.Items.Add(monster.Name);
-
-            var result = MessageBox.Show("Load a party?", "Load?", MessageBoxButtons.YesNo, MessageBoxIcon.None);
-            if (result == DialogResult.Yes)
+        private String GetVersion()
+        {
+            if (ApplicationDeployment.IsNetworkDeployed)
             {
-                var partyFileName = GetPartyFileNameFromUser();
-                party = fileAccessor.LoadParty(partyFileName) as List<Participant>;
-                LoadPartyIntoUi();
+                var cd = ApplicationDeployment.CurrentDeployment;
+                var version = cd.CurrentVersion;
+                return String.Format("Battle Order {0}.{1}.{2}", version.Major, version.Minor, version.Revision);
             }
+
+            return "Battle Order IN DEVELOPMENT";
         }
 
         private String GetPartyFileNameFromUser()
@@ -679,7 +692,7 @@ namespace BattleOrder
             MonsterPerRoundText.Text = "";
             MonsterPerRoundText.Enabled = true;
             InAdditionCheckBox.Checked = false;
-            fileAccessor.SaveMonsterDb(monsterDatabase);
+            fileAccessor.SaveMonsterDatabase(monsterDatabase);
         }
 
         private void ComputeRound()
@@ -720,6 +733,7 @@ namespace BattleOrder
                         output += String.Format("\n\t{0}'s {1}", thisAttack.Name, thisAttack.Attack.Name);
                     else
                         output += String.Format("\n\t{0}'s {1} {2}", thisAttack.Name, numtoword(thisAttack.Attack.AttacksUsed + 1), thisAttack.Attack.Name);
+                    
                     thisAttack.Attack.FinishCurrentPartOfAttack();
                     thisAttack.Attack.SetPlacementForNextPartOfAttack();
                 }
@@ -1581,7 +1595,7 @@ namespace BattleOrder
                 MonsterNameCombo.Items.Remove(monster.Name);
             }
 
-            fileAccessor.SaveMonsterDb(monsterDatabase);
+            fileAccessor.SaveMonsterDatabase(monsterDatabase);
         }
 
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
@@ -1599,7 +1613,7 @@ namespace BattleOrder
                 MonsterAttackCombo.Items.Remove(attack.Name);
             }
 
-            fileAccessor.SaveMonsterDb(monsterDatabase);
+            fileAccessor.SaveMonsterDatabase(monsterDatabase);
         }
 
         private void deleteSelectedToolStripMenuItem1_Click(object sender, EventArgs e)

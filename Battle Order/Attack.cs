@@ -51,7 +51,7 @@ namespace BattleOrder
 
         public void SetPlacementForNextPartOfAttack()
         {
-            if (ThisRound == -1 || used[ThisRound - 1])
+            if (used[ThisRound - 1])
             {
                 Placement = 11;
                 return;
@@ -64,7 +64,7 @@ namespace BattleOrder
 
         public void SetPlacement(Int32 initiative)
         {
-            if (ThisRound == -1 || used[ThisRound - 1])
+            if (used[ThisRound - 1])
             {
                 Placement = 11;
                 return;
