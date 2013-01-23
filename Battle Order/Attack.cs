@@ -8,16 +8,15 @@ namespace BattleOrder
     [Serializable]
     public class Attack
     {
+        private Boolean[] used;
+        private Boolean differingPerRound { get { return (PerRound - Math.Floor(PerRound)) != 0; } }
+
         public String Name { get; private set; }
         public Double PerRound { get; private set; }
         public Int32 Speed { get; private set; }
-        public Double Placement { get; private set; }
         public Boolean AllUsable { get; set; }
         public Boolean Prepped { get; set; }
-        public Boolean DifferingPerRound { get { return (PerRound - Math.Floor(PerRound)) != 0; } }
         public Int32 AttacksUsed { get { return used.Count(x => x); } }
-
-        private Boolean[] used;
 
         public Int32 ThisRound
         {
@@ -45,55 +44,26 @@ namespace BattleOrder
             PerRound = perRound;
             Speed = speed;
             Prepped = prepped;
+            AllUsable = true;
 
             used = new Boolean[Convert.ToInt32(Math.Ceiling(PerRound))];
         }
 
-        public void SetPlacementForNextPartOfAttack()
-        {
-            if (used[ThisRound - 1])
-            {
-                Placement = 11;
-                return;
-            }
-
-            var currentPartOfAttack = used.Count(x => x);
-            Placement += Placement / currentPartOfAttack;
-
-        }
-
-        public void SetPlacement(Int32 initiative)
-        {
-            if (used[ThisRound - 1])
-            {
-                Placement = 11;
-                return;
-            }
-
-            var denominator = Convert.ToDouble(ThisRound - initiative);
-            if (denominator == 0)
-            {
-                Placement = 11;
-                return;
-            }
-
-            var currentPartOfAttack = used.Count(x => x);
-            var numerator = Convert.ToDouble((currentPartOfAttack + 1) * Speed);
-            Placement = numerator / denominator;
-        }
-
         public void FinishCurrentPartOfAttack()
         {
-            if (used[used.Length - 1])
+            if (AttackIsDone())
                 return;
 
             var firstUnusedIndex = used.Count(x => x);
             used[firstUnusedIndex] = true;
 
-            if (DifferingPerRound && AllUsable && used[used.Length - 1])
-                AllUsable = false;
-            else
-                AllUsable = true;
+            if (differingPerRound && AttackIsDone())
+                AllUsable = !AllUsable;
+        }
+
+        private Boolean AttackIsDone()
+        {
+            return used[ThisRound - 1];
         }
 
         public void Reset()
@@ -102,15 +72,12 @@ namespace BattleOrder
                 used[i] = false;
 
             AllUsable = true;
-            Placement = 11;
         }
 
         public void ResetPartial()
         {
             for (var i = 0; i < used.Length; i++)
                 used[i] = false;
-
-            Placement = 11;
         }
 
         public Boolean Equals(Attack toCompare)

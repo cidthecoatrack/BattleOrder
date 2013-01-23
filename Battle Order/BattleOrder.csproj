@@ -80,11 +80,13 @@
     <Compile Include="BattleOrderForm.Designer.cs">
       <DependentUpon>BattleOrderForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ErrorHandler.cs" />
     <Compile Include="FileAccessor.cs" />
     <Compile Include="Participant.cs" />
+    <Compile Include="PlacementCalculator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueueableParticipant.cs" />
+    <Compile Include="QueueableAttack.cs" />
     <EmbeddedResource Include="BattleOrderForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>BattleOrderForm.cs</DependentUpon>
