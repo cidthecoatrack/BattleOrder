@@ -7,30 +7,30 @@ using BattleOrder.Attacks;
 
 namespace BattleOrder
 {
-    public class PartyHandler
+    public class GroupHandler
     {
-        private List<Participant> party;
+        private List<Participant> group;
 
-        public PartyHandler(IEnumerable<Participant> party)
+        public GroupHandler(IEnumerable<Participant> group)
         {
-            this.party = party as List<Participant>;
+            this.group = group as List<Participant>;
         }
         
         public List<Participant> AddNewAttackToParty(Attack newAttack, String partyMemberName)
         {
-            var goodGuyExists = party.Any(x => x.Name == partyMemberName);
+            var goodGuyExists = group.Any(x => x.Name == partyMemberName);
 
             if (!goodGuyExists)
                 AddNewPartyMember(newAttack, partyMemberName);
             else
                 AddNewAttackToPartyMember(newAttack, partyMemberName);
 
-            return party;
+            return group;
         }
 
         private void AddNewAttackToPartyMember(Attack newAttack, String partyMemberName)
         {
-            var goodguy = party.First(x => x.Name == partyMemberName);
+            var goodguy = group.First(x => x.Name == partyMemberName);
             var attackExists = goodguy.Attacks.Any(x => x.Name == newAttack.Name);
 
             if (!attackExists)
@@ -157,7 +157,7 @@ namespace BattleOrder
             var npc = (result != DialogResult.No);
             var newPerson = new Participant(partyMemberName, npc, newAttack);
 
-            party.Add(newPerson);
+            group.Add(newPerson);
         }
     }
 }

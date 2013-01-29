@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace BattleOrder.Attacks
+namespace BattleOrder.Models.Attacks
 {
     [Serializable]
     public class Attack

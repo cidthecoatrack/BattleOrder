@@ -1,5 +1,5 @@
 ﻿using BattleOrder;
-using BattleOrder.Attacks;
+using BattleOrder.Models.Attacks;
 using NUnit.Framework;
 
 namespace BattleOrderTests

@@ -5,7 +5,8 @@ using System.Deployment.Application;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using BattleOrder.Attacks;
+using BattleOrder.Models;
+using BattleOrder.Models.Attacks;
 
 namespace BattleOrder
 {
@@ -141,6 +142,7 @@ namespace BattleOrder
         private void PartyAdd_Click(object sender, EventArgs e)
         {
             TrimPartyInputFields();
+
             Double perRound;
             Int32 speed;
 
@@ -156,14 +158,18 @@ namespace BattleOrder
             }
 
             var attackName = PartyAttackCombo.Text;
-            var partyMemberName = PartyNameText.Text;
             var newAttack = new Attack(attackName, perRound, speed);
+            var partyMemberName = PartyNameText.Text;
 
-            var partyHandler = new PartyHandler(party);
-            party = partyHandler.AddNewAttackToParty(newAttack, partyMemberName);
-
-            if (!PartyChecklist.Items.Contains(partyMemberName))
+            //HACK - logic to add attack or party member, current, all that crap
+            var goodGuyExists = party.Any(x => x.Name == partyMemberName);
+            if (!goodGuyExists)
+            {
+                var result = MessageBox.Show("Is this character an NPC?", "NPC?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                var npc = (result != DialogResult.No);
+                //HACK - adding new person
                 PartyChecklist.Items.Add(partyMemberName, true);
+            }
 
             ClearPartyInputFields();
             fileAccessor.SaveParty(party);
@@ -389,7 +395,7 @@ namespace BattleOrder
                                 DialogResult result = MessageBox.Show(message, "Differing Data", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                                 if (result == DialogResult.Yes)
                                 {
-                                    databaseEntry.Attacks.Remove(attack);
+                                    databaseEntry.RemoveAttack(attack);
                                     databaseEntry.AddAttack(newAttack);
                                     
                                     foreach (var badguy in enemies)
@@ -401,7 +407,7 @@ namespace BattleOrder
                                                 if (newAttack.Name == attack2.Name)
                                                 {
                                                     bool prepit = attack2.Prepped;
-                                                    badguy.Attacks.Remove(attack2);
+                                                    badguy.RemoveAttack(attack2);
                                                     newAttack.Prepped = prepit;
                                                     badguy.AddAttack(newAttack);
                                                     break;
@@ -480,26 +486,27 @@ namespace BattleOrder
 
                         if (!attackExists)
                         {
-                            badguy.AddAttack(newBadGuy.Attacks.Last());
-                            badguy.Attacks[badguy.Attacks.Count - 1].Prepped = false;
+                            var attack = newBadGuy.Attacks.Last();
+                            attack.Prepped = false;
+                            badguy.AddAttack(attack);
                             if (badguy.CurrentAttacks.Any())
                             {
                                 var message = String.Format("{0} already has an attack prepared.  Switch attack to new attack?\n\nPress \"Yes\" to switch {0}'s current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s attacks, in addition to {1}.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", badguy.Name, badguy.CurrentAttacksToString(), newAttack.Name);
                                 var result = MessageBox.Show(message, "Add to current attacks?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
                                 if (result == DialogResult.Yes)
                                 {
-                                    foreach (var attack in badguy.Attacks)
+                                    foreach (var currentAttack in badguy.CurrentAttacks)
                                         attack.Prepped = false;
-                                    badguy.Attacks[badguy.Attacks.Count - 1].Prepped = true;
+                                    attack.Prepped = true;
                                 }
                                 else if (result == DialogResult.No)
                                 {
-                                    badguy.Attacks[badguy.Attacks.Count - 1].Prepped = true;
+                                    attack.Prepped = true;
                                 }
                             }
                             else
                             {
-                                badguy.Attacks[badguy.Attacks.Count - 1].Prepped = true;
+                                attack.Prepped = true;
                             }
                         }
                         else
@@ -559,9 +566,10 @@ namespace BattleOrder
                                 var result = MessageBox.Show(message, "Edit?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                                 if (result == DialogResult.Yes)
                                 {
-                                    badguy.Attacks.Remove(attack);
-                                    badguy.AddAttack(newBadGuy.Attacks.Last());
-                                    badguy.Attacks[badguy.Attacks.Count - 1].Prepped = false;
+                                    badguy.RemoveAttack(attack);
+                                    var editedAttack = newBadGuy.Attacks.Last();
+                                    badguy.AddAttack(editedAttack);
+                                    editedAttack.Prepped = false;
                                     if (badguy.CurrentAttacks.Any())
                                     {
                                         message = String.Format("{0} already has an attack prepared.  Switch attack to new attack?\n\nPress \"Yes\" to switch {0}'s current attack from {1} to {2}.\nPress \"No\" to add {2} to {0}'s attacks, in addition to {1}.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", badguy.Name, badguy.CurrentAttacksToString(), newAttack.Name);
@@ -572,11 +580,11 @@ namespace BattleOrder
                                                 currentAttack.Prepped = false;
 
                                         if (result == DialogResult.No || result == DialogResult.Yes)
-                                            badguy.Attacks[badguy.Attacks.Count - 1].Prepped = true;
+                                            editedAttack.Prepped = true;
                                     }
                                     else
                                     {
-                                        badguy.Attacks[badguy.Attacks.Count - 1].Prepped = true;
+                                        editedAttack.Prepped = true;
                                     }
                                 }
                             }
@@ -1428,7 +1436,7 @@ namespace BattleOrder
                 var monster = monsterDatabase.First(x => x.Name == currentEnemy);
                 var attack = monster.Attacks.First(x => x.Name == comboName);
 
-                monster.Attacks.Remove(attack);
+                monster.RemoveAttack(attack);
                 MonsterAttackCombo.Items.Remove(attack.Name);
             }
 
@@ -1446,7 +1454,7 @@ namespace BattleOrder
                 var partyMember = party.First(x => x.Name == currentPartyMember);
                 var attack = partyMember.Attacks.First(x => x.Name == comboName);
 
-                partyMember.Attacks.Remove(attack);
+                partyMember.RemoveAttack(attack);
                 PartyAttackCombo.Items.Remove(attack.Name);
             }
 

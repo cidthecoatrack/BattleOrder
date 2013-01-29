@@ -1,5 +1,5 @@
 ﻿using System;
-using BattleOrder.Attacks;
+using BattleOrder.Models.Attacks;
 
 namespace BattleOrder
 {

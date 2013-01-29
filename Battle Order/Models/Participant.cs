@@ -1,44 +1,38 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BattleOrder.Attacks;
+using BattleOrder.Models.Attacks;
 
-namespace BattleOrder
+namespace BattleOrder.Models
 {
     [Serializable]
     public class Participant
     {
         public String Name { get; set; }
         public Int32 Initiative { get; set; }
-        public List<Attack> Attacks { get; private set; }
+        public IEnumerable<Attack> Attacks { get; private set; }
         public Boolean NPC { get; set; }
         public IEnumerable<Attack> CurrentAttacks { get { return Attacks.Where(x => x.Prepped); } }
 
         public Participant(String name, Boolean npc = true, Int32 initiative = 0)
         {
-            Attacks = new List<Attack>();
+            Attacks = Enumerable.Empty<Attack>();
             NPC = npc;
             Name = name;
             Initiative = initiative;
         }
 
-        public Participant(String name, List<Attack> attacks) : this(name)
+        public Participant(String name, IEnumerable<Attack> attacks) 
+            : this(name)
         {
-            foreach (var attack in attacks)
-                Attacks.Add(new Attack(attack.Name, attack.PerRound, attack.Speed, attack.Prepped));
+            Attacks = Attacks.Union(attacks);
         }
 
-        public Participant(String name, Boolean npc, Attack newAttack)
+        public Participant(String name, Attack newAttack, Boolean npc = false)
             : this(name, npc)
         {
             newAttack.Prepped = true;
-            Attacks.Add(newAttack);
-        }
-
-        public Participant(String name, Attack newAttack) : this(name)
-        {
-            newAttack.Prepped = true;
-            Attacks.Add(newAttack);
+            AddAttack(newAttack);
         }
 
         public String CurrentAttacksToString()
@@ -77,7 +71,16 @@ namespace BattleOrder
 
         public void AddAttack(Attack newAttack)
         {
-            Attacks.Add(newAttack);
+            var tempList = Attacks as List<Attack>;
+            tempList.Add(newAttack);
+            Attacks = tempList;
+        }
+
+        public void RemoveAttack(Attack attack)
+        {
+            var tempList = Attacks as List<Attack>;
+            tempList.Remove(attack);
+            Attacks = tempList;
         }
     }
 }

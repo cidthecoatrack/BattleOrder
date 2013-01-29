@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BattleOrder.Attacks
+namespace BattleOrder.Models.Attacks
 {
     public class QueueableAttack
     {

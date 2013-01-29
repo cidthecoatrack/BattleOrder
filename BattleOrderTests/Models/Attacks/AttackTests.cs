@@ -1,8 +1,8 @@
 ﻿using System;
-using BattleOrder.Attacks;
+using BattleOrder.Models.Attacks;
 using NUnit.Framework;
 
-namespace BattleOrderTests
+namespace BattleOrderTests.Models.Attacks
 {
     [TestFixture]
     public class AttackTests
