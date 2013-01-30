@@ -14,6 +14,12 @@ namespace BattleOrder.Models
         public Boolean IsNpc { get; private set; }
         public IEnumerable<Attack> CurrentAttacks { get { return Attacks.Where(x => x.Prepped); } }
 
+        public Participant() 
+        {
+            Name = String.Empty;
+            Attacks = Enumerable.Empty<Attack>();
+        }
+
         public Participant(String name, Boolean isNpc = true)
         {
             Attacks = Enumerable.Empty<Attack>();
@@ -24,14 +30,13 @@ namespace BattleOrder.Models
         public Participant(String name, IEnumerable<Attack> attacks) 
             : this(name)
         {
-            Attacks = Attacks.Union(attacks);
+            Attacks = attacks;
         }
 
-        public Participant(String name, Attack newAttack, Boolean isNpc = false)
+        public Participant(String name, Attack newAttack, Boolean isNpc = true)
             : this(name, isNpc)
         {
-            newAttack.Prepped = true;
-            AddAttack(newAttack);
+            Attacks = new[] { newAttack };
         }
 
         public String CurrentAttacksToString()

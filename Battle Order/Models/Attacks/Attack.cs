@@ -27,7 +27,13 @@ namespace BattleOrder.Models.Attacks
             }
         }
 
-        public Attack(String name, Double perRound, Int32 speed, Boolean prepped = true)
+        public Attack() 
+        {
+            Name = String.Empty;
+            used = new Boolean[0];
+        }
+
+        public Attack(String name, Double perRound, Int32 speed, Boolean prepped = false)
         {
             Name = name;
             PerRound = perRound;
@@ -74,6 +80,7 @@ namespace BattleOrder.Models.Attacks
             Name = newName;
             PerRound = newPerRound;
             Speed = newSpeed;
+            used = new Boolean[Convert.ToInt32(Math.Ceiling(PerRound))];
         }
     }
 }

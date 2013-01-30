@@ -9,31 +9,57 @@ namespace BattleOrderTests.Models.Attacks
     {
         Attack attack;
 
-        [Test]
-        public void PreppedDefaultedToTrue()
+        [SetUp]
+        public void Setup()
         {
-            attack = new Attack("attack", 1, 1);
-            Assert.That(attack.Prepped, Is.True);
+            attack = new Attack("attack", 5, 3);
         }
 
         [Test]
-        public void PreppedSetToFalse()
+        public void DefaultAttackConstructor()
         {
-            attack = new Attack("attack", 1, 1, false);
+            attack = new Attack();
+            Assert.That(attack.Name, Is.EqualTo(String.Empty));
+            Assert.That(attack.PerRound, Is.EqualTo(0));
+            Assert.That(attack.Speed, Is.EqualTo(0));
+            Assert.That(attack.Prepped, Is.EqualTo(false));
+        }
+
+        [Test]
+        public void AlterAttackInfo()
+        {
+            attack.AlterInfo("new name", 1.5, 5);
+            Assert.That(attack.Name, Is.EqualTo("new name"));
+            Assert.That(attack.PerRound, Is.EqualTo(1.5));
+            Assert.That(attack.Speed, Is.EqualTo(5));
+        }
+        
+        [Test]
+        public void PreppedDefaultedToFalse()
+        {
             Assert.That(attack.Prepped, Is.False);
+        }
+
+        [Test]
+        public void PreppedCanBeSet()
+        {
+            attack = new Attack(attack.Name, attack.PerRound, attack.Speed, false);
+            Assert.That(attack.Prepped, Is.False);
+
+            attack = new Attack(attack.Name, attack.PerRound, attack.Speed, true);
+            Assert.That(attack.Prepped, Is.True);
         }
 
         [Test]
         public void ThisRoundShowsPerRound()
         {
-            attack = new Attack("attack", 1, 2);
-            Assert.That(attack.ThisRound, Is.EqualTo(1));
+            Assert.That(attack.ThisRound, Is.EqualTo(5));
         }
 
         [Test]
         public void ThisRoundShowsLowerPerRoundIfNotAllUsable()
         {
-            attack = new Attack("attack", 1.5, 3);
+            attack.AlterInfo(attack.Name, 1.5, attack.Speed);
             attack.FinishCurrentPartOfAttack();
             attack.FinishCurrentPartOfAttack();
             Assert.That(attack.ThisRound, Is.EqualTo(1));
@@ -42,14 +68,13 @@ namespace BattleOrderTests.Models.Attacks
         [Test]
         public void ThisRoundShowsUpperPerRoundIfAllUsable()
         {
-            attack = new Attack("attack", 1.5, 3);
+            attack.AlterInfo(attack.Name, 1.5, attack.Speed);
             Assert.That(attack.ThisRound, Is.EqualTo(2));
         }
 
         [Test]
         public void AttacksUsedGivesAccurateCount()
         {
-            attack = new Attack("attack", 5, 1);
             FinishAttacks(3);
             Assert.That(attack.AttacksUsed, Is.EqualTo(3));
         }
@@ -63,7 +88,6 @@ namespace BattleOrderTests.Models.Attacks
         [Test]
         public void AttacksLeftGivesAccurateCount()
         {
-            attack = new Attack("attack", 5, 1);
             FinishAttacks(3);
             Assert.That(attack.AttacksLeft, Is.EqualTo(2));
         }
@@ -71,7 +95,7 @@ namespace BattleOrderTests.Models.Attacks
         [Test]
         public void AttacksLeftShowUpperPerRoundIfAllUsable()
         {
-            attack = new Attack("attack", 4.5, 1);
+            attack.AlterInfo(attack.Name, 4.5, attack.Speed);
             FinishAttacks(3);
             Assert.That(attack.AttacksLeft, Is.EqualTo(2));
         }
@@ -79,7 +103,7 @@ namespace BattleOrderTests.Models.Attacks
         [Test]
         public void AttacksLeftShowLowerPerRoundIfNotAllUsable()
         {
-            attack = new Attack("attack", 4.5, 1);
+            attack.AlterInfo(attack.Name, 4.5, attack.Speed);
             FinishAttacks(5);
             attack.ResetPartial();
             FinishAttacks(3);
