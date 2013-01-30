@@ -8,18 +8,17 @@ namespace BattleOrder.Models
     [Serializable]
     public class Participant
     {
-        public String Name { get; set; }
+        public String Name { get; private set; }
         public Int32 Initiative { get; set; }
         public IEnumerable<Attack> Attacks { get; private set; }
-        public Boolean NPC { get; set; }
+        public Boolean IsNpc { get; private set; }
         public IEnumerable<Attack> CurrentAttacks { get { return Attacks.Where(x => x.Prepped); } }
 
-        public Participant(String name, Boolean npc = true, Int32 initiative = 0)
+        public Participant(String name, Boolean isNpc = true)
         {
             Attacks = Enumerable.Empty<Attack>();
-            NPC = npc;
+            IsNpc = isNpc;
             Name = name;
-            Initiative = initiative;
         }
 
         public Participant(String name, IEnumerable<Attack> attacks) 
@@ -28,8 +27,8 @@ namespace BattleOrder.Models
             Attacks = Attacks.Union(attacks);
         }
 
-        public Participant(String name, Attack newAttack, Boolean npc = false)
-            : this(name, npc)
+        public Participant(String name, Attack newAttack, Boolean isNpc = false)
+            : this(name, isNpc)
         {
             newAttack.Prepped = true;
             AddAttack(newAttack);
@@ -38,6 +37,7 @@ namespace BattleOrder.Models
         public String CurrentAttacksToString()
         {
             var output = String.Empty;
+
             foreach (var attack in CurrentAttacks)
             {
                 if (!String.IsNullOrEmpty(output))
@@ -81,6 +81,12 @@ namespace BattleOrder.Models
             var tempList = Attacks as List<Attack>;
             tempList.Remove(attack);
             Attacks = tempList;
+        }
+
+        public void AlterInfo(String newName, Boolean npc)
+        {
+            Name = newName;
+            IsNpc = npc;
         }
     }
 }

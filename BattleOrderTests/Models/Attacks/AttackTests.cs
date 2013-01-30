@@ -10,13 +10,6 @@ namespace BattleOrderTests.Models.Attacks
         Attack attack;
 
         [Test]
-        public void AllUsableInitializedToTrue()
-        {
-            attack = new Attack("attack", 1, 1);
-            Assert.That(attack.AllUsable, Is.True);
-        }
-
-        [Test]
         public void PreppedDefaultedToTrue()
         {
             attack = new Attack("attack", 1, 1);
@@ -33,22 +26,23 @@ namespace BattleOrderTests.Models.Attacks
         [Test]
         public void ThisRoundShowsPerRound()
         {
-            attack = new Attack("attack", 1, 1);
+            attack = new Attack("attack", 1, 2);
             Assert.That(attack.ThisRound, Is.EqualTo(1));
         }
 
         [Test]
         public void ThisRoundShowsLowerPerRoundIfNotAllUsable()
         {
-            attack = new Attack("attack", 1.5, 1);
-            attack.AllUsable = false;
+            attack = new Attack("attack", 1.5, 3);
+            attack.FinishCurrentPartOfAttack();
+            attack.FinishCurrentPartOfAttack();
             Assert.That(attack.ThisRound, Is.EqualTo(1));
         }
 
         [Test]
         public void ThisRoundShowsUpperPerRoundIfAllUsable()
         {
-            attack = new Attack("attack", 1.5, 1);
+            attack = new Attack("attack", 1.5, 3);
             Assert.That(attack.ThisRound, Is.EqualTo(2));
         }
 
@@ -77,7 +71,7 @@ namespace BattleOrderTests.Models.Attacks
         [Test]
         public void AttacksLeftShowUpperPerRoundIfAllUsable()
         {
-            attack = new Attack("attack", 5, 1);
+            attack = new Attack("attack", 4.5, 1);
             FinishAttacks(3);
             Assert.That(attack.AttacksLeft, Is.EqualTo(2));
         }
@@ -85,8 +79,9 @@ namespace BattleOrderTests.Models.Attacks
         [Test]
         public void AttacksLeftShowLowerPerRoundIfNotAllUsable()
         {
-            attack = new Attack("attack", 5, 1);
-            attack.AllUsable = false;
+            attack = new Attack("attack", 4.5, 1);
+            FinishAttacks(5);
+            attack.ResetPartial();
             FinishAttacks(3);
             Assert.That(attack.AttacksLeft, Is.EqualTo(1));
         }

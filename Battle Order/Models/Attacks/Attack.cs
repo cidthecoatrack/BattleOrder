@@ -7,32 +7,23 @@ namespace BattleOrder.Models.Attacks
     public class Attack
     {
         private Boolean[] used;
-        private Boolean differingPerRound { get { return (PerRound - Math.Floor(PerRound)) != 0; } }
+        private Boolean differingPerRound { get { return (PerRound - Math.Floor(PerRound)) > 0; } }
+        private Boolean allUsable;
 
         public String Name { get; private set; }
         public Double PerRound { get; private set; }
         public Int32 Speed { get; private set; }
-        public Boolean AllUsable { get; set; }
         public Boolean Prepped { get; set; }
         public Int32 AttacksUsed { get { return used.Count(x => x); } }
+        public Int32 AttacksLeft { get { return ThisRound - AttacksUsed; } }
 
         public Int32 ThisRound
         {
             get
             {
-                if (AllUsable)
+                if (allUsable)
                     return Convert.ToInt32(Math.Ceiling(PerRound));
                 return Convert.ToInt32(Math.Floor(PerRound));
-            }
-        }
-
-        public Int32 AttacksLeft
-        {
-            get
-            {
-                if (AllUsable)
-                    return used.Count(x => !x);
-                return Math.Max(0, used.Count(x => !x) - 1);
             }
         }
 
@@ -42,7 +33,7 @@ namespace BattleOrder.Models.Attacks
             PerRound = perRound;
             Speed = speed;
             Prepped = prepped;
-            AllUsable = true;
+            allUsable = true;
 
             used = new Boolean[Convert.ToInt32(Math.Ceiling(PerRound))];
         }
@@ -56,7 +47,7 @@ namespace BattleOrder.Models.Attacks
             used[firstUnusedIndex] = true;
 
             if (differingPerRound && AttackIsDone())
-                AllUsable = !AllUsable;
+                allUsable = !allUsable;
         }
 
         private Boolean AttackIsDone()
@@ -69,13 +60,20 @@ namespace BattleOrder.Models.Attacks
             for (var i = 0; i < used.Length; i++)
                 used[i] = false;
 
-            AllUsable = true;
+            allUsable = true;
         }
 
         public void ResetPartial()
         {
             for (var i = 0; i < used.Length; i++)
                 used[i] = false;
+        }
+
+        public void AlterInfo(String newName, Double newPerRound, Int32 newSpeed)
+        {
+            Name = newName;
+            PerRound = newPerRound;
+            Speed = newSpeed;
         }
     }
 }

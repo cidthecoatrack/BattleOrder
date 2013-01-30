@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleOrder", "Battle Order
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleOrder.Tests", "BattleOrderTests\BattleOrder.Tests.csproj", "{0EDC400A-7A82-44F1-9EF0-B74A0E68B3F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleOrder.Forms", "BattleOrder.Forms\BattleOrder.Forms.csproj", "{3BD6990E-255D-4433-81ED-A9E225BEDF95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleOrder.UI", "BattleOrder.Forms\BattleOrder.UI.csproj", "{3BD6990E-255D-4433-81ED-A9E225BEDF95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

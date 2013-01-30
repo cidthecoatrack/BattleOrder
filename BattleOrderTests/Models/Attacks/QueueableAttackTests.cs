@@ -13,7 +13,7 @@ namespace BattleOrderTests.Models.Attacks
         {
             var attack = new Attack("bow", 2, 7);
             attack.FinishCurrentPartOfAttack();
-            queueableAttack = new QueueableAttack("name", attack, 7);
+            queueableAttack = new QueueableAttack("attacker", attack, 7);
         }
         
         [Test]
@@ -25,16 +25,16 @@ namespace BattleOrderTests.Models.Attacks
         [Test]
         public void HasCorrectDescriptionForMultiPartAttack()
         {
-            Assert.That(queueableAttack.Description, Is.EqualTo("name's second bow"));
+            Assert.That(queueableAttack.Description, Is.EqualTo("attacker's second bow"));
         }
 
         [Test]
         public void HasCorrectDescription()
         {
             var attack = new Attack("attack", 1, 1);
-            queueableAttack = new QueueableAttack("name", attack, 7);
+            queueableAttack = new QueueableAttack("attacker", attack, 7);
             Assert.That(queueableAttack.Placement, Is.EqualTo(-6));
-            Assert.That(queueableAttack.Description, Is.EqualTo("name's attack"));
+            Assert.That(queueableAttack.Description, Is.EqualTo("attacker's attack"));
         }
     }
 }

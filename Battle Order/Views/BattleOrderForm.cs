@@ -243,7 +243,7 @@ namespace BattleOrder
                         var newName = String.Format("{0} {1}", RemoveNumberFromName(badguy.Name), stringNumber);
                         
                         MonsterChecklist.Items.Remove(badguy.Name);
-                        badguy.Name = newName;
+                        badguy.AlterInfo(newName, badguy.IsNpc);
                         MonsterChecklist.Items.Add(badguy.Name, ischecked);
                     }
                 }
@@ -657,7 +657,7 @@ namespace BattleOrder
 
                         foreach (var person in everyone)
                             foreach (var attack in person.CurrentAttacks)
-                                attack.AllUsable = true;
+                                attack.Reset();
 
                         break;
                     }
@@ -819,7 +819,7 @@ namespace BattleOrder
             foreach (var participant in activeParticipants)
             {
                 participant.Reset();
-                if (participant.NPC)
+                if (participant.IsNpc)
                 {
                     var initiative = random.Next(1, 11);
                     participant.Initiative = initiative;
@@ -1179,65 +1179,46 @@ namespace BattleOrder
             MonsterChecklist.Items.Remove(badguy.Name);
         }
 
-        //********************************************************************************************
-        //Preps a badguy to display all of its stats
         private void displayToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (var badguy in enemies)
-                if (MonsterChecklist.SelectedItem.ToString() == badguy.Name)
-                    DisplayAllStats(badguy);
+            var badGuy = enemies.First(x => MonsterChecklist.SelectedItems.Contains(x.Name));
+            DisplayAllStats(badGuy);
         }
 
-        //********************************************************************************************
-        //Displays all stats for a given participant
         private void DisplayAllStats(Participant person)
         {
-            string output = person.Name;
-            if (person.NPC)
+            var output = person.Name;
+
+            if (person.IsNpc)
                 output += " (NPC)";
             else
                 output += " (Player Character)";
+
             output += ":\n\nAttacks:\n";
-            foreach (Attack attack in person.Attacks)
+
+            foreach (var attack in person.Attacks)
             {
                 output += String.Format("\t{0}:\n", attack.Name);
                 output += String.Format("\t\tSpeed: {0}\tAttacks per Round: {1}\n", attack.Speed, attack.PerRound);
-                string maybe;
-                if (attack.Prepped)
-                    maybe = "Yes";
-                else
-                    maybe = "No";
-                output += String.Format("\t\tPrepped as Current: {0}\n", maybe);
+                output += String.Format("\t\tPrepped as Current: {0}\n", Convert.ToString(attack.Prepped));
             }
+
             MessageBox.Show(output, person.Name);
             return;
         }
 
-        //********************************************************************************************
-        //Preps a goodguy to have all of his or her stats displayed
         private void displayAllStatsForSelectedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (Participant goodguy in party)
-                if (PartyChecklist.SelectedItem.ToString() == goodguy.Name)
-                    DisplayAllStats(goodguy);
+            var goodGuy = party.First(x => PartyChecklist.SelectedItems.Contains(x.Name));
+            DisplayAllStats(goodGuy);
         }
 
-        //********************************************************************************************
-        //Switches a badguy to or from being an NPC
         private void makeAnNPCToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (Participant badguy in enemies)
-                if (MonsterChecklist.SelectedItem.ToString() == badguy.Name)
-                {
-                    if (badguy.NPC)
-                        badguy.NPC = false;
-                    else
-                        badguy.NPC = true;
-                }
+            var badGuy = enemies.First(x => MonsterChecklist.SelectedItems.Contains(x.Name));
+            badGuy.AlterInfo(badGuy.Name, !badGuy.IsNpc);
         }
 
-        //********************************************************************************************
-        //Makes sure the "switch npc" command is to or from, according to selected, for badguy list
         private void badguycontextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
             if (MonsterChecklist.SelectedItem != null)
@@ -1245,15 +1226,13 @@ namespace BattleOrder
                 ConvertToGoodGuy.Enabled = true;
                 displayToolStripMenuItem.Enabled = true;
                 makeAnNPCToolStripMenuItem.Enabled = true;
-                
-                foreach (Participant badguy in enemies)
-                    if (MonsterChecklist.SelectedItem.ToString() == badguy.Name)
-                    {
-                        if (badguy.NPC)
-                            makeAnNPCToolStripMenuItem.Text = "Make selected a player character";
-                        else
-                            makeAnNPCToolStripMenuItem.Text = "Make selected an NPC";
-                    }
+
+                var badGuy = enemies.First(x => MonsterChecklist.SelectedItems.Contains(x.Name));
+
+                if (badGuy.IsNpc)
+                    makeAnNPCToolStripMenuItem.Text = "Make selected a player character";
+                else
+                    makeAnNPCToolStripMenuItem.Text = "Make selected an NPC";
             }
             else
             {
@@ -1263,8 +1242,6 @@ namespace BattleOrder
             }
         }
 
-        //********************************************************************************************
-        //Makes sure the "switch npc" command is to or from, according to selected, for goodguy list
         private void goodguycontextMenuStrip2_Opening(object sender, CancelEventArgs e)
         {
             if (PartyChecklist.SelectedItem != null)
@@ -1272,15 +1249,13 @@ namespace BattleOrder
                 toolStripMenuItem2.Enabled = true;
                 displayAllStatsForSelectedToolStripMenuItem.Enabled = true;
                 makeAnNPCToolStripMenuItem1.Enabled = true;
-                
-                foreach (Participant goodguy in party)
-                    if (PartyChecklist.SelectedItem.ToString() == goodguy.Name)
-                    {
-                        if (goodguy.NPC)
-                            makeAnNPCToolStripMenuItem1.Text = "Make selected a player character";
-                        else
-                            makeAnNPCToolStripMenuItem1.Text = "Make selected an NPC";
-                    }
+
+                var goodGuy = party.First(x => PartyChecklist.SelectedItems.Contains(x.Name));
+
+                if (goodGuy.IsNpc)
+                    makeAnNPCToolStripMenuItem1.Text = "Make selected a player character";
+                else
+                    makeAnNPCToolStripMenuItem1.Text = "Make selected an NPC";
             }
             else
             {
@@ -1292,14 +1267,8 @@ namespace BattleOrder
 
         private void makeAnNPCToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            foreach (Participant goodguy in party)
-                if (PartyChecklist.SelectedItem.ToString() == goodguy.Name)
-                {
-                    if (goodguy.NPC)
-                        goodguy.NPC = false;
-                    else
-                        goodguy.NPC = true;
-                }
+            var goodGuy = party.First(x => PartyChecklist.SelectedItems.Contains(x.Name));
+            goodGuy.AlterInfo(goodGuy.Name, !goodGuy.IsNpc);
             fileAccessor.SaveParty(party);
         }
 
