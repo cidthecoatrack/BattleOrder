@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Forms;
 using BattleOrder.Models;
 using BattleOrder.Models.Attacks;
+using BattleOrder.Models.Participants;
 
 namespace BattleOrder
 {
@@ -124,7 +125,7 @@ namespace BattleOrder
             foreach (var goodguy in party)
             {
                 PartyChecklist.Items.Add(goodguy.Name);
-                goodguy.TotalReset();
+                goodguy.PrepareForNextBattle();
             }
 
             ClearPartyInputFields();
@@ -657,7 +658,7 @@ namespace BattleOrder
 
                         foreach (var person in everyone)
                             foreach (var attack in person.CurrentAttacks)
-                                attack.Reset();
+                                attack.PrepareForNextBattle();
 
                         break;
                     }
@@ -818,7 +819,7 @@ namespace BattleOrder
 
             foreach (var participant in activeParticipants)
             {
-                participant.Reset();
+                participant.PrepareForNextRound();
                 if (participant.IsNpc)
                 {
                     var initiative = random.Next(1, 11);
@@ -831,7 +832,7 @@ namespace BattleOrder
             var inactiveParticipants = inactiveBadGuys.Union(inactiveGoodGuys);
 
             foreach (var participant in inactiveParticipants)
-                participant.TotalReset();
+                participant.PrepareForNextBattle();
 
             CheckInitiative();
         }
@@ -845,7 +846,7 @@ namespace BattleOrder
             enemies.Clear();
 
             foreach (Participant goodguy in party)
-                goodguy.TotalReset();
+                goodguy.PrepareForNextBattle();
 
             MonsterAttackCombo.Text = "";
             MonsterAttackCombo.Items.Clear();
@@ -1453,7 +1454,7 @@ namespace BattleOrder
             party = party.Union(importedParty) as List<Participant>;
 
             foreach (var goodguy in party)
-                goodguy.TotalReset();
+                goodguy.PrepareForNextBattle();
 
             var result = MessageBox.Show("Save as a new party?", "Save?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)

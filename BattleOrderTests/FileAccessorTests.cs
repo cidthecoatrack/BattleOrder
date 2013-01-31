@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using BattleOrder.Models;
+using BattleOrder.Models.Participants;
 using NUnit.Framework;
 
 namespace BattleOrder.Tests

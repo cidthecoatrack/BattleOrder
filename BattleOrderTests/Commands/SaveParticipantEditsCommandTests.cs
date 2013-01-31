@@ -1,6 +1,7 @@
 ﻿using System;
 using BattleOrder.Commands;
 using BattleOrder.Models;
+using BattleOrder.Models.Participants;
 using BattleOrder.ViewModels;
 using NUnit.Framework;
 

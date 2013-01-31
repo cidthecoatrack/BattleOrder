@@ -77,12 +77,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\BaseCommand.cs" />
+    <Compile Include="Commands\DecrementInitiativeCommand.cs" />
     <Compile Include="Commands\DecrementPerRoundCommand.cs" />
+    <Compile Include="Commands\GetNextInitiativeCommand.cs" />
+    <Compile Include="Commands\IncrementInitiativeCommand.cs" />
     <Compile Include="Commands\SaveParticipantEditsCommand.cs" />
     <Compile Include="Models\Attacks\Attack.cs" />
     <Compile Include="Commands\SaveAttackEditsCommand.cs" />
     <Compile Include="ViewModels\AttackViewModel.cs" />
     <Compile Include="ViewModels\ParticipantViewModel.cs" />
+    <Compile Include="ViewModels\SetParticipantInitiativesViewModel.cs" />
     <Compile Include="Views\BattleOrderForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,7 +95,7 @@
     </Compile>
     <Compile Include="ErrorHandler.cs" />
     <Compile Include="FileAccessor.cs" />
-    <Compile Include="Models\Participant.cs" />
+    <Compile Include="Models\Participants\Participant.cs" />
     <Compile Include="PlacementCalculator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

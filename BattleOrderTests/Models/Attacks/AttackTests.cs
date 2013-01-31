@@ -105,7 +105,7 @@ namespace BattleOrderTests.Models.Attacks
         {
             attack.AlterInfo(attack.Name, 4.5, attack.Speed);
             FinishAttacks(5);
-            attack.ResetPartial();
+            attack.PrepareForNextRound();
             FinishAttacks(3);
             Assert.That(attack.AttacksLeft, Is.EqualTo(1));
         }

@@ -1,0 +1,12 @@
+﻿<Window x:Class="BattleOrder.UI.SetInitiatives"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Set Initiatives" Height="117" Width="300" Icon="20 sided die.ico">
+    <Grid>
+        <Label Content="{Binding InitiativeString}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <Button Command="{Binding DecrementInitiativeCommand}" Content="&lt;" HorizontalAlignment="Left" Margin="76,55,0,0" VerticalAlignment="Top" Width="20"/>
+        <Button Command="{Binding IncrementInitiativeCommand}" Content="&gt;" HorizontalAlignment="Left" Margin="101,55,0,0" VerticalAlignment="Top" Width="20"/>
+        <Label Content="{Binding CurrentInitiative}" HorizontalAlignment="Left" Margin="10,53,0,0" VerticalAlignment="Top"/>
+        <Button Command="{Binding GetNextInitiativeCommand}" Click="SetInitiative" Content="Set" HorizontalAlignment="Left" Margin="207,55,0,0" VerticalAlignment="Top" Width="75"/>
+    </Grid>
+</Window>

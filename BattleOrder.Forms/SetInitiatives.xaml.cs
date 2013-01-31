@@ -11,26 +11,26 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using BattleOrder.Models;
 using BattleOrder.Models.Participants;
 using BattleOrder.ViewModels;
 
 namespace BattleOrder.UI
 {
-    public partial class EditParticipant : Window
+    public partial class SetInitiatives : Window
     {
-        private ParticipantViewModel participantViewModel;
+        private SetParticipantInitiativesViewModel setParticipantInitiativesViewModel;
         
-        public EditParticipant(Participant participant)
+        public SetInitiatives(IEnumerable<Participant> participants)
         {
             InitializeComponent();
-            participantViewModel = new ParticipantViewModel(participant);
-            DataContext = participantViewModel;
+            setParticipantInitiativesViewModel = new SetParticipantInitiativesViewModel(participants);
+            DataContext = setParticipantInitiativesViewModel;
         }
 
-        private void Close(Object sender, RoutedEventArgs e)
+        private void SetInitiative(Object sender, RoutedEventArgs e)
         {
-            Close();
+            if (setParticipantInitiativesViewModel.AllInitiativesSet)
+                Close();
         }
     }
 }

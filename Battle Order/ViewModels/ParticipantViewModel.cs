@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Input;
 using BattleOrder.Commands;
 using BattleOrder.Models;
+using BattleOrder.Models.Participants;
 
 namespace BattleOrder.ViewModels
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BattleOrder.Models.Attacks;
 
-namespace BattleOrder.Models
+namespace BattleOrder.Models.Participants
 {
     [Serializable]
     public class Participant
@@ -53,23 +53,18 @@ namespace BattleOrder.Models
             return output;
         }
 
-        public void Reset()
+        public void PrepareForNextRound()
         {
             foreach (var attack in Attacks)
-            {
-                if (attack.Prepped)
-                    attack.ResetPartial();
-                else
-                    attack.Reset();
-            }
+                attack.PrepareForNextRound();
 
             Initiative = 0;
         }
 
-        public void TotalReset()
+        public void PrepareForNextBattle()
         {
             foreach (var attack in Attacks)
-                attack.Reset();
+                attack.PrepareForNextBattle();
 
             Initiative = 0;
         }

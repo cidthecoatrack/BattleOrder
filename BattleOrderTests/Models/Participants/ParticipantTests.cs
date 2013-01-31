@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using BattleOrder.Models;
 using BattleOrder.Models.Attacks;
+using BattleOrder.Models.Participants;
 using NUnit.Framework;
 
-namespace BattleOrderTests.Models
+namespace BattleOrderTests.Models.Participants
 {
     [TestFixture]
     public class ParticipantTests

@@ -56,6 +56,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="RoundDisplay.xaml.cs">
+      <DependentUpon>RoundDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SetInitiatives.xaml.cs">
+      <DependentUpon>SetInitiatives.xaml</DependentUpon>
+    </Compile>
     <Page Include="EditAttack.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -69,6 +75,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="EditParticipant.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RoundDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SetInitiatives.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using BattleOrder.Models;
+using BattleOrder.Models.Participants;
 
 namespace BattleOrder
 {

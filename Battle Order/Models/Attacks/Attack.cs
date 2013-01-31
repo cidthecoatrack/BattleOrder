@@ -6,16 +6,16 @@ namespace BattleOrder.Models.Attacks
     [Serializable]
     public class Attack
     {
-        private Boolean[] used;
-        private Boolean differingPerRound { get { return (PerRound - Math.Floor(PerRound)) > 0; } }
+        private Int32 currentPartOfAttack;
         private Boolean allUsable;
+        private Boolean differingPerRound { get { return (PerRound - Math.Floor(PerRound)) > 0; } }
 
         public String Name { get; private set; }
         public Double PerRound { get; private set; }
         public Int32 Speed { get; private set; }
         public Boolean Prepped { get; set; }
-        public Int32 AttacksUsed { get { return used.Count(x => x); } }
-        public Int32 AttacksLeft { get { return ThisRound - AttacksUsed; } }
+        public Int32 AttacksUsed { get { return currentPartOfAttack; } }
+        public Int32 AttacksLeft { get { return ThisRound - currentPartOfAttack; } }
 
         public Int32 ThisRound
         {
@@ -30,7 +30,7 @@ namespace BattleOrder.Models.Attacks
         public Attack() 
         {
             Name = String.Empty;
-            used = new Boolean[0];
+            allUsable = true;
         }
 
         public Attack(String name, Double perRound, Int32 speed, Boolean prepped = false)
@@ -40,8 +40,6 @@ namespace BattleOrder.Models.Attacks
             Speed = speed;
             Prepped = prepped;
             allUsable = true;
-
-            used = new Boolean[Convert.ToInt32(Math.Ceiling(PerRound))];
         }
 
         public void FinishCurrentPartOfAttack()
@@ -49,8 +47,7 @@ namespace BattleOrder.Models.Attacks
             if (AttackIsDone())
                 return;
 
-            var firstUnusedIndex = used.Count(x => x);
-            used[firstUnusedIndex] = true;
+            currentPartOfAttack++;
 
             if (differingPerRound && AttackIsDone())
                 allUsable = !allUsable;
@@ -58,21 +55,18 @@ namespace BattleOrder.Models.Attacks
 
         private Boolean AttackIsDone()
         {
-            return used[ThisRound - 1];
+            return currentPartOfAttack >= ThisRound;
         }
 
-        public void Reset()
+        public void PrepareForNextBattle()
         {
-            for (var i = 0; i < used.Length; i++)
-                used[i] = false;
-
+            currentPartOfAttack = 0;
             allUsable = true;
         }
 
-        public void ResetPartial()
+        public void PrepareForNextRound()
         {
-            for (var i = 0; i < used.Length; i++)
-                used[i] = false;
+            currentPartOfAttack = 0;
         }
 
         public void AlterInfo(String newName, Double newPerRound, Int32 newSpeed)
@@ -80,7 +74,6 @@ namespace BattleOrder.Models.Attacks
             Name = newName;
             PerRound = newPerRound;
             Speed = newSpeed;
-            used = new Boolean[Convert.ToInt32(Math.Ceiling(PerRound))];
         }
     }
 }
