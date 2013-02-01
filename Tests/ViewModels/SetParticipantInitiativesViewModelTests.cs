@@ -17,6 +17,8 @@ namespace BattleOrder.Tests.ViewModels
         public void Setup()
         {
             participants = new[] { new Participant("1"), new Participant("2") };
+            var participant = participants.First();
+            participant.Initiative = 9;
             setParticipantInitiativesViewModel = new SetParticipantInitiativesViewModel(participants);
         }
 

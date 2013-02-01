@@ -29,6 +29,14 @@ namespace BattleOrder.Core.ViewModels
             DecrementInitiativeCommand = new DecrementInitiativeCommand(this);
             IncrementInitiativeCommand = new IncrementInitiativeCommand(this);
             GetNextInitiativeCommand = new GetNextInitiativeCommand(this);
+
+            ZeroOutAllInitiatives();
+        }
+
+        private void ZeroOutAllInitiatives()
+        {
+            foreach (var participant in participants)
+                participant.Initiative = 0;
         }
 
         public void GetNextParticipantToSetInitiative()

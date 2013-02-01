@@ -17,11 +17,11 @@ namespace BattleOrder.Tests.Commands
         public void Setup()
         {
             var participant = new Participant("name");
-            participant.Initiative = 9;
-
             var participants = new[] { participant };
 
             setParticipantInitiativesViewModel = new SetParticipantInitiativesViewModel(participants);
+            participant.Initiative = 9;
+
             incrementInitiativeCommand = new IncrementInitiativeCommand(setParticipantInitiativesViewModel);
         }
 
