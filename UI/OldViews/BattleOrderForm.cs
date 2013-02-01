@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using BattleOrder.Core;
 using BattleOrder.Core.Models.Attacks;
 using BattleOrder.Core.Models.Participants;
+using BattleOrder.UI.Views;
 
 namespace BattleOrder.UI.OldViews
 {
@@ -76,8 +77,8 @@ namespace BattleOrder.UI.OldViews
         {
             if (ApplicationDeployment.IsNetworkDeployed)
             {
-                var cd = ApplicationDeployment.CurrentDeployment;
-                var version = cd.CurrentVersion;
+                var currentDeployment = ApplicationDeployment.CurrentDeployment;
+                var version = currentDeployment.CurrentVersion;
                 return String.Format("Battle Order {0}.{1}.{2}", version.Major, version.Minor, version.Revision);
             }
 
@@ -142,37 +143,20 @@ namespace BattleOrder.UI.OldViews
 
         private void PartyAdd_Click(object sender, EventArgs e)
         {
-            TrimPartyInputFields();
+            var newParticipant = new Participant();
+            var newParticipantWindow = new EditParticipant(newParticipant);
 
-            Double perRound;
-            Int32 speed;
+            newParticipantWindow.ShowDialog();
 
-            try
-            {
-                perRound = Convert.ToDouble(PartyPerRoundText.Text);
-                speed = Convert.ToInt16(PartySpeedText.Text);
-            }
-            catch (FormatException)
-            {
-                MessageBox.Show("Please enter information correctly.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            var attack = new Attack();
+            newParticipant.AddAttack(attack);
+            var newAttackWindow = new EditAttack(attack);
 
-            var attackName = PartyAttackCombo.Text;
-            var newAttack = new Attack(attackName, perRound, speed);
-            var partyMemberName = PartyNameText.Text;
+            newAttackWindow.ShowDialog();
 
-            //HACK - logic to add attack or party member, current, all that crap
-            var goodGuyExists = party.Any(x => x.Name == partyMemberName);
-            if (!goodGuyExists)
-            {
-                var result = MessageBox.Show("Is this character an NPC?", "NPC?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                var npc = (result != DialogResult.No);
-                //HACK - adding new person
-                PartyChecklist.Items.Add(partyMemberName, true);
-            }
+            party.Add(newParticipant);
+            PartyChecklist.Items.Add(newParticipant.Name, true);
 
-            ClearPartyInputFields();
             fileAccessor.SaveParty(party);
         }
 
@@ -188,9 +172,8 @@ namespace BattleOrder.UI.OldViews
         {
             var stringNumber = Convert.ToString(number);
 
-            if (stringNumber.Length < digitAdjustment)
-                while ((digitAdjustment - stringNumber.Length) > 0)
-                    stringNumber = "0" + stringNumber;
+            while ((digitAdjustment - stringNumber.Length) > 0)
+                stringNumber = "0" + stringNumber;
 
             return stringNumber;
         }
@@ -199,11 +182,10 @@ namespace BattleOrder.UI.OldViews
         {
             var result = String.Empty;
 
-            if (source[source.Length - 1] >= '0' && source[source.Length - 1] <= '9')
+            if (source.Last() >= '0' && source.Last() <= '9')
             {
-                var whereCut = source.Length - 1;
                 var split = source.Split(' ');
-                result = split[split.Length - 1];
+                result = split.Last();
             }
 
             var number = Convert.ToInt32(result);

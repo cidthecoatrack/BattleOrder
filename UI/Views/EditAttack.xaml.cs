@@ -17,11 +17,11 @@ using BattleOrder.Core.ViewModels;
 
 namespace BattleOrder.UI.Views
 {
-    public partial class Edit : Window
+    public partial class EditAttack : Window
     {
         private AttackViewModel attackViewModel;
         
-        public Edit(Attack attack)
+        public EditAttack(Attack attack)
         {
             InitializeComponent();
             attackViewModel = new AttackViewModel(attack);

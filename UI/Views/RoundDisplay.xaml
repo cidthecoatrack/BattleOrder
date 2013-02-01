@@ -1,7 +1,7 @@
 ﻿<Window x:Class="BattleOrder.UI.Views.RoundDisplay"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="{Binding RoundTitle}" Height="300" Width="300" Icon="20 sided die.ico">
+        Title="{Binding RoundTitle}" Height="300" Width="300" Icon="/BattleOrder.UI;component/Images/20 sided die.ico" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow">
     <Grid>
         <Button Command="{Binding GetNextAttacksCommand}" Content="Next" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
         <ProgressBar Minimum="0" Value="{Binding CompletedAttacks}" Maximum="{Binding TotalAttacks}" HorizontalAlignment="Left" Height="22" Margin="90,10,0,0" VerticalAlignment="Top" Width="112"/>

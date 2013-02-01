@@ -8,7 +8,7 @@ namespace BattleOrder.Core
     {
         public enum ERROR_TYPES { OUT_OF_RANGE };
         
-        public static String ShowDebugInfo(ERROR_TYPES errorType, object causeOfError)
+        public static String ShowDebugInfo(ERROR_TYPES errorType, Object causeOfError)
         {
             var stackFrame = new StackFrame(1, true);
 
