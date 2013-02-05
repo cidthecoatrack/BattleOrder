@@ -756,7 +756,6 @@ namespace BattleOrder.UI.OldViews
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::BattleOrder.UI.Properties.Resources.Suggestion07_copy;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(767, 443);
             this.Controls.Add(this.menuStrip1);
