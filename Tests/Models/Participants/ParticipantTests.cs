@@ -55,19 +55,6 @@ namespace BattleOrder.Tests.Models.Participants
         }
 
         [Test]
-        public void AttacksStartAsEmptyIEnumerable()
-        {
-            participant = new Participant("name");
-            Assert.That(participant.Attacks, Is.EqualTo(Enumerable.Empty<Attack>()));
-        }
-
-        [Test]
-        public void InitiativeZeroAtStart()
-        {
-            Assert.That(participant.Initiative, Is.EqualTo(0));
-        }
-
-        [Test]
         public void PassInIEnumerableOfAttacks()
         {
             var count = participant.Attacks.Count();
@@ -77,6 +64,11 @@ namespace BattleOrder.Tests.Models.Participants
         [Test]
         public void CurrentAttacksIsAccurate()
         {
+            var attacks = new List<Attack>();
+            for (var i = 0; i < 3; i++)
+                attacks.Add(new Attack("name " + i, i, i, (i % 2 == 0)));
+
+            participant = new Participant("name", attacks); 
             var count = participant.CurrentAttacks.Count();
             Assert.That(count, Is.EqualTo(2));
 

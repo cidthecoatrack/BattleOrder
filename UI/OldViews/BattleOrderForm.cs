@@ -144,18 +144,15 @@ namespace BattleOrder.UI.OldViews
         private void PartyAdd_Click(object sender, EventArgs e)
         {
             var newParticipant = new Participant();
-            var newParticipantWindow = new EditParticipant(newParticipant);
+            var newParticipantWindow = new NewParticipant(newParticipant);
 
             newParticipantWindow.ShowDialog();
 
-            var attack = new Attack();
-            newParticipant.AddAttack(attack);
-            var newAttackWindow = new EditAttack(attack);
-
-            newAttackWindow.ShowDialog();
-
-            party.Add(newParticipant);
-            PartyChecklist.Items.Add(newParticipant.Name, true);
+            if (newParticipant.IsValid())
+            {
+                party.Add(newParticipant);
+                PartyChecklist.Items.Add(newParticipant.Name, true);
+            }
 
             fileAccessor.SaveParty(party);
         }

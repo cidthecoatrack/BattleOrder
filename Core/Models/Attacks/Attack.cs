@@ -75,5 +75,10 @@ namespace BattleOrder.Core.Models.Attacks
             PerRound = newPerRound;
             Speed = newSpeed;
         }
+
+        public Boolean IsValid()
+        {
+            return !String.IsNullOrEmpty(Name) && PerRound > 0;
+        }
     }
 }

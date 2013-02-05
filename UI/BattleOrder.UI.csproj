@@ -59,6 +59,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Views\NewParticipant.xaml.cs">
+      <DependentUpon>NewParticipant.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -74,6 +77,10 @@
     <Compile Include="OldViews\BattleOrderForm.Designer.cs">
       <DependentUpon>BattleOrderForm.cs</DependentUpon>
     </Compile>
+    <Page Include="Views\NewParticipant.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\EditAttack.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

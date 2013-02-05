@@ -8,35 +8,38 @@ namespace BattleOrder.Core.Models.Participants
     [Serializable]
     public class Participant
     {
+        private List<Attack> attacks;
+        
         public String Name { get; private set; }
         public Int32 Initiative { get; set; }
-        public IEnumerable<Attack> Attacks { get; private set; }
         public Boolean IsNpc { get; private set; }
-        public IEnumerable<Attack> CurrentAttacks { get { return Attacks.Where(x => x.Prepped); } }
+        public IEnumerable<Attack> Attacks { get { return attacks; } }
+        public IEnumerable<Attack> CurrentAttacks { get { return attacks.Where(x => x.Prepped); } }
 
         public Participant() 
         {
             Name = String.Empty;
-            Attacks = Enumerable.Empty<Attack>();
+            attacks = new List<Attack>();
         }
 
         public Participant(String name, Boolean isNpc = true)
         {
-            Attacks = Enumerable.Empty<Attack>();
+            attacks = new List<Attack>();
             IsNpc = isNpc;
             Name = name;
         }
 
-        public Participant(String name, IEnumerable<Attack> attacks) 
+        public Participant(String name, IEnumerable<Attack> newAttacks) 
             : this(name)
         {
-            Attacks = attacks;
+            attacks = new List<Attack>(newAttacks);
         }
 
         public Participant(String name, Attack newAttack, Boolean isNpc = true)
             : this(name, isNpc)
         {
-            Attacks = new[] { newAttack };
+            attacks = new List<Attack>();
+            attacks.Add(newAttack);
         }
 
         public String CurrentAttacksToString()
@@ -71,22 +74,23 @@ namespace BattleOrder.Core.Models.Participants
 
         public void AddAttack(Attack newAttack)
         {
-            var tempList = Attacks as List<Attack>;
-            tempList.Add(newAttack);
-            Attacks = tempList;
+            attacks.Add(newAttack);
         }
 
         public void RemoveAttack(Attack attack)
         {
-            var tempList = Attacks as List<Attack>;
-            tempList.Remove(attack);
-            Attacks = tempList;
+            attacks.Remove(attack);
         }
 
         public void AlterInfo(String newName, Boolean npc)
         {
             Name = newName;
             IsNpc = npc;
+        }
+
+        public Boolean IsValid()
+        {
+            return !String.IsNullOrEmpty(Name) && attacks.Any();
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using BattleOrder.Core.Commands;
+using BattleOrder.Core.Models.Attacks;
 using BattleOrder.Core.Models.Participants;
 
 namespace BattleOrder.Core.ViewModels
@@ -21,11 +22,7 @@ namespace BattleOrder.Core.ViewModels
         {
             this.participant = participant;
             SaveParticipantEditsCommand = new SaveParticipantEditsCommand(this);
-            SetToUneditedVariables();
-        }
 
-        private void SetToUneditedVariables()
-        {
             Name = participant.Name;
             IsNpc = participant.IsNpc;
         }
@@ -33,6 +30,11 @@ namespace BattleOrder.Core.ViewModels
         public void SaveChanges()
         {
             participant.AlterInfo(Name, IsNpc);
+        }
+
+        public void AddAttack(Attack attack)
+        {
+            participant.AddAttack(attack);
         }
     }
 }
