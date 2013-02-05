@@ -47,6 +47,12 @@ namespace BattleOrder.UI.OldViews
                 party = fileAccessor.LoadParty(partyFileName) as List<Participant>;
                 LoadPartyIntoUi();
             }
+            else
+            {
+                var partyFileName = SaveNewParty();
+                party = new List<Participant>();
+                fileAccessor.SaveParty(party, partyFileName);
+            }
         }
 
         private void SetupMonsterDatabase()
@@ -83,6 +89,24 @@ namespace BattleOrder.UI.OldViews
             }
 
             return "Battle Order IN DEVELOPMENT";
+        }
+
+        private String SaveNewParty()
+        {
+            var save = new SaveFileDialog();
+            save.InitialDirectory = fileAccessor.SaveDirectory;
+            var result = save.ShowDialog();
+
+            if (result == DialogResult.Cancel)
+                return String.Empty;
+
+            if (String.IsNullOrEmpty(save.FileName))
+            {
+                MessageBox.Show("Empty file name.  Cannot open the file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return String.Empty;
+            }
+
+            return save.FileName;
         }
 
         private String GetPartyFileNameFromUser()

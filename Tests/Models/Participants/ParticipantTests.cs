@@ -112,5 +112,24 @@ namespace BattleOrder.Tests.Models.Participants
             var hasBeenRemoved = !participant.Attacks.Contains(attack);
             Assert.That(hasBeenRemoved, Is.True);
         }
+
+        [Test]
+        public void ParticipantIsValid()
+        {
+            participant = new Participant();
+            Assert.That(participant.IsValid(), Is.False);
+
+            participant.AlterInfo("name", false);
+            var attack = new Attack();
+            participant.AddAttack(attack);
+            Assert.That(participant.IsValid(), Is.True);
+
+            participant.AlterInfo(String.Empty, false);
+            Assert.That(participant.IsValid(), Is.False);
+
+            participant.AlterInfo("name", false);
+            participant.RemoveAttack(attack);
+            Assert.That(participant.IsValid(), Is.False);
+        }
     }
 }

@@ -109,5 +109,21 @@ namespace BattleOrder.Tests.Models.Attacks
             FinishAttacks(3);
             Assert.That(attack.AttacksLeft, Is.EqualTo(1));
         }
+
+        [Test]
+        public void AttackIsValid()
+        {
+            attack = new Attack();
+            Assert.That(attack.IsValid(), Is.False);
+
+            attack.AlterInfo("name", .5, 0);
+            Assert.That(attack.IsValid(), Is.True);
+
+            attack.AlterInfo(String.Empty, .5, 0);
+            Assert.That(attack.IsValid(), Is.False);
+
+            attack.AlterInfo("name", 0, 0);
+            Assert.That(attack.IsValid(), Is.False);
+        }
     }
 }

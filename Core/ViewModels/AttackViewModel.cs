@@ -9,13 +9,50 @@ using BattleOrder.Core.Models.Attacks;
 
 namespace BattleOrder.Core.ViewModels
 {
-    public class AttackViewModel
+    public class AttackViewModel : INotifyPropertyChanged
     {
         private Attack attack;
+        private String attackName;
+        private Double perRound;
+        private Int32 speed;
 
-        public String AttackName { get; set; }
-        public Double PerRound { get; private set; }
-        public Int32 Speed { get; private set; }
+        public String AttackName
+        {
+            get { return attackName; }
+            set
+            {
+                attackName = value;
+                NotifyPropertyChanged();
+            }
+        }
+        
+        public Double PerRound
+        {
+            get { return perRound; }
+            private set
+            {
+                perRound = value;
+                NotifyPropertyChanged();
+            }
+        }
+        
+        public Int32 Speed
+        {
+            get { return speed; }
+            private set
+            {
+                speed = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void NotifyPropertyChanged()
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(String.Empty));
+        }
 
         public ICommand SaveAttackEditsCommand { get; set; }
         public ICommand DecrementPerRoundCommand { get; set; }
