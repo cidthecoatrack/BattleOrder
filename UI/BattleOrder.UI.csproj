@@ -154,10 +154,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Suggestion07_copy.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Images\background.jpg" />
+    <Resource Include="Images\background.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

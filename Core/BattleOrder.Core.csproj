@@ -86,6 +86,7 @@
     <Compile Include="Commands\SaveParticipantEditsCommand.cs" />
     <Compile Include="Models\Attacks\Attack.cs" />
     <Compile Include="Commands\SaveAttackEditsCommand.cs" />
+    <Compile Include="ViewModels\AllParticipantsViewModel.cs" />
     <Compile Include="ViewModels\AttackViewModel.cs" />
     <Compile Include="Commands\GetNextAttacksCommand.cs" />
     <Compile Include="ViewModels\ParticipantViewModel.cs" />

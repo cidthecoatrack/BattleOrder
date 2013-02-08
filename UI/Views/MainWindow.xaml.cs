@@ -77,6 +77,13 @@ namespace BattleOrder.UI.Views
             else
             {
                 var partyFileName = SaveNewParty(fileAccessor);
+
+                if (String.IsNullOrEmpty(partyFileName))
+                {
+                    MessageBox.Show("No party file selected. Cannot continue operations. Closing program.", "Error: No Party File to Auto Save To", MessageBoxButton.OK);
+                    Close();
+                }
+
                 party = new List<Participant>();
                 fileAccessor.SaveParty(party, partyFileName);
             }
@@ -124,6 +131,13 @@ namespace BattleOrder.UI.Views
 
         private void AddPartyMember(Object sender, RoutedEventArgs e)
         {
+            var partyMember = new Participant();
+            var addPartyMemberWindow = new NewParticipant(partyMember);
+            addPartyMemberWindow.Owner = this;
+            addPartyMemberWindow.ShowDialog();
+
+            if (partyMember.IsValid())
+                party.Add(partyMember);
         }
 
         private void AddEnemy(Object sender, RoutedEventArgs e)

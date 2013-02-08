@@ -13,47 +13,16 @@ namespace BattleOrder.Core.Models.Participants
         public String Name { get; private set; }
         public Int32 Initiative { get; set; }
         public Boolean IsNpc { get; private set; }
+        public Boolean IsEnemy { get; private set; }
         public IEnumerable<Attack> Attacks { get { return attacks; } }
         public IEnumerable<Attack> CurrentAttacks { get { return attacks.Where(x => x.Prepped); } }
 
-        public Participant() 
+        public Participant(String name = "", Boolean isNpc = true, Boolean isEnemy = true)
         {
-            Name = String.Empty;
-            attacks = new List<Attack>();
-        }
-
-        public Participant(String name, Boolean isNpc = true)
-        {
-            attacks = new List<Attack>();
-            IsNpc = isNpc;
             Name = name;
-        }
-
-        public Participant(String name, IEnumerable<Attack> newAttacks) 
-            : this(name)
-        {
-            attacks = new List<Attack>(newAttacks);
-        }
-
-        public Participant(String name, Attack newAttack, Boolean isNpc = true)
-            : this(name, isNpc)
-        {
+            IsNpc = isNpc;
+            IsEnemy = isEnemy;
             attacks = new List<Attack>();
-            attacks.Add(newAttack);
-        }
-
-        public String CurrentAttacksToString()
-        {
-            var output = String.Empty;
-
-            foreach (var attack in CurrentAttacks)
-            {
-                if (!String.IsNullOrEmpty(output))
-                    output += " and ";
-                output += String.Format("{0}", attack.Name);
-            }
-
-            return output;
         }
 
         public void PrepareForNextRound()
@@ -77,15 +46,21 @@ namespace BattleOrder.Core.Models.Participants
             attacks.Add(newAttack);
         }
 
+        public void AddAttacks(IEnumerable<Attack> newAttacks)
+        {
+            attacks.AddRange(newAttacks);
+        }
+
         public void RemoveAttack(Attack attack)
         {
             attacks.Remove(attack);
         }
 
-        public void AlterInfo(String newName, Boolean npc)
+        public void AlterInfo(String newName, Boolean npc, Boolean isEnemy)
         {
             Name = newName;
             IsNpc = npc;
+            IsEnemy = isEnemy;
         }
 
         public Boolean IsValid()

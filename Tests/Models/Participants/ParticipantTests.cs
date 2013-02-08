@@ -19,7 +19,8 @@ namespace BattleOrder.Tests.Models.Participants
             for (var i = 0; i < 3; i++)
                 attacks.Add(new Attack("name " + i, i, i, (i % 2 == 0))); 
             
-            participant = new Participant("name", attacks);
+            participant = new Participant("name", true, true);
+            participant.AddAttacks(attacks);
         }
 
         [Test]
@@ -27,31 +28,18 @@ namespace BattleOrder.Tests.Models.Participants
         {
             participant = new Participant();
             Assert.That(participant.Name, Is.EqualTo(String.Empty));
-            Assert.That(participant.IsNpc, Is.EqualTo(false));
+            Assert.That(participant.IsNpc, Is.False);
+            Assert.That(participant.IsEnemy, Is.True);
             Assert.That(participant.Attacks, Is.EqualTo(Enumerable.Empty<Attack>()));
             Assert.That(participant.Initiative, Is.EqualTo(0));
         }
-        
-        [Test]
-        public void IsNpcDefaultsToTrue()
-        {
-            Assert.That(participant.IsNpc, Is.True);
-        }
 
         [Test]
-        public void ManuallySetIsNpc()
-        {
-            participant = new Participant("name", true);
-            Assert.That(participant.IsNpc, Is.True);
-
-            participant = new Participant("name", false);
-            Assert.That(participant.IsNpc, Is.False);
-        }
-
-        [Test]
-        public void NameCorrectlyPassedIn()
+        public void ManuallySetInitialValues()
         {
             Assert.That(participant.Name, Is.EqualTo("name"));
+            Assert.That(participant.IsNpc, Is.True);
+            Assert.That(participant.IsEnemy, Is.True);
         }
 
         [Test]
@@ -64,35 +52,11 @@ namespace BattleOrder.Tests.Models.Participants
         [Test]
         public void CurrentAttacksIsAccurate()
         {
-            var attacks = new List<Attack>();
-            for (var i = 0; i < 3; i++)
-                attacks.Add(new Attack("name " + i, i, i, (i % 2 == 0)));
-
-            participant = new Participant("name", attacks); 
             var count = participant.CurrentAttacks.Count();
             Assert.That(count, Is.EqualTo(2));
 
             foreach (var attack in participant.CurrentAttacks)
                 Assert.That(attack.PerRound % 2, Is.EqualTo(0));
-        }
-
-        [Test]
-        public void AddAttackWhenConstructingParticipant()
-        {
-            var attack = new Attack("attack name", 1, 2);
-            participant = new Participant("name", attack);
-
-            Assert.That(participant.Attacks.Count(), Is.EqualTo(1));
-            var passedAttack = participant.Attacks.First();
-            Assert.That(passedAttack.Name, Is.EqualTo("attack name"));
-        }
-
-        [Test]
-        public void CurrentAttackStringIsCorrect()
-        {
-            var currentAttacks = participant.CurrentAttacksToString();
-            var expectedString = "name 0 and name 2";
-            Assert.That(currentAttacks, Is.EqualTo(expectedString));
         }
 
         [Test]
@@ -102,6 +66,22 @@ namespace BattleOrder.Tests.Models.Participants
             participant.AddAttack(attack);
             var hasBeenAdded = participant.Attacks.Contains(attack);
             Assert.That(hasBeenAdded, Is.True);
+        }
+
+        [Test]
+        public void AddAttacks()
+        {
+            var attacks = new List<Attack>();
+            for (var i = 0; i < 2; i++)
+                attacks.Add(new Attack("new attack " + i, i, i));
+
+            participant.AddAttacks(attacks);
+
+            foreach (var attack in attacks)
+            {
+                var hasBeenAdded = participant.Attacks.Contains(attack);
+                Assert.That(hasBeenAdded, Is.True);
+            }
         }
 
         [Test]
@@ -119,15 +99,15 @@ namespace BattleOrder.Tests.Models.Participants
             participant = new Participant();
             Assert.That(participant.IsValid(), Is.False);
 
-            participant.AlterInfo("name", false);
+            participant.AlterInfo("name", false, false);
             var attack = new Attack();
             participant.AddAttack(attack);
             Assert.That(participant.IsValid(), Is.True);
 
-            participant.AlterInfo(String.Empty, false);
+            participant.AlterInfo(String.Empty, false, false);
             Assert.That(participant.IsValid(), Is.False);
 
-            participant.AlterInfo("name", false);
+            participant.AlterInfo("name", false, false);
             participant.RemoveAttack(attack);
             Assert.That(participant.IsValid(), Is.False);
         }

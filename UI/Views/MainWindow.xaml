@@ -6,7 +6,7 @@
         Icon="/BattleOrder.UI;component/Images/20 sided die.ico"
         Loaded="Load">
     <Window.Background>
-        <ImageBrush ImageSource="/BattleOrder.UI;component/Images/background.jpg"></ImageBrush>
+        <ImageBrush ImageSource="/BattleOrder.UI;component/Images/background.png"></ImageBrush>
     </Window.Background>
     <Grid>
         <Grid.RowDefinitions>
