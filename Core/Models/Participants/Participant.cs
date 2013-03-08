@@ -17,7 +17,7 @@ namespace BattleOrder.Core.Models.Participants
         public IEnumerable<Attack> Attacks { get { return attacks; } }
         public IEnumerable<Attack> CurrentAttacks { get { return attacks.Where(x => x.Prepped); } }
 
-        public Participant(String name = "", Boolean isNpc = true, Boolean isEnemy = true)
+        public Participant(String name, Boolean isEnemy = true, Boolean isNpc = true)
         {
             Name = name;
             IsNpc = isNpc;
@@ -66,6 +66,11 @@ namespace BattleOrder.Core.Models.Participants
         public Boolean IsValid()
         {
             return !String.IsNullOrEmpty(Name) && attacks.Any();
+        }
+
+        public override String ToString()
+        {
+            return Name;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace BattleOrder.Tests.ViewModels
         [SetUp]
         public void Setup()
         {
-            participant = new Participant("name", false);
+            participant = new Participant("name", false, false);
             participantViewModel = new ParticipantViewModel(participant);
         }
 
@@ -23,6 +23,7 @@ namespace BattleOrder.Tests.ViewModels
         public void CorrectLoad()
         {
             Assert.That(participantViewModel.Name, Is.EqualTo("name"));
+            Assert.That(participantViewModel.IsEnemy, Is.False);
             Assert.That(participantViewModel.IsNpc, Is.False);
         }
 

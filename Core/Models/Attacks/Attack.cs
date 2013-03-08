@@ -27,13 +27,7 @@ namespace BattleOrder.Core.Models.Attacks
             }
         }
 
-        public Attack() 
-        {
-            Name = String.Empty;
-            allUsable = true;
-        }
-
-        public Attack(String name, Double perRound, Int32 speed, Boolean prepped = false)
+        public Attack(String name, Double perRound = 0, Int32 speed = 0, Boolean prepped = false)
         {
             Name = name;
             PerRound = perRound;
@@ -79,6 +73,11 @@ namespace BattleOrder.Core.Models.Attacks
         public Boolean IsValid()
         {
             return !String.IsNullOrEmpty(Name) && PerRound > 0;
+        }
+
+        public override String ToString()
+        {
+            return Name;
         }
     }
 }

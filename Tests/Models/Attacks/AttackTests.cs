@@ -16,12 +16,11 @@ namespace BattleOrder.Tests.Models.Attacks
         }
 
         [Test]
-        public void DefaultAttackConstructor()
+        public void Constructor()
         {
-            attack = new Attack();
-            Assert.That(attack.Name, Is.EqualTo(String.Empty));
-            Assert.That(attack.PerRound, Is.EqualTo(0));
-            Assert.That(attack.Speed, Is.EqualTo(0));
+            Assert.That(attack.Name, Is.EqualTo("attack"));
+            Assert.That(attack.PerRound, Is.EqualTo(5));
+            Assert.That(attack.Speed, Is.EqualTo(3));
             Assert.That(attack.Prepped, Is.EqualTo(false));
         }
 
@@ -113,7 +112,7 @@ namespace BattleOrder.Tests.Models.Attacks
         [Test]
         public void AttackIsValid()
         {
-            attack = new Attack();
+            attack = new Attack(String.Empty);
             Assert.That(attack.IsValid(), Is.False);
 
             attack.AlterInfo("name", .5, 0);

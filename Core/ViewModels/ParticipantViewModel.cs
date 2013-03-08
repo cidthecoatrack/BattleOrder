@@ -15,6 +15,7 @@ namespace BattleOrder.Core.ViewModels
 
         public String Name { get; set; }
         public Boolean IsNpc { get; set; }
+        public Boolean IsEnemy { get; set; }
 
         public ICommand SaveParticipantEditsCommand { get; set; }
 
@@ -25,11 +26,12 @@ namespace BattleOrder.Core.ViewModels
 
             Name = participant.Name;
             IsNpc = participant.IsNpc;
+            IsEnemy = participant.IsEnemy;
         }
 
         public void SaveChanges()
         {
-            participant.AlterInfo(Name, IsNpc);
+            participant.AlterInfo(Name, IsNpc, IsEnemy);
         }
 
         public void AddAttack(Attack attack)

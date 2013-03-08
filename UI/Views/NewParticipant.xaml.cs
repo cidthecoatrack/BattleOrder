@@ -35,7 +35,7 @@ namespace BattleOrder.UI.Views
 
         private void Save(Object sender, RoutedEventArgs e)
         {
-            var attack = new Attack();
+            var attack = new Attack(String.Empty);
             var newAttackWindow = new EditAttack(attack);
 
             newAttackWindow.Owner = this;

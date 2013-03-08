@@ -19,16 +19,16 @@ namespace BattleOrder.Tests.Models.Participants
             for (var i = 0; i < 3; i++)
                 attacks.Add(new Attack("name " + i, i, i, (i % 2 == 0))); 
             
-            participant = new Participant("name", true, true);
+            participant = new Participant("name");
             participant.AddAttacks(attacks);
         }
 
         [Test]
         public void DefaultParticipantConstructor()
         {
-            participant = new Participant();
-            Assert.That(participant.Name, Is.EqualTo(String.Empty));
-            Assert.That(participant.IsNpc, Is.False);
+            participant = new Participant("name");
+            Assert.That(participant.Name, Is.EqualTo("name"));
+            Assert.That(participant.IsNpc, Is.True);
             Assert.That(participant.IsEnemy, Is.True);
             Assert.That(participant.Attacks, Is.EqualTo(Enumerable.Empty<Attack>()));
             Assert.That(participant.Initiative, Is.EqualTo(0));
@@ -96,11 +96,11 @@ namespace BattleOrder.Tests.Models.Participants
         [Test]
         public void ParticipantIsValid()
         {
-            participant = new Participant();
+            participant = new Participant(String.Empty);
             Assert.That(participant.IsValid(), Is.False);
 
             participant.AlterInfo("name", false, false);
-            var attack = new Attack();
+            var attack = new Attack(String.Empty);
             participant.AddAttack(attack);
             Assert.That(participant.IsValid(), Is.True);
 

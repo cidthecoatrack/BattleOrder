@@ -72,6 +72,7 @@
     <Compile Include="ViewModels\ParticipantViewModelTests.cs" />
     <Compile Include="ViewModels\SetParticipantInitiativesViewModelTests.cs" />
     <Compile Include="ViewModels\RoundViewModelTests.cs" />
+    <Compile Include="ViewModels\AllParticipantsViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\BattleOrder.Core.csproj">

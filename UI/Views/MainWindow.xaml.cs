@@ -15,17 +15,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BattleOrder.Core;
 using BattleOrder.Core.Models.Participants;
+using BattleOrder.Core.ViewModels;
 using BattleOrder.UI.OldViews;
 
 namespace BattleOrder.UI.Views
 {
     public partial class MainWindow : Window
     {
-        private List<Participant> party;
+        private AllParticipantsViewModel allParticipantsViewModel;
         
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent(); 
         }
 
         public void Load(Object sender, RoutedEventArgs e)
@@ -33,7 +34,10 @@ namespace BattleOrder.UI.Views
             Title = GetVersion();
 
             var fileAccessor = SetupFileAccessor();
-            SetupParty(fileAccessor);
+            var party = SetupParty(fileAccessor);
+            allParticipantsViewModel = new AllParticipantsViewModel(party);
+
+            DataContext = allParticipantsViewModel;
         }
 
         private String GetVersion()
@@ -66,13 +70,14 @@ namespace BattleOrder.UI.Views
             return new FileAccessor(saveDirectory);
         }
 
-        private void SetupParty(FileAccessor fileAccessor)
+        private IEnumerable<Participant> SetupParty(FileAccessor fileAccessor)
         {
             var result = MessageBox.Show("Load a party?", "Load?", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
                 var partyFileName = GetPartyFileNameFromUser(fileAccessor);
-                party = fileAccessor.LoadParty(partyFileName) as List<Participant>;
+                return fileAccessor.LoadParty(partyFileName);
+
             }
             else
             {
@@ -84,8 +89,10 @@ namespace BattleOrder.UI.Views
                     Close();
                 }
 
-                party = new List<Participant>();
+                var party = new List<Participant>();
                 fileAccessor.SaveParty(party, partyFileName);
+
+                return party;
             }
         }
 
@@ -127,33 +134,38 @@ namespace BattleOrder.UI.Views
 
         private void AddAttackToPartyMember(Object sender, RoutedEventArgs e)
         {
+            throw new NotImplementedException();
         }
 
         private void AddPartyMember(Object sender, RoutedEventArgs e)
         {
-            var partyMember = new Participant();
+            var partyMember = new Participant(String.Empty, false);
             var addPartyMemberWindow = new NewParticipant(partyMember);
             addPartyMemberWindow.Owner = this;
             addPartyMemberWindow.ShowDialog();
 
             if (partyMember.IsValid())
-                party.Add(partyMember);
+                allParticipantsViewModel.AddParticipant(partyMember);
         }
 
         private void AddEnemy(Object sender, RoutedEventArgs e)
         {
+            throw new NotImplementedException();
         }
 
         private void AddAttackToEnemy(Object sender, RoutedEventArgs e)
         {
+            throw new NotImplementedException();
         }
 
         private void MakeNewBattle(Object sender, RoutedEventArgs e)
         {
+            throw new NotImplementedException();
         }
 
         private void ExecuteRound(Object sender, RoutedEventArgs e)
         {
+            throw new NotImplementedException();
         }
     }
 }
