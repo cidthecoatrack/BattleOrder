@@ -32,6 +32,7 @@ namespace BattleOrder.Tests.Models.Participants
             Assert.That(participant.IsEnemy, Is.True);
             Assert.That(participant.Attacks, Is.EqualTo(Enumerable.Empty<Attack>()));
             Assert.That(participant.Initiative, Is.EqualTo(0));
+            Assert.That(participant.Enabled, Is.True);
         }
 
         [Test]

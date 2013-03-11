@@ -65,10 +65,12 @@ namespace BattleOrder.Core
 
         public IEnumerable<Participant> LoadParty(String partyFileName)
         {
+            this.partyFileName = partyFileName;
+
             var party = new List<Participant>();
             var binary = new BinaryFormatter();
-            var path = Path.Combine(SaveDirectory, partyFileName);
 
+            var path = Path.Combine(SaveDirectory, partyFileName);
             using (var input = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 while (true)

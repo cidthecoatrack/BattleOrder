@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BattleOrder.Core;
+using BattleOrder.Core.Models.Attacks;
 using BattleOrder.Core.Models.Participants;
 using BattleOrder.Core.ViewModels;
 using BattleOrder.UI.OldViews;
@@ -23,6 +24,8 @@ namespace BattleOrder.UI.Views
     public partial class MainWindow : Window
     {
         private AllParticipantsViewModel allParticipantsViewModel;
+        private FileAccessor fileAccessor;
+        private Int32 round;
         
         public MainWindow()
         {
@@ -33,11 +36,12 @@ namespace BattleOrder.UI.Views
         {
             Title = GetVersion();
 
-            var fileAccessor = SetupFileAccessor();
+            fileAccessor = SetupFileAccessor();
             var party = SetupParty(fileAccessor);
             allParticipantsViewModel = new AllParticipantsViewModel(party);
 
             DataContext = allParticipantsViewModel;
+            round = 0;
         }
 
         private String GetVersion()
@@ -134,7 +138,15 @@ namespace BattleOrder.UI.Views
 
         private void AddAttackToPartyMember(Object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var attack = new Attack(String.Empty);
+            var addAttackWindow = new EditAttack(attack);
+            addAttackWindow.Owner = this;
+            addAttackWindow.ShowDialog();
+
+            if (attack.IsValid())
+                allParticipantsViewModel.AddAttackToPartyMember(attack);
+
+            fileAccessor.SaveParty(allParticipantsViewModel.PartyMembers);
         }
 
         private void AddPartyMember(Object sender, RoutedEventArgs e)
@@ -146,6 +158,8 @@ namespace BattleOrder.UI.Views
 
             if (partyMember.IsValid())
                 allParticipantsViewModel.AddParticipant(partyMember);
+
+            fileAccessor.SaveParty(allParticipantsViewModel.PartyMembers);
         }
 
         private void AddEnemy(Object sender, RoutedEventArgs e)
@@ -158,13 +172,55 @@ namespace BattleOrder.UI.Views
             throw new NotImplementedException();
         }
 
-        private void MakeNewBattle(Object sender, RoutedEventArgs e)
+        private void EditEnemyAttack(Object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
         }
 
+        private void EditEnemy(Object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void EditPartyMember(Object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void EditPartyMemberAttack(Object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void RemoveEnemyAttack(Object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void RemoveEnemy(Object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void RemovePartyMember(Object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void RemovePartyMemberAttack(Object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void MakeNewBattle(Object sender, RoutedEventArgs e)
+        {
+            allParticipantsViewModel.RemoveAllEnemies();
+            round = 0;
+        }
+
         private void ExecuteRound(Object sender, RoutedEventArgs e)
         {
+            round++;
             throw new NotImplementedException();
         }
     }

@@ -19,6 +19,8 @@ namespace BattleOrder.Core.ViewModels
         public ObservableCollection<Participant> Enemies { get; private set; }
         public ObservableCollection<Attack> PartyMemberAttacks { get; private set; }
         public ObservableCollection<Attack> EnemyAttacks { get; private set; }
+        public Attack CurrentPartyMemberAttack { get; set; }
+        public Attack CurrentEnemyAttack { get; set; }
 
         public Participant CurrentPartyMember 
         {

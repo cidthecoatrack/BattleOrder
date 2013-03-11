@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using BattleOrder.Core.Models.Attacks;
 using BattleOrder.Core.Models.Participants;
 using BattleOrder.Core.ViewModels;
@@ -22,9 +23,9 @@ namespace BattleOrder.Tests.ViewModels
         [Test]
         public void CorrectLoad()
         {
-            Assert.That(participantViewModel.Name, Is.EqualTo("name"));
-            Assert.That(participantViewModel.IsEnemy, Is.False);
-            Assert.That(participantViewModel.IsNpc, Is.False);
+            Assert.That(participantViewModel.Name, Is.EqualTo(participant.Name));
+            Assert.That(participantViewModel.IsEnemy, Is.EqualTo(participant.IsEnemy), "IsEnemy");
+            Assert.That(participantViewModel.IsNpc, Is.EqualTo(participant.IsNpc), "IsNPC");
         }
 
         [Test]
@@ -35,17 +36,19 @@ namespace BattleOrder.Tests.ViewModels
 
             participantViewModel.SaveChanges();
 
-            Assert.That(participant.Name, Is.EqualTo("New Name"));
-            Assert.That(participantViewModel.IsNpc, Is.True);
+            Assert.That(participant.Name, Is.EqualTo(participantViewModel.Name));
+            Assert.That(participantViewModel.IsNpc, Is.EqualTo(participantViewModel.IsNpc));
         }
 
         [Test]
         public void AddsAttack()
         {
             var attack = new Attack("attack name", 1, 1);
+            var attackCount = participant.Attacks.Count();
             participantViewModel.AddAttack(attack);
 
             Assert.That(participant.Attacks, Contains.Item(attack));
+            Assert.That(participant.Attacks.Count(), Is.EqualTo(attackCount + 1));
         }
     }
 }

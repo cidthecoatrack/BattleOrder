@@ -14,6 +14,7 @@ namespace BattleOrder.Core.Models.Participants
         public Int32 Initiative { get; set; }
         public Boolean IsNpc { get; private set; }
         public Boolean IsEnemy { get; private set; }
+        public Boolean Enabled { get; set; }
         public IEnumerable<Attack> Attacks { get { return attacks; } }
         public IEnumerable<Attack> CurrentAttacks { get { return attacks.Where(x => x.Prepped); } }
 
@@ -23,6 +24,7 @@ namespace BattleOrder.Core.Models.Participants
             IsNpc = isNpc;
             IsEnemy = isEnemy;
             attacks = new List<Attack>();
+            Enabled = true;
         }
 
         public void PrepareForNextRound()
