@@ -31,23 +31,23 @@
         </ListBox>
         <ListBox ItemsSource="{Binding PartyMemberAttacks}" SelectedItem="{Binding CurrentPartyMemberAttack}" HorizontalAlignment="Center" Height="250" VerticalAlignment="Center" Width="168" Grid.Column="3" Grid.Row="2" Margin="15,6,15,41"/>
         <ListBox ItemsSource="{Binding EnemyAttacks}" SelectedItem="{Binding CurrentEnemyAttack}" HorizontalAlignment="Center" Height="250" VerticalAlignment="Center" Width="168" Grid.Column="0" Grid.Row="2" Margin="15,6,15,41"/>
-        <Button Click="AddAttackToPartyMember" Content="Add" Grid.Column="3" HorizontalAlignment="Left" Margin="15,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="47" RenderTransformOrigin="0.227,0"/>
+        <Button Click="AddAttackToPartyMember" Command="{Binding AddPartyMemberAttackCommand}" Content="Add" Grid.Column="3" HorizontalAlignment="Left" Margin="15,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="47" RenderTransformOrigin="0.227,0"/>
         <Button Click="AddPartyMember"  Content="Add" Grid.Column="2" HorizontalAlignment="Left" Margin="15,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="47" RenderTransformOrigin="0.227,0"/>
         <Button Click="AddEnemy" Content="Add" Grid.Column="1" HorizontalAlignment="Left" Margin="15,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="47" RenderTransformOrigin="0.227,0"/>
-        <Button Click="AddAttackToEnemy" Content="Add" HorizontalAlignment="Left" Margin="15,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="47" RenderTransformOrigin="0.227,0"/>
+        <Button Click="AddAttackToEnemy" Command="{Binding AddEnemyAttackCommand}" Content="Add" HorizontalAlignment="Left" Margin="15,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="47" RenderTransformOrigin="0.227,0"/>
         <Button Click="ExecuteRound" FontSize="20" Content="Begin Round" Grid.Column="2" HorizontalAlignment="Left" Margin="15,10,0,0" Grid.Row="3" VerticalAlignment="Top" Width="168" RenderTransformOrigin="0.227,0" Height="51"/>
         <Button Click="MakeNewBattle" FontSize="20" Content="New Battle" Grid.Column="1" HorizontalAlignment="Left" Margin="15,10,0,0" Grid.Row="3" VerticalAlignment="Top" Width="168" RenderTransformOrigin="0.227,0" Height="51"/>
         <TextBlock FontWeight="Bold" FontSize="20" Grid.Column="1" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" Text="Enemies" VerticalAlignment="Bottom"/>
         <TextBlock FontWeight="Bold" FontSize="20" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" Text="Party" VerticalAlignment="Bottom"/>
         <TextBlock FontWeight="Bold" FontSize="20" Grid.Column="3" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" Text="Attacks" VerticalAlignment="Bottom"/>
         <TextBlock FontWeight="Bold" FontSize="20" Grid.Column="0" HorizontalAlignment="Center" Grid.Row="1" TextWrapping="Wrap" Text="Attacks" VerticalAlignment="Bottom"/>
-        <Button Click="RemoveEnemyAttack" Content="Remove" HorizontalAlignment="Left" Margin="115,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="68" RenderTransformOrigin="0.227,0"/>
-        <Button Click="RemoveEnemy" Content="Remove" HorizontalAlignment="Left" Margin="115,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="68" RenderTransformOrigin="0.227,0" Grid.Column="1"/>
-        <Button Click="RemovePartyMember" Content="Remove" HorizontalAlignment="Left" Margin="115,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="68" RenderTransformOrigin="0.227,0" Grid.Column="2"/>
-        <Button Click="RemovePartyMemberAttack" Content="Remove" HorizontalAlignment="Left" Margin="115,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="68" RenderTransformOrigin="0.227,0" Grid.Column="3"/>
-        <Button Click="EditEnemyAttack" Content="Edit" HorizontalAlignment="Left" Margin="67,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="43" RenderTransformOrigin="0.227,0"/>
-        <Button Click="EditEnemy" Content="Edit" HorizontalAlignment="Left" Margin="67,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="43" RenderTransformOrigin="0.227,0" Grid.Column="1"/>
-        <Button Click="EditPartyMember" Content="Edit" HorizontalAlignment="Left" Margin="67,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="43" RenderTransformOrigin="0.227,0" Grid.Column="2"/>
-        <Button Click="EditPartyMemberAttack" Content="Edit" HorizontalAlignment="Left" Margin="67,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="43" RenderTransformOrigin="0.227,0" Grid.Column="3"/>
+        <Button Click="RemoveEnemyAttack" Command="{Binding RemoveEnemyAttackCommand}" Content="Remove" HorizontalAlignment="Left" Margin="115,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="68" RenderTransformOrigin="0.227,0"/>
+        <Button Click="RemoveEnemy" Command="{Binding RemoveEnemyCommand}" Content="Remove" HorizontalAlignment="Left" Margin="115,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="68" RenderTransformOrigin="0.227,0" Grid.Column="1"/>
+        <Button Click="RemovePartyMember" Command="{Binding RemovePartyMemberCommand}" Content="Remove" HorizontalAlignment="Left" Margin="115,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="68" RenderTransformOrigin="0.227,0" Grid.Column="2"/>
+        <Button Click="RemovePartyMemberAttack" Command="{Binding RemovePartyMemberAttackCommand}" Content="Remove" HorizontalAlignment="Left" Margin="115,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="68" RenderTransformOrigin="0.227,0" Grid.Column="3"/>
+        <Button Click="EditEnemyAttack" Command="{Binding EditEnemyAttackCommand}" Content="Edit" HorizontalAlignment="Left" Margin="67,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="43" RenderTransformOrigin="0.227,0"/>
+        <Button Click="EditEnemy" Command="{Binding EditEnemyCommand}" Content="Edit" HorizontalAlignment="Left" Margin="67,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="43" RenderTransformOrigin="0.227,0" Grid.Column="1"/>
+        <Button Click="EditPartyMember" Command="{Binding EditPartyMemberCommand}" Content="Edit" HorizontalAlignment="Left" Margin="67,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="43" RenderTransformOrigin="0.227,0" Grid.Column="2"/>
+        <Button Click="EditPartyMemberAttack" Command="{Binding EditPartyMemberAttackCommand}" Content="Edit" HorizontalAlignment="Left" Margin="67,256,0,0" Grid.Row="2" VerticalAlignment="Top" Width="43" RenderTransformOrigin="0.227,0" Grid.Column="3"/>
     </Grid>
 </Window>

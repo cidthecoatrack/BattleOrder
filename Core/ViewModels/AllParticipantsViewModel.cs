@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Windows.Input;
+using BattleOrder.Core.Commands;
 using BattleOrder.Core.Models.Attacks;
 using BattleOrder.Core.Models.Participants;
 
@@ -55,6 +57,16 @@ namespace BattleOrder.Core.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        public ICommand AddEnemyAttackCommand { get; set; }
+        public ICommand EditEnemyAttackCommand { get; set; }
+        public ICommand RemoveEnemyAttackCommand { get; set; }
+        public ICommand EditEnemyCommand { get; set; }
+        public ICommand RemoveEnemyCommand { get; set; }
+        public ICommand EditPartyMemberCommand { get; set; }
+        public ICommand RemovePartyMemberCommand { get; set; }
+        public ICommand AddPartyMemberAttackCommand { get; set; }
+        public ICommand EditPartyMemberAttackCommand { get; set; }
+        public ICommand RemovePartyMemberAttackCommand { get; set; }
 
         public AllParticipantsViewModel(IEnumerable<Participant> participants)
         {
@@ -63,6 +75,18 @@ namespace BattleOrder.Core.ViewModels
             Enemies = new ObservableCollection<Participant>();
             PartyMemberAttacks = new ObservableCollection<Attack>();
             EnemyAttacks = new ObservableCollection<Attack>();
+
+            
+            AddEnemyAttackCommand = new AddEnemyAttackCommand(this);
+            EditEnemyAttackCommand = new EditEnemyAttackCommand(this);
+            RemoveEnemyAttackCommand = new RemoveEnemyAttackCommand(this);
+            EditEnemyCommand = new EditEnemyCommand(this);
+            RemoveEnemyCommand = new RemoveEnemyCommand(this);
+            EditPartyMemberCommand = new EditPartyMemberCommand(this);
+            RemovePartyMemberCommand = new RemovePartyMemberCommand(this);
+            AddPartyMemberAttackCommand = new AddPartyMemberAttackCommand(this);
+            EditPartyMemberAttackCommand = new EditPartyMemberAttackCommand(this);
+            RemovePartyMemberAttackCommand = new RemovePartyMemberAttackCommand(this);
 
             UpdateParties();
         }
@@ -136,6 +160,20 @@ namespace BattleOrder.Core.ViewModels
         {
             CurrentEnemy.AddAttack(newAttack);
             EnemyAttacks.Add(newAttack);
+        }
+
+        public void RemovePartyMemberAttack()
+        {
+            CurrentPartyMember.RemoveAttack(CurrentPartyMemberAttack);
+            PartyMemberAttacks.Remove(CurrentPartyMemberAttack);
+            CurrentPartyMemberAttack = null;
+        }
+
+        public void RemoveEnemyAttack()
+        {
+            CurrentEnemy.RemoveAttack(CurrentEnemyAttack);
+            EnemyAttacks.Remove(CurrentEnemyAttack);
+            CurrentEnemyAttack = null;
         }
     }
 }

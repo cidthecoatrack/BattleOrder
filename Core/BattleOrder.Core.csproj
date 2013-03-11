@@ -78,6 +78,16 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AddEnemyAttackCommand.cs" />
+    <Compile Include="Commands\EditPartyMemberAttackCommand.cs" />
+    <Compile Include="Commands\AddPartyMemberAttackCommand.cs" />
+    <Compile Include="Commands\RemovePartyMemberAttackCommand.cs" />
+    <Compile Include="Commands\RemovePartyMemberCommand.cs" />
+    <Compile Include="Commands\EditPartyMemberCommand.cs" />
+    <Compile Include="Commands\RemoveEnemyCommand.cs" />
+    <Compile Include="Commands\EditEnemyCommand.cs" />
+    <Compile Include="Commands\RemoveEnemyAttackCommand.cs" />
+    <Compile Include="Commands\EditEnemyAttackCommand.cs" />
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\DecrementInitiativeCommand.cs" />
     <Compile Include="Commands\DecrementPerRoundCommand.cs" />
