@@ -21,9 +21,6 @@ namespace BattleOrder.Core.Commands
                 && allParticipantsViewModel.CurrentEnemyAttack != null;
         }
 
-        public override void Execute(Object parameter)
-        {
-            allParticipantsViewModel.RemoveEnemyAttack();
-        }
+        public override void Execute(Object parameter) { }
     }
 }

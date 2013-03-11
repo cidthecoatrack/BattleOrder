@@ -28,7 +28,7 @@ namespace BattleOrder.Tests.Commands
         }
 
         [Test]
-        public void CantExecuteIfRoundComplete()
+        public void RoundComplete()
         {
             Assert.That(getNextAttacksCommand.CanExecute(new Object()), Is.True);
             getNextAttacksCommand.Execute(new Object());
@@ -36,7 +36,7 @@ namespace BattleOrder.Tests.Commands
         }
 
         [Test]
-        public void ExecuteGetsNextAttacks()
+        public void Execute()
         {
             Assert.That(roundViewModel.CurrentAttacks, Is.EqualTo("\nname's attack 1"));
             getNextAttacksCommand.Execute(new Object());

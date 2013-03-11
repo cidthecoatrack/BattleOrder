@@ -9,8 +9,8 @@ namespace BattleOrder.Tests.Commands
     [TestFixture]
     public class GetNextInitiativeCommandTests
     {
-        SetParticipantInitiativesViewModel setParticipantInitiativesViewModel;
-        GetNextInitiativeCommand getNextInitiativeCommand;
+        private SetParticipantInitiativesViewModel setParticipantInitiativesViewModel;
+        private GetNextInitiativeCommand getNextInitiativeCommand;
 
         [SetUp]
         public void Setup()
@@ -25,7 +25,7 @@ namespace BattleOrder.Tests.Commands
         }
 
         [Test]
-        public void CantExecuteIfInitiativeTooLow()
+        public void InitiativeTooLow()
         {
             Assert.That(getNextInitiativeCommand.CanExecute(new Object()), Is.True);
             setParticipantInitiativesViewModel.DecrementCurrentInitiative();
@@ -33,7 +33,7 @@ namespace BattleOrder.Tests.Commands
         }
 
         [Test]
-        public void CantExecuteIfInitiativeTooHigh()
+        public void InitiativeTooHigh()
         {
             while (setParticipantInitiativesViewModel.CurrentInitiative < 10)
                 setParticipantInitiativesViewModel.IncrementCurrentInitiative();
@@ -44,7 +44,7 @@ namespace BattleOrder.Tests.Commands
         }
 
         [Test]
-        public void ExecuteGetsNextParticipantWithInitiativeToSet()
+        public void Execute()
         {
             getNextInitiativeCommand.Execute(new Object());
             Assert.That(setParticipantInitiativesViewModel.AllInitiativesSet, Is.True);

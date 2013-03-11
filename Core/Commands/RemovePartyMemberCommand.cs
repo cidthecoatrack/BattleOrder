@@ -20,9 +20,6 @@ namespace BattleOrder.Core.Commands
             return allParticipantsViewModel.CurrentPartyMember != null;
         }
 
-        public override void Execute(Object parameter)
-        {
-            allParticipantsViewModel.RemoveParticipant(allParticipantsViewModel.CurrentPartyMember);
-        }
+        public override void Execute(Object parameter) { }
     }
 }

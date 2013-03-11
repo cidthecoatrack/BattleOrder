@@ -10,8 +10,8 @@ namespace BattleOrder.Tests.Commands
     [TestFixture]
     public class IncrementInitiativeCommandTests
     {
-        SetParticipantInitiativesViewModel setParticipantInitiativesViewModel;
-        IncrementInitiativeCommand incrementInitiativeCommand;
+        private SetParticipantInitiativesViewModel setParticipantInitiativesViewModel;
+        private IncrementInitiativeCommand incrementInitiativeCommand;
 
         [SetUp]
         public void Setup()
@@ -26,7 +26,7 @@ namespace BattleOrder.Tests.Commands
         }
 
         [Test]
-        public void CantExecuteIfInitiativeTooHigh()
+        public void InitiativeTooHigh()
         {
             Assert.That(incrementInitiativeCommand.CanExecute(new Object()), Is.True);
             incrementInitiativeCommand.Execute(new Object());
@@ -34,7 +34,7 @@ namespace BattleOrder.Tests.Commands
         }
 
         [Test]
-        public void ExecuteDecrementsPerRound()
+        public void Execute()
         {
             incrementInitiativeCommand.Execute(new Object());
             Assert.That(setParticipantInitiativesViewModel.CurrentInitiative, Is.EqualTo(10));

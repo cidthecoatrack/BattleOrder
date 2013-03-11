@@ -22,7 +22,7 @@ namespace BattleOrder.Tests.Commands
         }
         
         [Test]
-        public void CantExecuteWithInvalidPerRound()
+        public void InvalidPerRound()
         {
             Assert.That(saveAttackEditsCommand.CanExecute(new Object()), Is.True);
             attackViewModel.DecrementPerRound();
@@ -30,7 +30,7 @@ namespace BattleOrder.Tests.Commands
         }
 
         [Test]
-        public void CantExecuteWithInvalidAttackName()
+        public void InvalidAttackName()
         {
             Assert.That(saveAttackEditsCommand.CanExecute(new Object()), Is.True);
             attackViewModel.AttackName = String.Empty;
@@ -38,7 +38,7 @@ namespace BattleOrder.Tests.Commands
         }
 
         [Test]
-        public void ExecuteSavesAttack()
+        public void Execute()
         {
             attackViewModel.AttackName = "New Name";
             attackViewModel.IncrementPerRound();

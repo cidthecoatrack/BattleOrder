@@ -20,9 +20,6 @@ namespace BattleOrder.Core.Commands
             return allParticipantsViewModel.CurrentEnemy != null;
         }
 
-        public override void Execute(Object parameter)
-        {
-            allParticipantsViewModel.RemoveParticipant(allParticipantsViewModel.CurrentEnemy);
-        }
+        public override void Execute(Object parameter) { }
     }
 }

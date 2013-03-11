@@ -9,9 +9,9 @@ namespace BattleOrder.Tests.Commands
     [TestFixture]
     public class SaveParticipantEditsCommandTests
     {
-        Participant participant;
-        ParticipantViewModel participantViewModel;
-        SaveParticipantEditsCommand saveParticipantEditsCommand;
+        private Participant participant;
+        private ParticipantViewModel participantViewModel;
+        private SaveParticipantEditsCommand saveParticipantEditsCommand;
 
         [SetUp]
         public void Setup()
@@ -22,7 +22,7 @@ namespace BattleOrder.Tests.Commands
         }
 
         [Test]
-        public void CantExecuteIfNameIsEmpty()
+        public void EmptyName()
         {
             Assert.That(saveParticipantEditsCommand.CanExecute(new Object()), Is.True);
             participantViewModel.Name = String.Empty;
@@ -30,7 +30,7 @@ namespace BattleOrder.Tests.Commands
         }
 
         [Test]
-        public void ExecuteSavesParticipant()
+        public void Execute()
         {
             participantViewModel.Name = "New Name";
             participantViewModel.IsNpc = false;

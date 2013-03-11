@@ -21,9 +21,6 @@ namespace BattleOrder.Core.Commands
                 && allParticipantsViewModel.CurrentPartyMemberAttack != null;
         }
 
-        public override void Execute(Object parameter)
-        {
-            allParticipantsViewModel.RemovePartyMemberAttack();
-        }
+        public override void Execute(Object parameter) { }
     }
 }

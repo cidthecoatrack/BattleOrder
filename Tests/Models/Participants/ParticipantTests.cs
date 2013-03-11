@@ -24,7 +24,7 @@ namespace BattleOrder.Tests.Models.Participants
         }
 
         [Test]
-        public void DefaultParticipantConstructor()
+        public void Constructor()
         {
             participant = new Participant("name");
             Assert.That(participant.Name, Is.EqualTo("name"));

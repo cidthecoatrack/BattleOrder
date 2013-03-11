@@ -21,7 +21,7 @@ namespace BattleOrder.Tests.Commands
         }
         
         [Test]
-        public void CantExecuteIfPerRoundTooLow()
+        public void PerRoundTooLow()
         {
             Assert.That(decrementPerRoundCommand.CanExecute(new Object()), Is.True);
             decrementPerRoundCommand.Execute(new Object());
@@ -29,7 +29,7 @@ namespace BattleOrder.Tests.Commands
         }
 
         [Test]
-        public void ExecuteDecrementsPerRound()
+        public void Execute()
         {
             decrementPerRoundCommand.Execute(new Object());
             Assert.That(attackViewModel.PerRound, Is.EqualTo(.5));

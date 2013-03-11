@@ -10,8 +10,8 @@ namespace BattleOrder.Tests.Commands
     [TestFixture]
     public class DecrementInitiativeCommandTests
     {
-        SetParticipantInitiativesViewModel setParticipantInitiativesViewModel;
-        DecrementInitiativeCommand decrementInitiativeCommand;
+        private SetParticipantInitiativesViewModel setParticipantInitiativesViewModel;
+        private DecrementInitiativeCommand decrementInitiativeCommand;
 
         [SetUp]
         public void Setup()
@@ -26,7 +26,7 @@ namespace BattleOrder.Tests.Commands
         }
 
         [Test]
-        public void CantExecuteIfInitiativeTooLow()
+        public void InitiativeTooLow()
         {
             Assert.That(decrementInitiativeCommand.CanExecute(new Object()), Is.True);
             decrementInitiativeCommand.Execute(new Object());
@@ -34,7 +34,7 @@ namespace BattleOrder.Tests.Commands
         }
 
         [Test]
-        public void ExecuteDecrementsPerRound()
+        public void Execute()
         {
             decrementInitiativeCommand.Execute(new Object());
             Assert.That(setParticipantInitiativesViewModel.CurrentInitiative, Is.EqualTo(1));

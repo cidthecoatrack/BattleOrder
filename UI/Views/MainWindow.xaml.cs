@@ -184,32 +184,42 @@ namespace BattleOrder.UI.Views
 
         private void EditPartyMember(Object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var editParticipantWindow = new EditParticipant(allParticipantsViewModel.CurrentPartyMember);
+            editParticipantWindow.Owner = this;
+            editParticipantWindow.ShowDialog();
+
+            fileAccessor.SaveParty(allParticipantsViewModel.PartyMembers);
         }
 
         private void EditPartyMemberAttack(Object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var editAttackWindow = new EditAttack(allParticipantsViewModel.CurrentPartyMemberAttack);
+            editAttackWindow.Owner = this;
+            editAttackWindow.ShowDialog();
+
+            fileAccessor.SaveParty(allParticipantsViewModel.PartyMembers);
         }
 
         private void RemoveEnemyAttack(Object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            allParticipantsViewModel.RemoveEnemyAttack();
         }
 
         private void RemoveEnemy(Object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            allParticipantsViewModel.RemoveParticipant(allParticipantsViewModel.CurrentEnemy);
         }
 
         private void RemovePartyMember(Object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            allParticipantsViewModel.RemoveParticipant(allParticipantsViewModel.CurrentPartyMember);
+            fileAccessor.SaveParty(allParticipantsViewModel.PartyMembers);
         }
 
         private void RemovePartyMemberAttack(Object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            allParticipantsViewModel.RemovePartyMemberAttack();
+            fileAccessor.SaveParty(allParticipantsViewModel.PartyMembers);
         }
 
         private void MakeNewBattle(Object sender, RoutedEventArgs e)

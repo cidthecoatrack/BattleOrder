@@ -55,12 +55,22 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Commands\DecrementPerRoundCommandTests.cs" />
+    <Compile Include="Commands\RemoveEnemyCommandTests.cs" />
+    <Compile Include="Commands\RemoveEnemyAttackCommandTests.cs" />
+    <Compile Include="Commands\EditPartyMemberCommandTests.cs" />
+    <Compile Include="Commands\EditPartyMemberAttackCommandTests.cs" />
+    <Compile Include="Commands\EditEnemyCommandTests.cs" />
+    <Compile Include="Commands\EditEnemyAttackCommandTests.cs" />
+    <Compile Include="Commands\AddPartyMemberAttackCommandTests.cs" />
+    <Compile Include="Commands\AddEnemyAttackCommandTests.cs" />
     <Compile Include="Commands\SaveAttackEditsCommandTests.cs" />
     <Compile Include="Commands\SaveParticipantEditsCommandTests.cs" />
     <Compile Include="Commands\IncrementInitiativeCommandTests.cs" />
     <Compile Include="Commands\DecrementInitiativeCommandTests.cs" />
     <Compile Include="Commands\GetNextInitiativeCommandTests.cs" />
     <Compile Include="Commands\GetNextAttacksCommandTests.cs" />
+    <Compile Include="Commands\RemovePartyMemberCommandTests.cs" />
+    <Compile Include="Commands\RemovePartyMemberAttackCommandTests.cs" />
     <Compile Include="ErrorHandlerTests.cs" />
     <Compile Include="FileAccessorTests.cs" />
     <Compile Include="Models\Participants\ParticipantTests.cs" />
