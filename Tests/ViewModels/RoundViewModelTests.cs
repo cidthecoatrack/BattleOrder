@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BattleOrder.Core.Models.Attacks;
 using BattleOrder.Core.ViewModels;
 using NUnit.Framework;

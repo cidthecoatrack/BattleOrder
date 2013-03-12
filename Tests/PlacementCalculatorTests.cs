@@ -1,5 +1,4 @@
-﻿using BattleOrder;
-using BattleOrder.Core;
+﻿using BattleOrder.Core;
 using BattleOrder.Core.Models.Attacks;
 using NUnit.Framework;
 

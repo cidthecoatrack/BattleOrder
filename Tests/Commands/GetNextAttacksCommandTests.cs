@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using BattleOrder.Core.Commands;
 using BattleOrder.Core.Models.Attacks;
 using BattleOrder.Core.ViewModels;

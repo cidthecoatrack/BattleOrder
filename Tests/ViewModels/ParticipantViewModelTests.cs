@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using BattleOrder.Core.Models.Attacks;
 using BattleOrder.Core.Models.Participants;
 using BattleOrder.Core.ViewModels;

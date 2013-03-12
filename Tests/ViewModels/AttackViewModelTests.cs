@@ -1,5 +1,4 @@
-﻿using System;
-using BattleOrder.Core.Models.Attacks;
+﻿using BattleOrder.Core.Models.Attacks;
 using BattleOrder.Core.ViewModels;
 using NUnit.Framework;
 

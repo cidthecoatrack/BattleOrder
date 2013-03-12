@@ -2,22 +2,12 @@
 using System.Collections.Generic;
 using System.Deployment.Application;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using BattleOrder.Core;
 using BattleOrder.Core.Models.Attacks;
 using BattleOrder.Core.Models.Participants;
 using BattleOrder.Core.ViewModels;
-using BattleOrder.UI.OldViews;
+using Xceed.Wpf.Toolkit;
 
 namespace BattleOrder.UI.Views
 {
@@ -61,7 +51,7 @@ namespace BattleOrder.UI.Views
             if (!File.Exists("SaveDirectory"))
             {
                 var message = "No save directory was found for the monster database and parties.  Please select a save directory.";
-                MessageBox.Show(message, "No save directory", MessageBoxButton.OK);
+                System.Windows.MessageBox.Show(message, "No save directory", MessageBoxButton.OK);
 
                 var folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
                 folderBrowser.ShowDialog();
@@ -76,7 +66,7 @@ namespace BattleOrder.UI.Views
 
         private IEnumerable<Participant> SetupParty(FileAccessor fileAccessor)
         {
-            var result = MessageBox.Show("Load a party?", "Load?", MessageBoxButton.YesNo);
+            var result = System.Windows.MessageBox.Show("Load a party?", "Load?", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
                 var partyFileName = GetPartyFileNameFromUser(fileAccessor);
@@ -89,7 +79,7 @@ namespace BattleOrder.UI.Views
 
                 if (String.IsNullOrEmpty(partyFileName))
                 {
-                    MessageBox.Show("No party file selected. Cannot continue operations. Closing program.", "Error: No Party File to Auto Save To", MessageBoxButton.OK);
+                    System.Windows.MessageBox.Show("No party file selected. Cannot continue operations. Closing program.", "Error: No Party File to Auto Save To", MessageBoxButton.OK);
                     Close();
                 }
 
@@ -111,7 +101,7 @@ namespace BattleOrder.UI.Views
 
             if (String.IsNullOrEmpty(open.FileName))
             {
-                MessageBox.Show("Empty file name.  Cannot open the file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("Empty file name.  Cannot open the file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return String.Empty;
             }
 
@@ -129,7 +119,7 @@ namespace BattleOrder.UI.Views
 
             if (String.IsNullOrEmpty(save.FileName))
             {
-                MessageBox.Show("Empty file name.  Cannot open the file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("Empty file name.  Cannot open the file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return String.Empty;
             }
 

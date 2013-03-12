@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using BattleOrder.Core.Commands;
 using BattleOrder.Core.Models.Participants;
 using BattleOrder.Core.ViewModels;
