@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BattleOrder.Core.Models.Attacks;
+using BattleOrder.Core.Models.Actions;
 using BattleOrder.Core.Models.Participants;
 using NUnit.Framework;
 
@@ -10,17 +10,17 @@ namespace BattleOrder.Tests.Models.Participants
     [TestFixture]
     public class ParticipantTests
     {
-        Participant participant;
+        private Participant participant;
 
         [SetUp]
         public void Setup()
         {
-            var attacks = new List<Attack>();
+            var attacks = new List<BattleAction>();
             for (var i = 0; i < 3; i++)
-                attacks.Add(new Attack("name " + i, i, i, (i % 2 == 0))); 
+                attacks.Add(new BattleAction("name " + i, i, i, (i % 2 == 0))); 
             
             participant = new Participant("name");
-            participant.AddAttacks(attacks);
+            participant.AddActions(attacks);
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace BattleOrder.Tests.Models.Participants
             Assert.That(participant.Name, Is.EqualTo("name"));
             Assert.That(participant.IsNpc, Is.True);
             Assert.That(participant.IsEnemy, Is.True);
-            Assert.That(participant.Attacks, Is.EqualTo(Enumerable.Empty<Attack>()));
+            Assert.That(participant.Actions, Is.EqualTo(Enumerable.Empty<Action>()));
             Assert.That(participant.Initiative, Is.EqualTo(0));
             Assert.That(participant.Enabled, Is.True);
         }
@@ -44,53 +44,53 @@ namespace BattleOrder.Tests.Models.Participants
         }
 
         [Test]
-        public void PassInIEnumerableOfAttacks()
+        public void PassInIEnumerableOfActions()
         {
-            var count = participant.Attacks.Count();
+            var count = participant.Actions.Count();
             Assert.That(count, Is.EqualTo(3));
         }
 
         [Test]
-        public void CurrentAttacksIsAccurate()
+        public void CurrentActionsIsAccurate()
         {
-            var count = participant.CurrentAttacks.Count();
+            var count = participant.CurrentActions.Count();
             Assert.That(count, Is.EqualTo(2));
 
-            foreach (var attack in participant.CurrentAttacks)
-                Assert.That(attack.PerRound % 2, Is.EqualTo(0));
+            foreach (var action in participant.CurrentActions)
+                Assert.That(action.PerRound % 2, Is.EqualTo(0));
         }
 
         [Test]
-        public void AddAttack()
+        public void AddAction()
         {
-            var attack = new Attack("attack name", 1, 2);
-            participant.AddAttack(attack);
-            var hasBeenAdded = participant.Attacks.Contains(attack);
+            var attack = new BattleAction("attack name", 1, 2);
+            participant.AddAction(attack);
+            var hasBeenAdded = participant.Actions.Contains(attack);
             Assert.That(hasBeenAdded, Is.True);
         }
 
         [Test]
-        public void AddAttacks()
+        public void AddActions()
         {
-            var attacks = new List<Attack>();
+            var attacks = new List<BattleAction>();
             for (var i = 0; i < 2; i++)
-                attacks.Add(new Attack("new attack " + i, i, i));
+                attacks.Add(new BattleAction("new attack " + i, i, i));
 
-            participant.AddAttacks(attacks);
+            participant.AddActions(attacks);
 
             foreach (var attack in attacks)
             {
-                var hasBeenAdded = participant.Attacks.Contains(attack);
+                var hasBeenAdded = participant.Actions.Contains(attack);
                 Assert.That(hasBeenAdded, Is.True);
             }
         }
 
         [Test]
-        public void RemoveAttack()
+        public void RemoveAction()
         {
-            var attack = participant.Attacks.First(x => x.Name == "name 0");
-            participant.RemoveAttack(attack);
-            var hasBeenRemoved = !participant.Attacks.Contains(attack);
+            var action = participant.Actions.First(x => x.Name == "name 0");
+            participant.RemoveAction(action);
+            var hasBeenRemoved = !participant.Actions.Contains(action);
             Assert.That(hasBeenRemoved, Is.True);
         }
 
@@ -101,16 +101,7 @@ namespace BattleOrder.Tests.Models.Participants
             Assert.That(participant.IsValid(), Is.False);
 
             participant.AlterInfo("name", false, false);
-            var attack = new Attack(String.Empty);
-            participant.AddAttack(attack);
             Assert.That(participant.IsValid(), Is.True);
-
-            participant.AlterInfo(String.Empty, false, false);
-            Assert.That(participant.IsValid(), Is.False);
-
-            participant.AlterInfo("name", false, false);
-            participant.RemoveAttack(attack);
-            Assert.That(participant.IsValid(), Is.False);
         }
     }
 }

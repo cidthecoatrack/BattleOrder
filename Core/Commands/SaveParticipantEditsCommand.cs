@@ -17,9 +17,6 @@ namespace BattleOrder.Core.Commands
             return !String.IsNullOrEmpty(participantViewModel.Name);
         }
 
-        public override void Execute(Object parameter)
-        {
-            participantViewModel.SaveChanges();
-        }
+        public override void Execute(Object parameter) { }
     }
 }

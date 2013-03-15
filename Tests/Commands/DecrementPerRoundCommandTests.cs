@@ -1,6 +1,6 @@
 ﻿using System;
 using BattleOrder.Core.Commands;
-using BattleOrder.Core.Models.Attacks;
+using BattleOrder.Core.Models.Actions;
 using BattleOrder.Core.ViewModels;
 using NUnit.Framework;
 
@@ -9,15 +9,15 @@ namespace BattleOrder.Tests.Commands
     [TestFixture]
     public class DecrementPerRoundCommandTests
     {
-        AttackViewModel attackViewModel;
+        BattleActionViewModel battleActionViewModel;
         DecrementPerRoundCommand decrementPerRoundCommand;
         
         [SetUp]
         public void Setup()
         {
-            var attack = new Attack("name", 1, 1);
-            attackViewModel = new AttackViewModel(attack);
-            decrementPerRoundCommand = new DecrementPerRoundCommand(attackViewModel);
+            var attack = new BattleAction("name", 1, 1);
+            battleActionViewModel = new BattleActionViewModel(attack);
+            decrementPerRoundCommand = new DecrementPerRoundCommand(battleActionViewModel);
         }
         
         [Test]
@@ -32,7 +32,7 @@ namespace BattleOrder.Tests.Commands
         public void Execute()
         {
             decrementPerRoundCommand.Execute(new Object());
-            Assert.That(attackViewModel.PerRound, Is.EqualTo(.5));
+            Assert.That(battleActionViewModel.PerRound, Is.EqualTo(.5));
         }
     }
 }

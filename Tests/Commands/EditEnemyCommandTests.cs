@@ -9,7 +9,7 @@ namespace BattleOrder.Tests.Commands
     [TestFixture]
     public class EditEnemyCommandTests
     {
-        private AllParticipantsViewModel allParticipantsViewModel;
+        private PartyViewModel allParticipantsViewModel;
         private EditEnemyCommand editEnemyCommand;
         private Participant participant;
 
@@ -19,7 +19,7 @@ namespace BattleOrder.Tests.Commands
             participant = new Participant("name");
             var participants = new[] { participant };
 
-            allParticipantsViewModel = new AllParticipantsViewModel(participants);
+            allParticipantsViewModel = new PartyViewModel(participants);
             editEnemyCommand = new EditEnemyCommand(allParticipantsViewModel);
         }
 

@@ -5,21 +5,21 @@ namespace BattleOrder.Core.Commands
 {
     public class DecrementPerRoundCommand : BaseCommand
     {
-        private readonly AttackViewModel attackViewModel;
+        private readonly BattleActionViewModel battleActionViewModel;
 
-        public DecrementPerRoundCommand(AttackViewModel attackViewModel)
+        public DecrementPerRoundCommand(BattleActionViewModel battleActionViewModel)
         {
-            this.attackViewModel = attackViewModel;
+            this.battleActionViewModel = battleActionViewModel;
         }
 
         public override Boolean CanExecute(Object parameter)
         {
-            return attackViewModel.PerRound > .5;
+            return battleActionViewModel.PerRound > .5;
         }
 
         public override void Execute(Object parameter)
         {
-            attackViewModel.DecrementPerRound();
+            battleActionViewModel.DecrementPerRound();
         }
     }
 }

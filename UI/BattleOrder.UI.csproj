@@ -64,17 +64,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Views\NewParticipant.xaml.cs">
-      <DependentUpon>NewParticipant.xaml</DependentUpon>
+    <Compile Include="Views\NewParticipantWindow.xaml.cs">
+      <DependentUpon>NewParticipantWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RoundDisplay.xaml.cs">
-      <DependentUpon>RoundDisplay.xaml</DependentUpon>
+    <Compile Include="Views\RoundWindow.xaml.cs">
+      <DependentUpon>RoundWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SetInitiatives.xaml.cs">
-      <DependentUpon>SetInitiatives.xaml</DependentUpon>
+    <Compile Include="Views\SetInitiativesWindow.xaml.cs">
+      <DependentUpon>SetInitiativesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="OldViews\BattleOrderForm.cs">
       <SubType>Form</SubType>
@@ -82,11 +82,17 @@
     <Compile Include="OldViews\BattleOrderForm.Designer.cs">
       <DependentUpon>BattleOrderForm.cs</DependentUpon>
     </Compile>
-    <Page Include="Views\NewParticipant.xaml">
+    <Compile Include="Views\ShowActionWindow.xaml.cs">
+      <DependentUpon>ShowActionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShowParticipantWindow.xaml.cs">
+      <DependentUpon>ShowParticipantWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\NewParticipantWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\EditAttack.xaml">
+    <Page Include="Views\EditActionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -94,11 +100,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\EditAttack.xaml.cs">
-      <DependentUpon>EditAttack.xaml</DependentUpon>
+    <Compile Include="Views\EditActionWindow.xaml.cs">
+      <DependentUpon>EditActionWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\EditParticipant.xaml">
+    <Page Include="Views\EditParticipantWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -106,18 +112,26 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\RoundDisplay.xaml">
+    <Page Include="Views\RoundWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SetInitiatives.xaml">
+    <Page Include="Views\SetInitiativesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ShowActionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ShowParticipantWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Views\EditParticipant.xaml.cs">
-      <DependentUpon>EditParticipant.xaml</DependentUpon>
+    <Compile Include="Views\EditParticipantWindow.xaml.cs">
+      <DependentUpon>EditParticipantWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

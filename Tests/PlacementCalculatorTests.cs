@@ -1,5 +1,5 @@
 ﻿using BattleOrder.Core;
-using BattleOrder.Core.Models.Attacks;
+using BattleOrder.Core.Models.Actions;
 using NUnit.Framework;
 
 namespace BattleOrder.Tests
@@ -7,29 +7,29 @@ namespace BattleOrder.Tests
     [TestFixture]
     public class PlacementCalculatorTests
     {
-        Attack attack;
+        BattleAction action;
         PlacementCalculator calculator;
 
         [SetUp]
         public void Setup()
         {
-            attack = new Attack("attack", 2, 7);
-            calculator = new PlacementCalculator(attack);
+            action = new BattleAction("attack", 2, 7);
+            calculator = new PlacementCalculator(action);
         }
 
         [Test]
         public void SetPlacementByInitiative()
         {
-            attack = new Attack("attack", 1, 1);
-            calculator = new PlacementCalculator(attack);
+            action = new BattleAction("attack", 1, 1);
+            calculator = new PlacementCalculator(action);
             Assert.That(calculator.ComputePlacement(10), Is.EqualTo(-9));
         }
 
         [Test]
-        public void SetPlacementByInitiativeForMultiPartAttack()
+        public void SetPlacementByInitiativeForMultiPartAction()
         {
-            attack.FinishCurrentPartOfAttack();
-            calculator = new PlacementCalculator(attack);
+            action.FinishCurrentPartOfAction();
+            calculator = new PlacementCalculator(action);
             Assert.That(calculator.ComputePlacement(7), Is.EqualTo(3.5));
         }
     }
