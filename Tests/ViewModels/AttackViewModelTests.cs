@@ -20,7 +20,7 @@ namespace BattleOrder.Tests.ViewModels
         [Test]
         public void CorrectLoad()
         {
-            Assert.That(attackViewModel.AttackName, Is.EqualTo("name"));
+            Assert.That(attackViewModel.Name, Is.EqualTo("name"));
             Assert.That(attackViewModel.PerRound, Is.EqualTo(1.5));
             Assert.That(attackViewModel.Speed, Is.EqualTo(2));
         }
@@ -56,7 +56,7 @@ namespace BattleOrder.Tests.ViewModels
         [Test]
         public void CorrectSave()
         {
-            attackViewModel.AttackName = "New Name";
+            attackViewModel.Name = "New Name";
             attackViewModel.IncrementPerRound();
             attackViewModel.IncrementPerRound();
             attackViewModel.IncrementSpeed();

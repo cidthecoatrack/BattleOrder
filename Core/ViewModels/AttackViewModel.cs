@@ -9,17 +9,17 @@ namespace BattleOrder.Core.ViewModels
     public class AttackViewModel : INotifyPropertyChanged
     {
         private Attack attack;
-        private String attackName;
+        private String name;
         private Double perRound;
         private Int32 speed;
 
-        public String AttackName
+        public String Name
         {
-            get { return attackName; }
+            get { return name; }
             set
             {
-                attackName = value;
-                NotifyPropertyChanged();
+                name = value;
+                PropertyChanged(this, new PropertyChangedEventArgs("Name"));
             }
         }
         
@@ -29,7 +29,7 @@ namespace BattleOrder.Core.ViewModels
             private set
             {
                 perRound = value;
-                NotifyPropertyChanged();
+                PropertyChanged(this, new PropertyChangedEventArgs("PerRound"));
             }
         }
         
@@ -39,17 +39,11 @@ namespace BattleOrder.Core.ViewModels
             private set
             {
                 speed = value;
-                NotifyPropertyChanged();
+                PropertyChanged(this, new PropertyChangedEventArgs("Speed"));
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void NotifyPropertyChanged()
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(String.Empty));
-        }
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         public ICommand SaveAttackEditsCommand { get; set; }
         public ICommand DecrementPerRoundCommand { get; set; }
@@ -64,14 +58,14 @@ namespace BattleOrder.Core.ViewModels
 
         private void SetToUneditedVariables()
         {
-            AttackName = attack.Name;
+            Name = attack.Name;
             PerRound = attack.PerRound;
             Speed = attack.Speed;
         }
 
         public void SaveChanges()
         {
-            attack.AlterInfo(AttackName, PerRound, Speed);
+            attack.AlterInfo(Name, PerRound, Speed);
         }
 
         public void IncrementPerRound()

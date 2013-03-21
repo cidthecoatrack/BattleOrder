@@ -14,7 +14,7 @@ namespace BattleOrder.Core.Commands
 
         public override Boolean CanExecute(Object parameter)
         {
-            return !String.IsNullOrEmpty(attackViewModel.AttackName) && attackViewModel.PerRound > 0;
+            return !String.IsNullOrEmpty(attackViewModel.Name) && attackViewModel.PerRound > 0;
         }
 
         public override void Execute(Object parameter)

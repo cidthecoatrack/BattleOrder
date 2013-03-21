@@ -33,14 +33,14 @@ namespace BattleOrder.Tests.Commands
         public void InvalidAttackName()
         {
             Assert.That(saveAttackEditsCommand.CanExecute(new Object()), Is.True);
-            attackViewModel.AttackName = String.Empty;
+            attackViewModel.Name = String.Empty;
             Assert.That(saveAttackEditsCommand.CanExecute(new Object()), Is.False);
         }
 
         [Test]
         public void Execute()
         {
-            attackViewModel.AttackName = "New Name";
+            attackViewModel.Name = "New Name";
             attackViewModel.IncrementPerRound();
             attackViewModel.IncrementSpeed();
             
