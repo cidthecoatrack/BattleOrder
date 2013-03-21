@@ -13,9 +13,9 @@ namespace BattleOrder.Tests.ViewModels
         public void Setup()
         {
             var attack = new Attack("attack", 1, 1, true);
-            var attacks = new Queue<QueueableAttack>();
-            attacks.Enqueue(new QueueableAttack("Name", attack, 2));
-            attacks.Enqueue(new QueueableAttack("Other Name", attack, 1));
+            var attacks = new Queue<QueueableAction>();
+            attacks.Enqueue(new QueueableAction("Name", attack, 2));
+            attacks.Enqueue(new QueueableAction("Other Name", attack, 1));
 
             roundViewModel = new RoundViewModel(attacks, 1);
         }

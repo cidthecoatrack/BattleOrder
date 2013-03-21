@@ -9,7 +9,7 @@ namespace BattleOrder.Core.ViewModels
 {
     public class RoundViewModel
     {
-        private Queue<QueueableAttack> attacks;
+        private Queue<QueueableAction> attacks;
         private readonly Int32 round;
 
         public String RoundTitle { get; private set; }
@@ -20,7 +20,7 @@ namespace BattleOrder.Core.ViewModels
 
         public ICommand GetNextAttacksCommand { get; set; }
 
-        public RoundViewModel(Queue<QueueableAttack> attacks, Int32 round)
+        public RoundViewModel(Queue<QueueableAction> attacks, Int32 round)
         {
             this.attacks = attacks;
             this.round = round;
@@ -35,7 +35,7 @@ namespace BattleOrder.Core.ViewModels
             var partOfRound = attacks.Peek().Placement;
             RoundTitle = String.Format("Round {0}: {1}", round, partOfRound);
 
-            var currentAttacks = new List<QueueableAttack>();
+            var currentAttacks = new List<QueueableAction>();
             while (RoundIsActive && attacks.Peek().Placement == partOfRound)
                 currentAttacks.Add(attacks.Dequeue());
 

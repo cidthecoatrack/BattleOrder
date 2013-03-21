@@ -16,11 +16,11 @@ namespace BattleOrder.Tests.Commands
         [SetUp]
         public void Setup()
         {
-            var attacks = new Queue<QueueableAttack>();
+            var attacks = new Queue<QueueableAction>();
             var firstAttack = new Attack("attack 1", 1, 1, true);
             var secondAttack = new Attack("attack 2", 1, 1, true);
-            attacks.Enqueue(new QueueableAttack("name", firstAttack, 2));
-            attacks.Enqueue(new QueueableAttack("other name", secondAttack, 1));
+            attacks.Enqueue(new QueueableAction("name", firstAttack, 2));
+            attacks.Enqueue(new QueueableAction("other name", secondAttack, 1));
 
             roundViewModel = new RoundViewModel(attacks, 1);
             getNextAttacksCommand = new GetNextAttacksCommand(roundViewModel);

@@ -2,12 +2,12 @@
 
 namespace BattleOrder.Core.Models.Attacks
 {
-    public class QueueableAttack
+    public class QueueableAction
     {
         public Double Placement { get; private set; }
         public String Description { get; private set; }
 
-        public QueueableAttack(String participantName, Attack attack, Int32 initiative)
+        public QueueableAction(String participantName, Attack attack, Int32 initiative)
         {
             var calculator = new PlacementCalculator(attack);
             Placement = calculator.ComputePlacement(initiative);

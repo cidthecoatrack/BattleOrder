@@ -10,7 +10,7 @@ namespace BattleOrder.UI.Views
     {
         private RoundViewModel roundViewModel;
         
-        public RoundDisplay(Int32 round, Queue<QueueableAttack> attacks)
+        public RoundDisplay(Int32 round, Queue<QueueableAction> attacks)
         {
             InitializeComponent();
             roundViewModel = new RoundViewModel(attacks, round);

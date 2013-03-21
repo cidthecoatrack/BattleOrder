@@ -628,20 +628,20 @@ namespace BattleOrder.UI.OldViews
             var activeBadGuys = enemies.Where(x => MonsterChecklist.CheckedItems.Contains(x.Name));
             var activeParticipants = activeGoodGuys.Union(activeBadGuys);
 
-            var queueableAttacks = new List<QueueableAttack>();
+            var queueableAttacks = new List<QueueableAction>();
             foreach (var participant in activeParticipants)
             {
                 foreach (var attack in participant.CurrentAttacks)
                 {
                     for (var count = attack.ThisRound; count > 0; count--)
                     {
-                        queueableAttacks.Add(new QueueableAttack(participant.Name, attack, participant.Initiative));
+                        queueableAttacks.Add(new QueueableAction(participant.Name, attack, participant.Initiative));
                         attack.FinishCurrentPartOfAttack();
                     }
                 }
             }
 
-            var orderedAttacks = (Queue<QueueableAttack>)queueableAttacks.OrderBy(x => x.Placement);
+            var orderedAttacks = (Queue<QueueableAction>)queueableAttacks.OrderBy(x => x.Placement);
 
             while (orderedAttacks.Any())
             {
