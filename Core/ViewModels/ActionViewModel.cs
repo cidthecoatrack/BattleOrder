@@ -6,7 +6,7 @@ using BattleOrder.Core.Models.Attacks;
 
 namespace BattleOrder.Core.ViewModels
 {
-    public class AttackViewModel : INotifyPropertyChanged
+    public class ActionViewModel : INotifyPropertyChanged
     {
         private Attack attack;
         private String name;
@@ -48,7 +48,7 @@ namespace BattleOrder.Core.ViewModels
         public ICommand SaveAttackEditsCommand { get; set; }
         public ICommand DecrementPerRoundCommand { get; set; }
 
-        public AttackViewModel(Attack attack)
+        public ActionViewModel(Attack attack)
         {
             this.attack = attack;
             SaveAttackEditsCommand = new SaveActionEditsCommand(this);

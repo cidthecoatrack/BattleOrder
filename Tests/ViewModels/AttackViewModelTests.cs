@@ -8,13 +8,13 @@ namespace BattleOrder.Tests.ViewModels
     public class AttackViewModelTests
     {
         Attack attack;
-        AttackViewModel attackViewModel;
+        ActionViewModel attackViewModel;
         
         [SetUp]
         public void Setup()
         {
             attack = new Attack("name", 1.5, 2);
-            attackViewModel = new AttackViewModel(attack);
+            attackViewModel = new ActionViewModel(attack);
         }
         
         [Test]

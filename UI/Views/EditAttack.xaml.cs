@@ -7,12 +7,12 @@ namespace BattleOrder.UI.Views
 {
     public partial class EditAttack : Window
     {
-        private AttackViewModel attackViewModel;
+        private ActionViewModel attackViewModel;
         
         public EditAttack(Attack attack)
         {
             InitializeComponent();
-            attackViewModel = new AttackViewModel(attack);
+            attackViewModel = new ActionViewModel(attack);
             DataContext = attackViewModel;
         }
 

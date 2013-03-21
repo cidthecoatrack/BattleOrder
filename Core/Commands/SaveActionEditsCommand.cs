@@ -5,9 +5,9 @@ namespace BattleOrder.Core.Commands
 {
     public class SaveActionEditsCommand : BaseCommand
     {
-        private readonly AttackViewModel attackViewModel;
+        private readonly ActionViewModel attackViewModel;
         
-        public SaveActionEditsCommand(AttackViewModel attackViewModel)
+        public SaveActionEditsCommand(ActionViewModel attackViewModel)
         {
             this.attackViewModel = attackViewModel;
         }

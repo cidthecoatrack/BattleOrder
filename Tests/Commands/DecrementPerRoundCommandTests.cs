@@ -9,14 +9,14 @@ namespace BattleOrder.Tests.Commands
     [TestFixture]
     public class DecrementPerRoundCommandTests
     {
-        AttackViewModel attackViewModel;
+        ActionViewModel attackViewModel;
         DecrementPerRoundCommand decrementPerRoundCommand;
         
         [SetUp]
         public void Setup()
         {
             var attack = new Attack("name", 1, 1);
-            attackViewModel = new AttackViewModel(attack);
+            attackViewModel = new ActionViewModel(attack);
             decrementPerRoundCommand = new DecrementPerRoundCommand(attackViewModel);
         }
         

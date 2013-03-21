@@ -5,9 +5,9 @@ namespace BattleOrder.Core.Commands
 {
     public class DecrementPerRoundCommand : BaseCommand
     {
-        private readonly AttackViewModel attackViewModel;
+        private readonly ActionViewModel attackViewModel;
 
-        public DecrementPerRoundCommand(AttackViewModel attackViewModel)
+        public DecrementPerRoundCommand(ActionViewModel attackViewModel)
         {
             this.attackViewModel = attackViewModel;
         }

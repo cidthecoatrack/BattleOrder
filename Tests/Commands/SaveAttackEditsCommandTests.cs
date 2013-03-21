@@ -10,14 +10,14 @@ namespace BattleOrder.Tests.Commands
     public class SaveAttackEditsCommandTests
     {
         Attack attack;
-        AttackViewModel attackViewModel;
+        ActionViewModel attackViewModel;
         SaveActionEditsCommand saveAttackEditsCommand;
         
         [SetUp]
         public void Setup()
         {
             attack = new Attack("name", .5, 1);
-            attackViewModel = new AttackViewModel(attack);
+            attackViewModel = new ActionViewModel(attack);
             saveAttackEditsCommand = new SaveActionEditsCommand(attackViewModel);
         }
         

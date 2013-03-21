@@ -97,7 +97,7 @@
     <Compile Include="Models\Attacks\Attack.cs" />
     <Compile Include="Commands\SaveActionEditsCommand.cs" />
     <Compile Include="ViewModels\AllParticipantsViewModel.cs" />
-    <Compile Include="ViewModels\AttackViewModel.cs" />
+    <Compile Include="ViewModels\ActionViewModel.cs" />
     <Compile Include="Commands\GetNextActionsCommand.cs" />
     <Compile Include="ViewModels\ParticipantViewModel.cs" />
     <Compile Include="ViewModels\RoundViewModel.cs" />
