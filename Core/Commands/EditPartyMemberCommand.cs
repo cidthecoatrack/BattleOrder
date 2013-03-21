@@ -5,9 +5,9 @@ namespace BattleOrder.Core.Commands
 {
     public class EditPartyMemberCommand : BaseCommand
     {
-        private readonly PartyViewModel allParticipantsViewModel;
+        private readonly AllParticipantsViewModel allParticipantsViewModel;
 
-        public EditPartyMemberCommand(PartyViewModel allParticipantsViewModel)
+        public EditPartyMemberCommand(AllParticipantsViewModel allParticipantsViewModel)
         {
             this.allParticipantsViewModel = allParticipantsViewModel;
         }

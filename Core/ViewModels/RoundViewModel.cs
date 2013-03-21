@@ -3,45 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using BattleOrder.Core.Commands;
-using BattleOrder.Core.Models.Actions;
+using BattleOrder.Core.Models.Attacks;
 
 namespace BattleOrder.Core.ViewModels
 {
     public class RoundViewModel
     {
-        private Queue<QueueableBattleAction> actions;
+        private Queue<QueueableAttack> attacks;
         private readonly Int32 round;
 
         public String RoundTitle { get; private set; }
-        public String CurrentActions { get; private set; }
-        public Int32 TotalActions { get; private set; }
-        public Int32 CompletedActions { get { return TotalActions - actions.Count; } }
-        public Boolean RoundIsActive { get { return actions.Any(); } }
+        public String CurrentAttacks { get; private set; }
+        public Int32 TotalAttacks { get; private set; }
+        public Int32 CompletedAttacks { get { return TotalAttacks - attacks.Count; } }
+        public Boolean RoundIsActive { get { return attacks.Any(); } }
 
-        public ICommand GetNextActionsCommand { get; set; }
+        public ICommand GetNextAttacksCommand { get; set; }
 
-        public RoundViewModel(Queue<QueueableBattleAction> actions, Int32 round)
+        public RoundViewModel(Queue<QueueableAttack> attacks, Int32 round)
         {
-            this.actions = actions;
+            this.attacks = attacks;
             this.round = round;
-            TotalActions = this.actions.Count;
-            GetNextActionsCommand = new GetNextActionsCommand(this);
+            TotalAttacks = this.attacks.Count;
+            GetNextAttacksCommand = new GetNextAttacksCommand(this);
 
-            GetActions();
+            GetAttacks();
         }
 
-        public void GetActions()
+        public void GetAttacks()
         {
-            var partOfRound = actions.Peek().Placement;
+            var partOfRound = attacks.Peek().Placement;
             RoundTitle = String.Format("Round {0}: {1}", round, partOfRound);
 
-            var currentActions = new List<QueueableBattleAction>();
-            while (RoundIsActive && actions.Peek().Placement == partOfRound)
-                currentActions.Add(actions.Dequeue());
+            var currentAttacks = new List<QueueableAttack>();
+            while (RoundIsActive && attacks.Peek().Placement == partOfRound)
+                currentAttacks.Add(attacks.Dequeue());
 
-            CurrentActions = String.Empty;
-            foreach (var action in currentActions)
-                CurrentActions += "\n" + action.Description;
+            CurrentAttacks = String.Empty;
+            foreach (var attack in currentAttacks)
+                CurrentAttacks += "\n" + attack.Description;
         }
     }
 }

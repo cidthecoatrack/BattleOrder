@@ -9,7 +9,7 @@ namespace BattleOrder.Tests.Commands
     [TestFixture]
     public class RemovePartyMemberCommandTests
     {
-        private PartyViewModel allParticipantsViewModel;
+        private AllParticipantsViewModel allParticipantsViewModel;
         private RemovePartyMemberCommand removePartyMemberCommand;
         private Participant participant;
 
@@ -19,7 +19,7 @@ namespace BattleOrder.Tests.Commands
             participant = new Participant("name");
             var participants = new[] { participant };
 
-            allParticipantsViewModel = new PartyViewModel(participants);
+            allParticipantsViewModel = new AllParticipantsViewModel(participants);
             removePartyMemberCommand = new RemovePartyMemberCommand(allParticipantsViewModel);
         }
 

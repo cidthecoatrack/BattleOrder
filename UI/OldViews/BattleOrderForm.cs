@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using BattleOrder.Core;
-using BattleOrder.Core.Models.Actions;
+using BattleOrder.Core.Models.Attacks;
 using BattleOrder.Core.Models.Participants;
 using BattleOrder.UI.Views;
 
@@ -168,7 +168,7 @@ namespace BattleOrder.UI.OldViews
         private void PartyAdd_Click(object sender, EventArgs e)
         {
             var newParticipant = new Participant(String.Empty);
-            var newParticipantWindow = new NewParticipantWindow(newParticipant);
+            var newParticipantWindow = new NewParticipant(newParticipant);
 
             newParticipantWindow.ShowDialog();
 
@@ -219,7 +219,7 @@ namespace BattleOrder.UI.OldViews
         private void MonsterAdd_Click(object sender, EventArgs e)
         {
             Participant[] newMonsters;
-            BattleAction newAttack;
+            Attack newAttack;
 
             MonsterAttackCombo.Text = MonsterAttackCombo.Text.Trim();
             MonsterNameCombo.Text = MonsterNameCombo.Text.Trim();
@@ -292,7 +292,7 @@ namespace BattleOrder.UI.OldViews
                                 var stringNumber = AddZerosInFrontOfNumber(i + count, Convert.ToString(numforlength).Length);
                                 var monsterName = String.Format("{0} {1}", MonsterNameCombo.Text, stringNumber);
                                 var newParticipant = new Participant(monsterName);
-                                newParticipant.AddActions(databaseEntry.Actions);
+                                newParticipant.AddAttacks(databaseEntry.Attacks);
                                 enemies.Add(newParticipant);
                                 MonsterChecklist.Items.Add(newParticipant.Name, true);
                             }
@@ -316,24 +316,24 @@ namespace BattleOrder.UI.OldViews
                             if (InAdditionCheckBox.Checked)
                             {
                                 var name = String.Format("{0} {1}", MonsterNameCombo.Text, AddZerosInFrontOfNumber(i + 1 + count, numforlength.ToString().Length));
-                                var attack = new BattleAction(MonsterAttackCombo.Text, Convert.ToDouble(MonsterPerRoundText.Text), Convert.ToInt16(MonsterSpeedText.Text));
+                                var attack = new Attack(MonsterAttackCombo.Text, Convert.ToDouble(MonsterPerRoundText.Text), Convert.ToInt16(MonsterSpeedText.Text));
                                 newMonsters[i] = new Participant(name);
-                                newMonsters[i].AddAction(attack);
+                                newMonsters[i].AddAttack(attack);
                             }
                             else
                             {
                                 var name = String.Format("{0} {1}", MonsterNameCombo.Text, AddZerosInFrontOfNumber(i + 1, numforlength.ToString().Length));
-                                var attack = new BattleAction(MonsterAttackCombo.Text, Convert.ToDouble(MonsterPerRoundText.Text), Convert.ToInt16(MonsterSpeedText.Text));
+                                var attack = new Attack(MonsterAttackCombo.Text, Convert.ToDouble(MonsterPerRoundText.Text), Convert.ToInt16(MonsterSpeedText.Text));
                                 newMonsters[i] = new Participant(name);
-                                newMonsters[i].AddAction(attack);
+                                newMonsters[i].AddAttack(attack);
                             }
                         }
                         else
                         {
                             var name = String.Format("{0} {1}", RemoveNumberFromName(MonsterNameCombo.Text), AddZerosInFrontOfNumber(i + start, count.ToString().Length));
-                            var attack = new BattleAction(MonsterAttackCombo.Text, Convert.ToDouble(MonsterPerRoundText.Text), Convert.ToInt16(MonsterSpeedText.Text));
+                            var attack = new Attack(MonsterAttackCombo.Text, Convert.ToDouble(MonsterPerRoundText.Text), Convert.ToInt16(MonsterSpeedText.Text));
                             newMonsters[i] = new Participant(name);
-                            newMonsters[i].AddAction(attack);
+                            newMonsters[i].AddAttack(attack);
                         }
                     }
                 }
@@ -344,7 +344,7 @@ namespace BattleOrder.UI.OldViews
                         if (databaseEntry.Name == RemoveNumberFromName(MonsterNameCombo.Text) && MonsterAttackCombo.Text == String.Empty)
                         {
                             var newParticipant = new Participant(MonsterNameCombo.Text);
-                            newParticipant.AddActions(databaseEntry.Actions);
+                            newParticipant.AddAttacks(databaseEntry.Attacks);
                             enemies.Add(newParticipant);
                             MonsterChecklist.Items.Add(newParticipant.Name, true);
                             MonsterNameCombo.SelectedItem = null;
@@ -360,12 +360,12 @@ namespace BattleOrder.UI.OldViews
                     }
 
                     var name = MonsterNameCombo.Text;
-                    var attack = new BattleAction(MonsterAttackCombo.Text, Convert.ToDouble(MonsterPerRoundText.Text), Convert.ToInt16(MonsterSpeedText.Text));
+                    var attack = new Attack(MonsterAttackCombo.Text, Convert.ToDouble(MonsterPerRoundText.Text), Convert.ToInt16(MonsterSpeedText.Text));
                     newMonsters[0] = new Participant(name);
-                    newMonsters[0].AddAction(attack);
+                    newMonsters[0].AddAttack(attack);
                 }
 
-                newAttack = new BattleAction(MonsterAttackCombo.Text, Convert.ToDouble(MonsterPerRoundText.Text), Convert.ToInt16(MonsterSpeedText.Text));
+                newAttack = new Attack(MonsterAttackCombo.Text, Convert.ToDouble(MonsterPerRoundText.Text), Convert.ToInt16(MonsterSpeedText.Text));
                 bool There = false;
                 foreach (Participant databaseEntry in monsterDatabase)
                 {
@@ -373,19 +373,19 @@ namespace BattleOrder.UI.OldViews
                     {
                         There = true;
                         bool AttackThere = false;
-                        foreach (var attack in databaseEntry.Actions)
+                        foreach (Attack attack in databaseEntry.Attacks)
                         {
                             if (newAttack.Equals(attack))
                             {
                                 if (EditMonsterDatabaseCheckbox.Checked)
                                 {
-                                    if (databaseEntry.CurrentActions.Any())
+                                    if (databaseEntry.CurrentAttacks.Any())
                                     {
                                         var message = String.Format("Make {1} a standard current attack for {0}s?\n\nPress \"Yes\" to switch {0}'s standard current attack to {2}.\nPress \"No\" to add {1} to {0}'s standard current attacks.\nPress \"Cancel\" to not make {1} a standard current attack for {0}s.", databaseEntry.Name, newAttack.Name);
                                         var result = MessageBox.Show(message, "Edit the Monster Database?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
                                         if (result == DialogResult.Yes)
                                         {
-                                            foreach (var attack2 in databaseEntry.Actions)
+                                            foreach (Attack attack2 in databaseEntry.Attacks)
                                                 attack2.Prepped = false;
                                             attack.Prepped = true;
                                         }
@@ -405,21 +405,21 @@ namespace BattleOrder.UI.OldViews
                                 DialogResult result = MessageBox.Show(message, "Differing Data", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                                 if (result == DialogResult.Yes)
                                 {
-                                    databaseEntry.RemoveAction(attack);
-                                    databaseEntry.AddAction(newAttack);
+                                    databaseEntry.RemoveAttack(attack);
+                                    databaseEntry.AddAttack(newAttack);
                                     
                                     foreach (var badguy in enemies)
                                     {
                                         if (RemoveNumberFromName(badguy.Name) == databaseEntry.Name)
                                         {
-                                            foreach (var attack2 in badguy.Actions)
+                                            foreach (var attack2 in badguy.Attacks)
                                             {
                                                 if (newAttack.Name == attack2.Name)
                                                 {
                                                     bool prepit = attack2.Prepped;
-                                                    badguy.RemoveAction(attack2);
+                                                    badguy.RemoveAttack(attack2);
                                                     newAttack.Prepped = prepit;
-                                                    badguy.AddAction(newAttack);
+                                                    badguy.AddAttack(newAttack);
                                                     break;
                                                 }
                                             }
@@ -448,20 +448,20 @@ namespace BattleOrder.UI.OldViews
                         }
                         if (!AttackThere)
                         {
-                            if (databaseEntry.CurrentActions.Any() && EditMonsterDatabaseCheckbox.Checked)
+                            if (databaseEntry.CurrentAttacks.Any() && EditMonsterDatabaseCheckbox.Checked)
                             {
                                 var message = String.Format("Make {2} a standard current attack for {0}s?\n\nPress \"Yes\" to switch {0}'s standard current attack to {1}.\nPress \"No\" to add {1} to {0}'s standard current attacks.\nPress \"Cancel\" to not make {1} a standard current attack for {0}s.", databaseEntry.Name, newAttack.Name);
                                 var result = MessageBox.Show(message, "Edit the Monster Database?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
 
                                 if (result == DialogResult.Yes)
-                                    foreach (var attack in databaseEntry.Actions)
+                                    foreach (var attack in databaseEntry.Attacks)
                                         attack.Prepped = false;
 
                                 if (result == DialogResult.No || result == DialogResult.Yes)
                                     newAttack.Prepped = true;
                             }
 
-                            databaseEntry.AddAction(newAttack);
+                            databaseEntry.AddAttack(newAttack);
                         }
                         else
                         {
@@ -475,7 +475,7 @@ namespace BattleOrder.UI.OldViews
                     if (result == DialogResult.Yes)
                     {
                         var monster = new Participant(RemoveNumberFromName(MonsterNameCombo.Text));
-                        monster.AddAction(newAttack);
+                        monster.AddAttack(newAttack);
                         monsterDatabase.Add(monster);
                         MonsterNameCombo.Items.Add(RemoveNumberFromName(MonsterNameCombo.Text));
                     }
@@ -494,20 +494,20 @@ namespace BattleOrder.UI.OldViews
                     {
                         var badguy = enemies.First(x => x.Name == newBadGuy.Name);
 
-                        var attackExists = badguy.Actions.Any(x => x.Name == newAttack.Name);
+                        var attackExists = badguy.Attacks.Any(x => x.Name == newAttack.Name);
 
                         if (!attackExists)
                         {
-                            var attack = newBadGuy.Actions.Last();
+                            var attack = newBadGuy.Attacks.Last();
                             attack.Prepped = false;
-                            badguy.AddAction(attack);
-                            if (badguy.CurrentActions.Any())
+                            badguy.AddAttack(attack);
+                            if (badguy.CurrentAttacks.Any())
                             {
                                 var message = String.Format("{0} already has an attack prepared.  Switch attack to new attack?\n\nPress \"Yes\" to switch {0}'s current attack to {1}.\nPress \"No\" to add {1} to {0}'s attacks.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", badguy.Name, newAttack.Name);
                                 var result = MessageBox.Show(message, "Add to current attacks?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
                                 if (result == DialogResult.Yes)
                                 {
-                                    foreach (var currentAttack in badguy.CurrentActions)
+                                    foreach (var currentAttack in badguy.CurrentAttacks)
                                         attack.Prepped = false;
                                     attack.Prepped = true;
                                 }
@@ -523,13 +523,13 @@ namespace BattleOrder.UI.OldViews
                         }
                         else
                         {
-                            var attack = badguy.Actions.First(x => x.Name == newAttack.Name);
+                            var attack = badguy.Attacks.First(x => x.Name == newAttack.Name);
 
                             if (newAttack.Equals(attack))
                             {
                                 if (attack.Prepped)
                                 {
-                                    if (badguy.CurrentActions.Count() == 1)
+                                    if (badguy.CurrentAttacks.Count() == 1)
                                     {
                                         var message = String.Format("This attack has been already entered, and is prepped as {0}'s current attack.  You're being of the redundant, dufus.", badguy.Name);
                                         MessageBox.Show(message, "Error, dufus.");
@@ -540,7 +540,7 @@ namespace BattleOrder.UI.OldViews
                                         var result = MessageBox.Show(message, "Switch?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                                         if (result == DialogResult.Yes)
                                         {
-                                            foreach (var attack2 in badguy.Actions)
+                                            foreach (var attack2 in badguy.Attacks)
                                                 attack2.Prepped = false;
                                             attack.Prepped = true;
                                         }
@@ -548,13 +548,13 @@ namespace BattleOrder.UI.OldViews
                                 }
                                 else
                                 {
-                                    if (badguy.CurrentActions.Any())
+                                    if (badguy.CurrentAttacks.Any())
                                     {
                                         var message = String.Format("This attack has already been entered.  Make it a current attack?\n\nPress \"Yes\" to switch {0}'s current attack to {1}.\nPress \"No\" to add {1} to {0}'s attacks.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", badguy.Name, newAttack.Name);
                                         var result = MessageBox.Show(message, "Switch?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
                                         if (result == DialogResult.Yes)
                                         {
-                                            foreach (var attack2 in badguy.Actions)
+                                            foreach (Attack attack2 in badguy.Attacks)
                                                 attack2.Prepped = false;
                                             attack.Prepped = true;
                                         }
@@ -578,17 +578,17 @@ namespace BattleOrder.UI.OldViews
                                 var result = MessageBox.Show(message, "Edit?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                                 if (result == DialogResult.Yes)
                                 {
-                                    badguy.RemoveAction(attack);
-                                    var editedAttack = newBadGuy.Actions.Last();
-                                    badguy.AddAction(editedAttack);
+                                    badguy.RemoveAttack(attack);
+                                    var editedAttack = newBadGuy.Attacks.Last();
+                                    badguy.AddAttack(editedAttack);
                                     editedAttack.Prepped = false;
-                                    if (badguy.CurrentActions.Any())
+                                    if (badguy.CurrentAttacks.Any())
                                     {
                                         message = String.Format("{0} already has an attack prepared.  Switch attack to new attack?\n\nPress \"Yes\" to switch {0}'s current attack to {1}.\nPress \"No\" to add {1} to {0}'s attacks.\nPress \"Cancel\" to not add the attack to {0}'s current attacks.", badguy.Name, newAttack.Name);
                                         result = MessageBox.Show(message, "Add to current attacks?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
 
                                         if (result == DialogResult.Yes)
-                                            foreach (var currentAttack in badguy.CurrentActions)
+                                            foreach (var currentAttack in badguy.CurrentAttacks)
                                                 currentAttack.Prepped = false;
 
                                         if (result == DialogResult.No || result == DialogResult.Yes)
@@ -628,20 +628,20 @@ namespace BattleOrder.UI.OldViews
             var activeBadGuys = enemies.Where(x => MonsterChecklist.CheckedItems.Contains(x.Name));
             var activeParticipants = activeGoodGuys.Union(activeBadGuys);
 
-            var queueableAttacks = new List<QueueableBattleAction>();
+            var queueableAttacks = new List<QueueableAttack>();
             foreach (var participant in activeParticipants)
             {
-                foreach (var attack in participant.CurrentActions)
+                foreach (var attack in participant.CurrentAttacks)
                 {
                     for (var count = attack.ThisRound; count > 0; count--)
                     {
-                        queueableAttacks.Add(new QueueableBattleAction(participant.Name, attack, participant.Initiative));
-                        attack.FinishCurrentPartOfAction();
+                        queueableAttacks.Add(new QueueableAttack(participant.Name, attack, participant.Initiative));
+                        attack.FinishCurrentPartOfAttack();
                     }
                 }
             }
 
-            var orderedAttacks = (Queue<QueueableBattleAction>)queueableAttacks.OrderBy(x => x.Placement);
+            var orderedAttacks = (Queue<QueueableAttack>)queueableAttacks.OrderBy(x => x.Placement);
 
             while (orderedAttacks.Any())
             {
@@ -668,7 +668,7 @@ namespace BattleOrder.UI.OldViews
                         var everyone = party.Union(enemies);
 
                         foreach (var person in everyone)
-                            foreach (var attack in person.CurrentActions)
+                            foreach (var attack in person.CurrentAttacks)
                                 attack.PrepareForNextBattle();
 
                         break;
@@ -692,7 +692,7 @@ namespace BattleOrder.UI.OldViews
 
             foreach (var participant in activeParticipants)
             {
-                foreach (var attack in participant.CurrentActions)
+                foreach (var attack in participant.CurrentAttacks)
                 {
                     if (attack.ThisRound == -1)
                     {
@@ -909,7 +909,7 @@ namespace BattleOrder.UI.OldViews
             var activeEnemies = enemies.Where(x => MonsterChecklist.Items.Contains(x.Name));
             var activeParticipants = activeParty.Union(activeEnemies);
 
-            var linecount = 1 + activeParticipants.Sum(x => x.CurrentActions.Count());
+            var linecount = 1 + activeParticipants.Sum(x => x.CurrentAttacks.Count());
 
             if (linecount == 1)
             {
@@ -922,7 +922,7 @@ namespace BattleOrder.UI.OldViews
 
             foreach (var participant in activeParticipants)
             {
-                foreach (var attack in participant.CurrentActions)
+                foreach (var attack in participant.CurrentAttacks)
                 {
                     output += String.Format("{0}: {1} (SP: {2}) ({3} / rd)\n", participant.Name, attack.Name, attack.Speed, attack.PerRound);
                     tab -= 40;
@@ -943,7 +943,7 @@ namespace BattleOrder.UI.OldViews
         {
             foreach (Participant goodguy in party)
                 if (goodguy.Name == PartyNameText.Text)
-                    foreach (var attack in goodguy.Actions)
+                    foreach (Attack attack in goodguy.Attacks)
                         if (attack.Name == PartyAttackCombo.Text)
                         {
 
@@ -965,7 +965,7 @@ namespace BattleOrder.UI.OldViews
             foreach (Participant databaseEntry in monsterDatabase)
             {
                 if (databaseEntry.Name == RemoveNumberFromName(MonsterNameCombo.Text))
-                    foreach (var attack in databaseEntry.Actions)
+                    foreach (Attack attack in databaseEntry.Attacks)
                         if (attack.Name == MonsterAttackCombo.Text)
                         {
                             MonsterPerRoundText.Enabled = true;
@@ -1021,16 +1021,16 @@ namespace BattleOrder.UI.OldViews
                     currentPartyMember = goodguy.Name;
                     PartyAttackCombo.Items.Clear();
 
-                    foreach (var attack in goodguy.Actions)
+                    foreach (var attack in goodguy.Attacks)
                         PartyAttackCombo.Items.Add(attack.Name);
 
-                    if (goodguy.CurrentActions.Any())
+                    if (goodguy.CurrentAttacks.Any())
                     {
-                        var attack = goodguy.CurrentActions.First(x => PartyAttackCombo.Items.Contains(x.Name));
+                        var attack = goodguy.CurrentAttacks.First(x => PartyAttackCombo.Items.Contains(x.Name));
                         PartyAttackCombo.SelectedItem = (Object)attack.Name;
                     }
 
-                    CharAttackLabel.Text = String.Format("Character Attack (1 of {0}):", goodguy.CurrentActions.Count());
+                    CharAttackLabel.Text = String.Format("Character Attack (1 of {0}):", goodguy.CurrentAttacks.Count());
                     return;
                 }
             }
@@ -1107,13 +1107,13 @@ namespace BattleOrder.UI.OldViews
                         {
                             if (badguy.Name == MonsterNameCombo.Text)
                             {
-                                if (badguy.CurrentActions.Any())
+                                if (badguy.CurrentAttacks.Any())
                                 {
-                                    var attack = badguy.CurrentActions.First(x => MonsterAttackCombo.Items.Contains(x.Name));
+                                    var attack = badguy.CurrentAttacks.First(x => MonsterAttackCombo.Items.Contains(x.Name));
                                     MonsterAttackCombo.SelectedItem = (Object)attack.Name;
                                 }
 
-                                EnemAttackLabel.Text = String.Format("Enemy Attack (1 of {0}):", badguy.CurrentActions.Count());
+                                EnemAttackLabel.Text = String.Format("Enemy Attack (1 of {0}):", badguy.CurrentAttacks.Count());
                             }
                         }
 
@@ -1128,7 +1128,7 @@ namespace BattleOrder.UI.OldViews
                         currentEnemy = badguy.Name;
                         MonsterQuantText.Text = "1";
 
-                        foreach (var attack in badguy.Actions)
+                        foreach (Attack attack in badguy.Attacks)
                             if (!MonsterAttackCombo.Items.Contains(attack.Name))
                                 MonsterAttackCombo.Items.Add(attack.Name);
 
@@ -1157,7 +1157,7 @@ namespace BattleOrder.UI.OldViews
                     {
                         currentEnemy = MonsterNameCombo.Text;
 
-                        foreach (var attack in databaseEntry.Actions)
+                        foreach (var attack in databaseEntry.Attacks)
                             if (!MonsterAttackCombo.Items.Contains(attack.Name))
                                 MonsterAttackCombo.Items.Add(attack.Name);
 
@@ -1208,7 +1208,7 @@ namespace BattleOrder.UI.OldViews
 
             output += ":\n\nAttacks:\n";
 
-            foreach (var attack in person.Actions)
+            foreach (var attack in person.Attacks)
             {
                 output += String.Format("\t{0}:\n", attack.Name);
                 output += String.Format("\t\tSpeed: {0}\tAttacks per Round: {1}\n", attack.Speed, attack.PerRound);
@@ -1415,9 +1415,9 @@ namespace BattleOrder.UI.OldViews
             if (result == DialogResult.Yes)
             {
                 var monster = monsterDatabase.First(x => x.Name == currentEnemy);
-                var attack = monster.Actions.First(x => x.Name == comboName);
+                var attack = monster.Attacks.First(x => x.Name == comboName);
 
-                monster.RemoveAction(attack);
+                monster.RemoveAttack(attack);
                 MonsterAttackCombo.Items.Remove(attack.Name);
             }
 
@@ -1433,9 +1433,9 @@ namespace BattleOrder.UI.OldViews
             if (result == DialogResult.Yes)
             {
                 var partyMember = party.First(x => x.Name == currentPartyMember);
-                var attack = partyMember.Actions.First(x => x.Name == comboName);
+                var attack = partyMember.Attacks.First(x => x.Name == comboName);
 
-                partyMember.RemoveAction(attack);
+                partyMember.RemoveAttack(attack);
                 PartyAttackCombo.Items.Remove(attack.Name);
             }
 

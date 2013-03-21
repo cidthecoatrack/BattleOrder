@@ -1,27 +1,27 @@
 ﻿using System;
-using BattleOrder.Core.Models.Actions;
+using BattleOrder.Core.Models.Attacks;
 
 namespace BattleOrder.Core
 {
     public class PlacementCalculator
     {
         private Double initiative;
-        private Double maxActionsThisRound;
+        private Double maxAttacksThisRound;
         private Double speed;
-        private Double currentPartOfAction;
+        private Double currentPartOfAttack;
         
-        public PlacementCalculator(BattleAction action)
+        public PlacementCalculator(Attack attack)
         {
-            maxActionsThisRound = action.ThisRound;
-            speed = action.Speed;
-            currentPartOfAction = action.Used + 1;
+            maxAttacksThisRound = attack.ThisRound;
+            speed = attack.Speed;
+            currentPartOfAttack = attack.AttacksUsed + 1;
         }
 
         public Double ComputePlacement(Int32 initiative)
         {
             this.initiative = initiative;
 
-            var fractionalTurn = (maxActionsThisRound - currentPartOfAction + 1) / maxActionsThisRound;
+            var fractionalTurn = (maxAttacksThisRound - currentPartOfAttack + 1) / maxAttacksThisRound;
             return speed - initiative * fractionalTurn;
         }
     }

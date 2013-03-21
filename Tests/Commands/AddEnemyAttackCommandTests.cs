@@ -7,10 +7,10 @@ using NUnit.Framework;
 namespace BattleOrder.Tests.Commands
 {
     [TestFixture]
-    public class EditPartyMemberCommandTests
+    public class AddEnemyAttackCommandTests
     {
         private AllParticipantsViewModel allParticipantsViewModel;
-        private EditPartyMemberCommand editPartyMemberCommand;
+        private AddEnemyAttackCommand addEnemyAttackCommand;
         private Participant participant;
 
         [SetUp]
@@ -20,15 +20,15 @@ namespace BattleOrder.Tests.Commands
             var participants = new[] { participant };
 
             allParticipantsViewModel = new AllParticipantsViewModel(participants);
-            editPartyMemberCommand = new EditPartyMemberCommand(allParticipantsViewModel);
+            addEnemyAttackCommand = new AddEnemyAttackCommand(allParticipantsViewModel);
         }
 
         [Test]
-        public void NoCurrentPartyMember()
+        public void NoCurrentEnemy()
         {
-            Assert.That(editPartyMemberCommand.CanExecute(new Object()), Is.False);
-            allParticipantsViewModel.CurrentPartyMember = participant;
-            Assert.That(editPartyMemberCommand.CanExecute(new Object()), Is.True);
+            Assert.That(addEnemyAttackCommand.CanExecute(new Object()), Is.False);
+            allParticipantsViewModel.CurrentEnemy = participant;
+            Assert.That(addEnemyAttackCommand.CanExecute(new Object()), Is.True);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using BattleOrder.Core.Models.Actions;
+using BattleOrder.Core.Models.Attacks;
 using BattleOrder.Core.Models.Participants;
 using BattleOrder.Core.ViewModels;
 using NUnit.Framework;
@@ -40,14 +40,14 @@ namespace BattleOrder.Tests.ViewModels
         }
 
         [Test]
-        public void AddsAction()
+        public void AddsAttack()
         {
-            var attack = new BattleAction("attack name", 1, 1);
-            var attackCount = participant.Actions.Count();
-            participantViewModel.AddAction(attack);
+            var attack = new Attack("attack name", 1, 1);
+            var attackCount = participant.Attacks.Count();
+            participantViewModel.AddAttack(attack);
 
-            Assert.That(participant.Actions, Contains.Item(attack));
-            Assert.That(participant.Actions.Count(), Is.EqualTo(attackCount + 1));
+            Assert.That(participant.Attacks, Contains.Item(attack));
+            Assert.That(participant.Attacks.Count(), Is.EqualTo(attackCount + 1));
         }
     }
 }
