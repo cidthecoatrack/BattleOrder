@@ -25,7 +25,7 @@ namespace BattleOrder.Core.ViewModels
             this.attacks = attacks;
             this.round = round;
             TotalAttacks = this.attacks.Count;
-            GetNextAttacksCommand = new GetNextAttacksCommand(this);
+            GetNextAttacksCommand = new GetNextActionsCommand(this);
 
             GetAttacks();
         }

@@ -11,7 +11,7 @@ namespace BattleOrder.Tests.Commands
     public class EditPartyMemberAttackCommandTests
     {
         private AllParticipantsViewModel allParticipantsViewModel;
-        private EditPartyMemberAttackCommand editPartyMemberAttackCommand;
+        private EditPartyMemberActionCommand editPartyMemberAttackCommand;
         private Participant participant;
         private Attack attack;
 
@@ -24,7 +24,7 @@ namespace BattleOrder.Tests.Commands
             var participants = new[] { participant };
 
             allParticipantsViewModel = new AllParticipantsViewModel(participants);
-            editPartyMemberAttackCommand = new EditPartyMemberAttackCommand(allParticipantsViewModel);
+            editPartyMemberAttackCommand = new EditPartyMemberActionCommand(allParticipantsViewModel);
         }
 
         [Test]

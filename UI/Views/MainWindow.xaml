@@ -4,8 +4,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         Title="Battle Order" 
         Height="500" Width="800" 
-        Icon="/BattleOrder.UI;component/Images/20 sided die.ico"
-        Loaded="Load">
+        Icon="/BattleOrder.UI;component/Images/20 sided die.ico">
     <Window.Background>
         <ImageBrush ImageSource="/BattleOrder.UI;component/Images/background.png"></ImageBrush>
     </Window.Background>

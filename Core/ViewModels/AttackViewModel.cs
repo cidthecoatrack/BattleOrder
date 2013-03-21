@@ -51,7 +51,7 @@ namespace BattleOrder.Core.ViewModels
         public AttackViewModel(Attack attack)
         {
             this.attack = attack;
-            SaveAttackEditsCommand = new SaveAttackEditsCommand(this);
+            SaveAttackEditsCommand = new SaveActionEditsCommand(this);
             DecrementPerRoundCommand = new DecrementPerRoundCommand(this);
             SetToUneditedVariables();
         }

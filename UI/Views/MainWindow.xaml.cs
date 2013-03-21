@@ -18,19 +18,15 @@ namespace BattleOrder.UI.Views
         
         public MainWindow()
         {
-            InitializeComponent(); 
-        }
-
-        public void Load(Object sender, RoutedEventArgs e)
-        {
-            Title = GetVersion();
-
             fileAccessor = SetupFileAccessor();
             var party = SetupParty(fileAccessor);
             allParticipantsViewModel = new AllParticipantsViewModel(party);
 
+            Title = GetVersion();
             DataContext = allParticipantsViewModel;
             round = 0;
+
+            InitializeComponent(); 
         }
 
         private String GetVersion()

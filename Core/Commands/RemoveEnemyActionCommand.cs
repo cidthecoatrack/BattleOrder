@@ -3,11 +3,11 @@ using BattleOrder.Core.ViewModels;
 
 namespace BattleOrder.Core.Commands
 {
-    public class EditEnemyAttackCommand : BaseCommand
+    public class RemoveEnemyActionCommand : BaseCommand
     {
         private readonly AllParticipantsViewModel allParticipantsViewModel;
 
-        public EditEnemyAttackCommand(AllParticipantsViewModel allParticipantsViewModel)
+        public RemoveEnemyActionCommand(AllParticipantsViewModel allParticipantsViewModel)
         {
             this.allParticipantsViewModel = allParticipantsViewModel;
         }
@@ -18,9 +18,6 @@ namespace BattleOrder.Core.Commands
                 && allParticipantsViewModel.CurrentEnemyAttack != null;
         }
 
-        public override void Execute(Object parameter)
-        {
-
-        }
+        public override void Execute(Object parameter) { }
     }
 }

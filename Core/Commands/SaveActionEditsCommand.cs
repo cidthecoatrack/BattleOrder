@@ -3,11 +3,11 @@ using BattleOrder.Core.ViewModels;
 
 namespace BattleOrder.Core.Commands
 {
-    public class SaveAttackEditsCommand : BaseCommand
+    public class SaveActionEditsCommand : BaseCommand
     {
         private readonly AttackViewModel attackViewModel;
         
-        public SaveAttackEditsCommand(AttackViewModel attackViewModel)
+        public SaveActionEditsCommand(AttackViewModel attackViewModel)
         {
             this.attackViewModel = attackViewModel;
         }

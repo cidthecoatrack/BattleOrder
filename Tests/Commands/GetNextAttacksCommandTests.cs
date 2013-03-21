@@ -11,7 +11,7 @@ namespace BattleOrder.Tests.Commands
     public class GetNextAttacksCommandTests
     {
         RoundViewModel roundViewModel;
-        GetNextAttacksCommand getNextAttacksCommand;
+        GetNextActionsCommand getNextAttacksCommand;
 
         [SetUp]
         public void Setup()
@@ -23,7 +23,7 @@ namespace BattleOrder.Tests.Commands
             attacks.Enqueue(new QueueableAction("other name", secondAttack, 1));
 
             roundViewModel = new RoundViewModel(attacks, 1);
-            getNextAttacksCommand = new GetNextAttacksCommand(roundViewModel);
+            getNextAttacksCommand = new GetNextActionsCommand(roundViewModel);
         }
 
         [Test]

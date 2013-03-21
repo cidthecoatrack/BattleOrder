@@ -11,7 +11,7 @@ namespace BattleOrder.Tests.Commands
     public class RemovePartyMemberAttackCommandTests
     {
         private AllParticipantsViewModel allParticipantsViewModel;
-        private RemovePartyMemberAttackCommand removePartyMemberAttackCommand;
+        private RemovePartyMemberActionCommand removePartyMemberAttackCommand;
         private Participant participant;
         private Attack attack;
 
@@ -24,7 +24,7 @@ namespace BattleOrder.Tests.Commands
             var participants = new[] { participant };
 
             allParticipantsViewModel = new AllParticipantsViewModel(participants);
-            removePartyMemberAttackCommand = new RemovePartyMemberAttackCommand(allParticipantsViewModel);
+            removePartyMemberAttackCommand = new RemovePartyMemberActionCommand(allParticipantsViewModel);
         }
 
         [Test]

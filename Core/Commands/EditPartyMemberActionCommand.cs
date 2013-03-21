@@ -3,11 +3,11 @@ using BattleOrder.Core.ViewModels;
 
 namespace BattleOrder.Core.Commands
 {
-    public class EditPartyMemberAttackCommand : BaseCommand
+    public class EditPartyMemberActionCommand : BaseCommand
     {
         private readonly AllParticipantsViewModel allParticipantsViewModel;
 
-        public EditPartyMemberAttackCommand(AllParticipantsViewModel allParticipantsViewModel)
+        public EditPartyMemberActionCommand(AllParticipantsViewModel allParticipantsViewModel)
         {
             this.allParticipantsViewModel = allParticipantsViewModel;
         }

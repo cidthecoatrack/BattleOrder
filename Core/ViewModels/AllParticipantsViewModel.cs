@@ -75,16 +75,16 @@ namespace BattleOrder.Core.ViewModels
             EnemyAttacks = new ObservableCollection<Attack>();
 
             
-            AddEnemyAttackCommand = new AddEnemyAttackCommand(this);
-            EditEnemyAttackCommand = new EditEnemyAttackCommand(this);
-            RemoveEnemyAttackCommand = new RemoveEnemyAttackCommand(this);
+            AddEnemyAttackCommand = new AddEnemyActionCommand(this);
+            EditEnemyAttackCommand = new EditEnemyActionCommand(this);
+            RemoveEnemyAttackCommand = new RemoveEnemyActionCommand(this);
             EditEnemyCommand = new EditEnemyCommand(this);
             RemoveEnemyCommand = new RemoveEnemyCommand(this);
             EditPartyMemberCommand = new EditPartyMemberCommand(this);
             RemovePartyMemberCommand = new RemovePartyMemberCommand(this);
-            AddPartyMemberAttackCommand = new AddPartyMemberAttackCommand(this);
-            EditPartyMemberAttackCommand = new EditPartyMemberAttackCommand(this);
-            RemovePartyMemberAttackCommand = new RemovePartyMemberAttackCommand(this);
+            AddPartyMemberAttackCommand = new AddPartyMemberActionCommand(this);
+            EditPartyMemberAttackCommand = new EditPartyMemberActionCommand(this);
+            RemovePartyMemberAttackCommand = new RemovePartyMemberActionCommand(this);
 
             UpdateParties();
         }

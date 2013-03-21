@@ -3,11 +3,11 @@ using BattleOrder.Core.ViewModels;
 
 namespace BattleOrder.Core.Commands
 {
-    public class GetNextAttacksCommand : BaseCommand
+    public class GetNextActionsCommand : BaseCommand
     {
         private readonly RoundViewModel roundViewModel;
 
-        public GetNextAttacksCommand(RoundViewModel roundViewModel)
+        public GetNextActionsCommand(RoundViewModel roundViewModel)
         {
             this.roundViewModel = roundViewModel;
         }

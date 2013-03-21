@@ -78,16 +78,16 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\AddEnemyAttackCommand.cs" />
-    <Compile Include="Commands\EditPartyMemberAttackCommand.cs" />
-    <Compile Include="Commands\AddPartyMemberAttackCommand.cs" />
-    <Compile Include="Commands\RemovePartyMemberAttackCommand.cs" />
+    <Compile Include="Commands\AddEnemyActionCommand.cs" />
+    <Compile Include="Commands\EditPartyMemberActionCommand.cs" />
+    <Compile Include="Commands\AddPartyMemberActionCommand.cs" />
+    <Compile Include="Commands\RemovePartyMemberActionCommand.cs" />
     <Compile Include="Commands\RemovePartyMemberCommand.cs" />
     <Compile Include="Commands\EditPartyMemberCommand.cs" />
     <Compile Include="Commands\RemoveEnemyCommand.cs" />
     <Compile Include="Commands\EditEnemyCommand.cs" />
-    <Compile Include="Commands\RemoveEnemyAttackCommand.cs" />
-    <Compile Include="Commands\EditEnemyAttackCommand.cs" />
+    <Compile Include="Commands\RemoveEnemyActionCommand.cs" />
+    <Compile Include="Commands\EditEnemyActionCommand.cs" />
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\DecrementInitiativeCommand.cs" />
     <Compile Include="Commands\DecrementPerRoundCommand.cs" />
@@ -95,10 +95,10 @@
     <Compile Include="Commands\IncrementInitiativeCommand.cs" />
     <Compile Include="Commands\SaveParticipantEditsCommand.cs" />
     <Compile Include="Models\Attacks\Attack.cs" />
-    <Compile Include="Commands\SaveAttackEditsCommand.cs" />
+    <Compile Include="Commands\SaveActionEditsCommand.cs" />
     <Compile Include="ViewModels\AllParticipantsViewModel.cs" />
     <Compile Include="ViewModels\AttackViewModel.cs" />
-    <Compile Include="Commands\GetNextAttacksCommand.cs" />
+    <Compile Include="Commands\GetNextActionsCommand.cs" />
     <Compile Include="ViewModels\ParticipantViewModel.cs" />
     <Compile Include="ViewModels\RoundViewModel.cs" />
     <Compile Include="ViewModels\SetParticipantInitiativesViewModel.cs" />

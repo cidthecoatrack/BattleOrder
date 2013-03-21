@@ -3,21 +3,23 @@ using BattleOrder.Core.ViewModels;
 
 namespace BattleOrder.Core.Commands
 {
-    public class RemoveEnemyAttackCommand : BaseCommand
+    public class AddPartyMemberActionCommand : BaseCommand
     {
         private readonly AllParticipantsViewModel allParticipantsViewModel;
 
-        public RemoveEnemyAttackCommand(AllParticipantsViewModel allParticipantsViewModel)
+        public AddPartyMemberActionCommand(AllParticipantsViewModel allParticipantsViewModel)
         {
             this.allParticipantsViewModel = allParticipantsViewModel;
         }
 
         public override Boolean CanExecute(Object parameter)
         {
-            return allParticipantsViewModel.CurrentEnemy != null
-                && allParticipantsViewModel.CurrentEnemyAttack != null;
+            return allParticipantsViewModel.CurrentPartyMember != null;
         }
 
-        public override void Execute(Object parameter) { }
+        public override void Execute(Object parameter)
+        {
+
+        }
     }
 }

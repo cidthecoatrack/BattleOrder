@@ -10,7 +10,7 @@ namespace BattleOrder.Tests.Commands
     public class AddPartyMemberAttackCommandTests
     {
         private AllParticipantsViewModel allParticipantsViewModel;
-        private AddPartyMemberAttackCommand addPartyMemberAttackCommand;
+        private AddPartyMemberActionCommand addPartyMemberAttackCommand;
         private Participant participant;
 
         [SetUp]
@@ -20,7 +20,7 @@ namespace BattleOrder.Tests.Commands
             var participants = new[] { participant };
 
             allParticipantsViewModel = new AllParticipantsViewModel(participants);
-            addPartyMemberAttackCommand = new AddPartyMemberAttackCommand(allParticipantsViewModel);
+            addPartyMemberAttackCommand = new AddPartyMemberActionCommand(allParticipantsViewModel);
         }
 
         [Test]
