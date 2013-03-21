@@ -7,7 +7,6 @@ using BattleOrder.Core;
 using BattleOrder.Core.Models.Attacks;
 using BattleOrder.Core.Models.Participants;
 using BattleOrder.Core.ViewModels;
-using Xceed.Wpf.Toolkit;
 
 namespace BattleOrder.UI.Views
 {

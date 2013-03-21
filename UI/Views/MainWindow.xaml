@@ -25,8 +25,14 @@
         <ListBox ItemsSource="{Binding Enemies}" SelectedItem="{Binding CurrentEnemy}" HorizontalAlignment="Center" Height="250" VerticalAlignment="Center" Width="168" Grid.Column="1" Grid.Row="2" Margin="15,6,15,41"/>
         <DataGrid ItemsSource="{Binding PartyMembers}" SelectedItem="{Binding CurrentPartyMember}" AutoGenerateColumns="False" HeadersVisibility="None" HorizontalAlignment="Center" Height="250" VerticalAlignment="Center" Width="168" Grid.Column="2" Grid.Row="2" Margin="15,6,15,41">
             <DataGrid.Columns>
-                <DataGridCheckBoxColumn Binding="{Binding Participant.Enabled}"/>
-                <DataGridTextColumn Binding="{Binding Participant.Name}" Width="*"/>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding Enabled}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Binding="{Binding Name}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
         <ListBox ItemsSource="{Binding PartyMemberAttacks}" SelectedItem="{Binding CurrentPartyMemberAttack}" HorizontalAlignment="Center" Height="250" VerticalAlignment="Center" Width="168" Grid.Column="3" Grid.Row="2" Margin="15,6,15,41"/>
