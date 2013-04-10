@@ -1,7 +1,9 @@
 using System;
+using System.Reflection;
 
-namespace BattleOrder.Core.Models.Actions
+namespace Battle_Order
 {
+    [Serializable]
     public class Attack
     {
         public String Name { get; set; }

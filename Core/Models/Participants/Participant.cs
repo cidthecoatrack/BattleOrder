@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using BattleOrder.Core.Models.Actions;
 
-namespace BattleOrder.Core.Models.Participants
+namespace Battle_Order
 {
+    [Serializable]
     public class Participant
     {
         public String Name { get; set; }

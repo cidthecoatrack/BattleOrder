@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using Battle_Order;
 using BattleOrder.Core.Models.Actions;
 using BattleOrder.Core.Models.Participants;
 using ProtoBuf;

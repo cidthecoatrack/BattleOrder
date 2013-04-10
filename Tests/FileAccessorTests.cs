@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
+using Battle_Order;
 using BattleOrder.Core;
 using BattleOrder.Core.Models.Actions;
 using BattleOrder.Core.Models.Participants;
@@ -15,6 +17,16 @@ namespace BattleOrder.Tests
     {
         private const String saveDirectory = "directory";
         
+        public FileAccessorTests()
+        { 
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(MyResolveEventHandler);
+        }
+
+        private static Assembly MyResolveEventHandler(object sender, ResolveEventArgs args)
+        {
+            return typeof(Attack).Assembly;
+        }
+
         [Test]
         public void GetsCorrectDirectoryFromSaveDirectoryFile()
         {
