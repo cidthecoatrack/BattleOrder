@@ -2,13 +2,13 @@
 using System.ComponentModel;
 using System.Windows.Input;
 using BattleOrder.Core.Commands;
-using BattleOrder.Core.Models.Attacks;
+using BattleOrder.Core.Models.Actions;
 
 namespace BattleOrder.Core.ViewModels
 {
     public class ActionViewModel : INotifyPropertyChanged
     {
-        private Attack attack;
+        private BattleAction action;
         private String name;
         private Double perRound;
         private Int32 speed;
@@ -45,27 +45,27 @@ namespace BattleOrder.Core.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
-        public ICommand SaveAttackEditsCommand { get; set; }
+        public ICommand SaveActionEditsCommand { get; set; }
         public ICommand DecrementPerRoundCommand { get; set; }
 
-        public ActionViewModel(Attack attack)
+        public ActionViewModel(BattleAction action)
         {
-            this.attack = attack;
-            SaveAttackEditsCommand = new SaveActionEditsCommand(this);
+            this.action = action;
+            SaveActionEditsCommand = new SaveActionEditsCommand(this);
             DecrementPerRoundCommand = new DecrementPerRoundCommand(this);
             SetToUneditedVariables();
         }
 
         private void SetToUneditedVariables()
         {
-            Name = attack.Name;
-            PerRound = attack.PerRound;
-            Speed = attack.Speed;
+            Name = action.Name;
+            PerRound = action.PerRound;
+            Speed = action.Speed;
         }
 
         public void SaveChanges()
         {
-            attack.AlterInfo(Name, PerRound, Speed);
+            action.AlterInfo(Name, PerRound, Speed);
         }
 
         public void IncrementPerRound()

@@ -35,7 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="D20Dice">
+      <HintPath>..\..\packages\D20Dice.1.0.0\lib\D20Dice.dll</HintPath>
+    </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
@@ -56,33 +58,33 @@
   <ItemGroup>
     <Compile Include="Commands\DecrementPerRoundCommandTests.cs" />
     <Compile Include="Commands\RemoveEnemyCommandTests.cs" />
-    <Compile Include="Commands\RemoveEnemyAttackCommandTests.cs" />
+    <Compile Include="Commands\RemoveEnemyActionCommandTests.cs" />
     <Compile Include="Commands\EditPartyMemberCommandTests.cs" />
-    <Compile Include="Commands\EditPartyMemberAttackCommandTests.cs" />
+    <Compile Include="Commands\EditPartyMemberActionCommandTests.cs" />
     <Compile Include="Commands\EditEnemyCommandTests.cs" />
-    <Compile Include="Commands\EditEnemyAttackCommandTests.cs" />
-    <Compile Include="Commands\AddPartyMemberAttackCommandTests.cs" />
-    <Compile Include="Commands\AddEnemyAttackCommandTests.cs" />
-    <Compile Include="Commands\SaveAttackEditsCommandTests.cs" />
+    <Compile Include="Commands\EditEnemyActionCommandTests.cs" />
+    <Compile Include="Commands\AddPartyMemberActionCommandTests.cs" />
+    <Compile Include="Commands\AddEnemyActionCommandTests.cs" />
+    <Compile Include="Commands\SaveActionEditsCommandTests.cs" />
     <Compile Include="Commands\SaveParticipantEditsCommandTests.cs" />
     <Compile Include="Commands\IncrementInitiativeCommandTests.cs" />
     <Compile Include="Commands\DecrementInitiativeCommandTests.cs" />
     <Compile Include="Commands\GetNextInitiativeCommandTests.cs" />
-    <Compile Include="Commands\GetNextAttacksCommandTests.cs" />
+    <Compile Include="Commands\GetNextActionsCommandTests.cs" />
     <Compile Include="Commands\RemovePartyMemberCommandTests.cs" />
-    <Compile Include="Commands\RemovePartyMemberAttackCommandTests.cs" />
+    <Compile Include="Commands\RemovePartyMemberActionCommandTests.cs" />
     <Compile Include="ErrorHandlerTests.cs" />
     <Compile Include="FileAccessorTests.cs" />
     <Compile Include="Models\Participants\ParticipantTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\Attacks\AttackTests.cs" />
+    <Compile Include="Models\Actions\BattleActionTests.cs" />
     <Compile Include="PlacementCalculatorTests.cs" />
-    <Compile Include="Models\Attacks\QueueableAttackTests.cs" />
-    <Compile Include="ViewModels\AttackViewModelTests.cs" />
+    <Compile Include="Models\Actions\QueueableActionTests.cs" />
+    <Compile Include="ViewModels\ActionViewModelTests.cs" />
     <Compile Include="ViewModels\ParticipantViewModelTests.cs" />
-    <Compile Include="ViewModels\SetParticipantInitiativesViewModelTests.cs" />
+    <Compile Include="ViewModels\SetInitiativesViewModelTests.cs" />
     <Compile Include="ViewModels\RoundViewModelTests.cs" />
-    <Compile Include="ViewModels\AllParticipantsViewModelTests.cs" />
+    <Compile Include="ViewModels\PartyViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\BattleOrder.Core.csproj">
@@ -91,6 +93,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Files\MonsterDatabase" />
+    <None Include="Files\Old\MonsterDatabase">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\Old\OldParty">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Files\Test Party" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

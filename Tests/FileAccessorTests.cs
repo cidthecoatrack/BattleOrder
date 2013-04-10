@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using BattleOrder.Core;
+using BattleOrder.Core.Models.Actions;
 using BattleOrder.Core.Models.Participants;
 using NUnit.Framework;
 
@@ -35,24 +36,24 @@ namespace BattleOrder.Tests
         public void LoadsMonsterDatabase()
         {
             var monsterDb = CreateDatabase();
-            SaveMonsterDatabaseToNewFile(monsterDb);
+            SaveDatabaseToNewFile(monsterDb);
 
             var accessor = new FileAccessor(saveDirectory);
 
             monsterDb = accessor.LoadMonsterDatabase();
-            Assert.That(monsterDb.Count(), Is.EqualTo(3));
+            Assert.That(monsterDb.Count(), Is.EqualTo(4));
         }
 
         [Test]
         public void LoadsParty()
         {
             var party = CreateDatabase();
-            SaveMonsterDatabaseToNewFile(party);
+            SaveDatabaseToNewFile(party);
 
             var accessor = new FileAccessor(saveDirectory);
 
             party = accessor.LoadParty("MonsterDatabase");
-            Assert.That(party.Count(), Is.EqualTo(3));
+            Assert.That(party.Count(), Is.EqualTo(4));
         }
 
         [Test]
@@ -66,7 +67,7 @@ namespace BattleOrder.Tests
             Assert.That(File.Exists(path), Is.True);
 
             monsterDb = accessor.LoadMonsterDatabase();
-            Assert.That(monsterDb.Count(), Is.EqualTo(3));
+            Assert.That(monsterDb.Count(), Is.EqualTo(4));
         }
 
         [Test]
@@ -74,16 +75,34 @@ namespace BattleOrder.Tests
         {
             var party = CreateDatabase();
             var accessor = new FileAccessor(saveDirectory);
-
             accessor.SaveParty(party, "newParty");
+
             var path = Path.Combine(saveDirectory, "newParty");
             Assert.That(File.Exists(path), Is.True);
 
-            party = accessor.LoadParty("newParty");
-            Assert.That(party.Count(), Is.EqualTo(3));
+            var loadedParty = accessor.LoadParty("newParty");
+            Assert.That(party.Count(), Is.EqualTo(loadedParty.Count()));
         }
 
-        private void SaveMonsterDatabaseToNewFile(IEnumerable<Participant> monsterDb)
+        [Test]
+        public void LoadsOldMonsterDatabase()
+        {
+            var accessor = new FileAccessor(@"Files\Old");
+            var newMonsterDb = accessor.LoadMonsterDatabase();
+
+            Assert.That(newMonsterDb.Count(), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void LoadsOldParty()
+        {
+            var accessor = new FileAccessor(@"Files\Old");
+            var newParty = accessor.LoadParty("OldParty");
+
+            Assert.That(newParty.Count(), Is.EqualTo(2));
+        }
+
+        private void SaveDatabaseToNewFile(IEnumerable<ActionParticipant> monsterDb)
         {
             var binary = new BinaryFormatter();
             var path = Path.Combine(saveDirectory, "MonsterDatabase");
@@ -93,14 +112,18 @@ namespace BattleOrder.Tests
                     binary.Serialize(output, databaseEntry);
         }
 
-        private IEnumerable<Participant> CreateDatabase()
+        private IEnumerable<ActionParticipant> CreateDatabase()
         {
-            var monsterDb = new List<Participant>();
-            monsterDb.Add(new Participant("monster 1"));
-            monsterDb.Add(new Participant("monster 2"));
-            monsterDb.Add(new Participant("player 1"));
+            var db = new List<ActionParticipant>();
+            db.Add(new ActionParticipant("monster 1"));
+            db.Add(new ActionParticipant("monster 2"));
+            db.Add(new ActionParticipant("player 1"));
 
-            return monsterDb;
+            var withActions = new ActionParticipant("Has actions");
+            withActions.AddAction(new BattleAction("action"));
+            db.Add(withActions);
+
+            return db;
         }
     }
 }

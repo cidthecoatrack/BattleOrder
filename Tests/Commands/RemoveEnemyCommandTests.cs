@@ -9,17 +9,17 @@ namespace BattleOrder.Tests.Commands
     [TestFixture]
     public class RemoveEnemyCommandTests
     {
-        private AllParticipantsViewModel allParticipantsViewModel;
+        private PartyViewModel allParticipantsViewModel;
         private RemoveEnemyCommand removeEnemyCommand;
-        private Participant participant;
+        private ActionParticipant participant;
 
         [SetUp]
         public void Setup()
         {
-            participant = new Participant("name");
+            participant = new ActionParticipant("name");
             var participants = new[] { participant };
 
-            allParticipantsViewModel = new AllParticipantsViewModel(participants);
+            allParticipantsViewModel = new PartyViewModel(participants);
             removeEnemyCommand = new RemoveEnemyCommand(allParticipantsViewModel);
         }
 

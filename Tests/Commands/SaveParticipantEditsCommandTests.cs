@@ -9,14 +9,14 @@ namespace BattleOrder.Tests.Commands
     [TestFixture]
     public class SaveParticipantEditsCommandTests
     {
-        private Participant participant;
+        private ActionParticipant participant;
         private ParticipantViewModel participantViewModel;
         private SaveParticipantEditsCommand saveParticipantEditsCommand;
 
         [SetUp]
         public void Setup()
         {
-            participant = new Participant("name", true);
+            participant = new ActionParticipant("name", true);
             participantViewModel = new ParticipantViewModel(participant);
             saveParticipantEditsCommand = new SaveParticipantEditsCommand(participantViewModel);
         }

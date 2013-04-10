@@ -2,6 +2,7 @@
 using BattleOrder.Core.Commands;
 using BattleOrder.Core.Models.Participants;
 using BattleOrder.Core.ViewModels;
+using D20Dice.Dice;
 using NUnit.Framework;
 
 namespace BattleOrder.Tests.Commands
@@ -9,19 +10,20 @@ namespace BattleOrder.Tests.Commands
     [TestFixture]
     public class DecrementInitiativeCommandTests
     {
-        private SetParticipantInitiativesViewModel setParticipantInitiativesViewModel;
+        private SetInitiativesViewModel setInitiativesViewModel;
         private DecrementInitiativeCommand decrementInitiativeCommand;
 
         [SetUp]
         public void Setup()
         {
-            var participant = new Participant("name");
+            var participant = new ActionParticipant("name", isNpc: false);
             var participants = new[] { participant };
+            var dice = DiceFactory.Create(new Random());
 
-            setParticipantInitiativesViewModel = new SetParticipantInitiativesViewModel(participants);
+            setInitiativesViewModel = new SetInitiativesViewModel(participants, dice);
             participant.Initiative = 2;
 
-            decrementInitiativeCommand = new DecrementInitiativeCommand(setParticipantInitiativesViewModel);
+            decrementInitiativeCommand = new DecrementInitiativeCommand(setInitiativesViewModel);
         }
 
         [Test]
@@ -36,7 +38,7 @@ namespace BattleOrder.Tests.Commands
         public void Execute()
         {
             decrementInitiativeCommand.Execute(new Object());
-            Assert.That(setParticipantInitiativesViewModel.CurrentInitiative, Is.EqualTo(1));
+            Assert.That(setInitiativesViewModel.CurrentInitiative, Is.EqualTo(1));
         }
     }
 }

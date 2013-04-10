@@ -5,9 +5,9 @@ namespace BattleOrder.Core.Commands
 {
     public class RemovePartyMemberActionCommand : BaseCommand
     {
-        private readonly AllParticipantsViewModel allParticipantsViewModel;
+        private readonly PartyViewModel allParticipantsViewModel;
 
-        public RemovePartyMemberActionCommand(AllParticipantsViewModel allParticipantsViewModel)
+        public RemovePartyMemberActionCommand(PartyViewModel allParticipantsViewModel)
         {
             this.allParticipantsViewModel = allParticipantsViewModel;
         }
@@ -15,7 +15,7 @@ namespace BattleOrder.Core.Commands
         public override Boolean CanExecute(Object parameter)
         {
             return allParticipantsViewModel.CurrentPartyMember != null
-                && allParticipantsViewModel.CurrentPartyMemberAttack != null;
+                && allParticipantsViewModel.CurrentPartyMemberAction != null;
         }
 
         public override void Execute(Object parameter) { }

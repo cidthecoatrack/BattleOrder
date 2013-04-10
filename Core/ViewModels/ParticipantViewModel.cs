@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Windows.Input;
 using BattleOrder.Core.Commands;
-using BattleOrder.Core.Models.Attacks;
+using BattleOrder.Core.Models.Actions;
 using BattleOrder.Core.Models.Participants;
 
 namespace BattleOrder.Core.ViewModels
 {
     public class ParticipantViewModel
     {
-        private Participant participant;
+        private ActionParticipant participant;
 
         public String Name { get; set; }
         public Boolean IsNpc { get; set; }
@@ -16,7 +16,7 @@ namespace BattleOrder.Core.ViewModels
 
         public ICommand SaveParticipantEditsCommand { get; set; }
 
-        public ParticipantViewModel(Participant participant)
+        public ParticipantViewModel(ActionParticipant participant)
         {
             this.participant = participant;
             SaveParticipantEditsCommand = new SaveParticipantEditsCommand(this);
@@ -31,9 +31,9 @@ namespace BattleOrder.Core.ViewModels
             participant.AlterInfo(Name, IsNpc, IsEnemy);
         }
 
-        public void AddAttack(Attack attack)
+        public void AddAction(BattleAction action)
         {
-            participant.AddAttack(attack);
+            participant.AddAction(action);
         }
     }
 }

@@ -5,21 +5,21 @@ namespace BattleOrder.Core.Commands
 {
     public class SaveActionEditsCommand : BaseCommand
     {
-        private readonly ActionViewModel attackViewModel;
+        private readonly ActionViewModel actionViewModel;
         
-        public SaveActionEditsCommand(ActionViewModel attackViewModel)
+        public SaveActionEditsCommand(ActionViewModel actionViewModel)
         {
-            this.attackViewModel = attackViewModel;
+            this.actionViewModel = actionViewModel;
         }
 
         public override Boolean CanExecute(Object parameter)
         {
-            return !String.IsNullOrEmpty(attackViewModel.Name) && attackViewModel.PerRound > 0;
+            return !String.IsNullOrEmpty(actionViewModel.Name) && actionViewModel.PerRound > 0;
         }
 
         public override void Execute(Object parameter)
         {
-            attackViewModel.SaveChanges();
+            actionViewModel.SaveChanges();
         }
     }
 }

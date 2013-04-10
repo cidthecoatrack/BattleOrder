@@ -5,9 +5,9 @@ namespace BattleOrder.Core.Commands
 {
     public class RemovePartyMemberCommand : BaseCommand
     {
-        private readonly AllParticipantsViewModel allParticipantsViewModel;
+        private readonly PartyViewModel allParticipantsViewModel;
 
-        public RemovePartyMemberCommand(AllParticipantsViewModel allParticipantsViewModel)
+        public RemovePartyMemberCommand(PartyViewModel allParticipantsViewModel)
         {
             this.allParticipantsViewModel = allParticipantsViewModel;
         }

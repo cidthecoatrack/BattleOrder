@@ -5,9 +5,9 @@ namespace BattleOrder.Core.Commands
 {
     public class IncrementInitiativeCommand : BaseCommand
     {
-        private readonly SetParticipantInitiativesViewModel setParticipantInitiativesViewModel;
+        private readonly SetInitiativesViewModel setParticipantInitiativesViewModel;
 
-        public IncrementInitiativeCommand(SetParticipantInitiativesViewModel setParticipantInitiativesViewModel)
+        public IncrementInitiativeCommand(SetInitiativesViewModel setParticipantInitiativesViewModel)
         {
             this.setParticipantInitiativesViewModel = setParticipantInitiativesViewModel;
         }

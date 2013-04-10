@@ -5,9 +5,9 @@ namespace BattleOrder.Core.Commands
 {
     public class GetNextInitiativeCommand : BaseCommand
     {
-        private readonly SetParticipantInitiativesViewModel setParticipantInitiativesViewModel;
+        private readonly SetInitiativesViewModel setParticipantInitiativesViewModel;
 
-        public GetNextInitiativeCommand(SetParticipantInitiativesViewModel setParticipantInitiativesViewModel)
+        public GetNextInitiativeCommand(SetInitiativesViewModel setParticipantInitiativesViewModel)
         {
             this.setParticipantInitiativesViewModel = setParticipantInitiativesViewModel;
         }

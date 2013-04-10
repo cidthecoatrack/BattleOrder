@@ -1,27 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using BattleOrder.Core.Models.Actions;
 using BattleOrder.Core.Models.Participants;
+using ProtoBuf;
 
 namespace BattleOrder.Core
 {
     public class FileAccessor
     {
+        private const String monsterDbFileName = "MonsterDatabase";
+
         public String SaveDirectory { get; private set; }
         private String partyFileName;
-        private const String monsterDbFileName = "MonsterDatabase";
-        private String monsterDbLocation { get { return Path.Combine(SaveDirectory, monsterDbFileName); } }
         
         public FileAccessor(String saveDirectory)
         {
             this.SaveDirectory = saveDirectory;
-            VerifyExistenceOfSaveDirectory();
-        }
 
-        private void VerifyExistenceOfSaveDirectory()
-        {
             if (!Directory.Exists(SaveDirectory))
                 Directory.CreateDirectory(SaveDirectory);
         }
@@ -36,85 +35,108 @@ namespace BattleOrder.Core
             File.WriteAllText("SaveDirectory", saveDirectory);
         }
 
-        public IEnumerable<Participant> LoadMonsterDatabase()
+        public IEnumerable<ActionParticipant> LoadMonsterDatabase()
         {
-            if (!File.Exists(monsterDbLocation))
-                File.Create(monsterDbLocation);
+            var path = Path.Combine(SaveDirectory, monsterDbFileName);
 
-            var monsterDb = new List<Participant>();
-            var binary = new BinaryFormatter();
+            if (!File.Exists(path))
+                File.Create(path);
 
-            using (var input = new FileStream(monsterDbLocation, FileMode.Open, FileAccess.Read))
-            {
-                while (true)
-                {
-                    try
-                    {
-                        var newParticipant = (Participant)binary.Deserialize(input);
-                        monsterDb.Add(newParticipant);
-                    }
-                    catch (SerializationException)
-                    {
-                        break;
-                    }
-                }
-            }
-
-            return monsterDb;
+            return LoadFile(monsterDbFileName);
         }
 
-        public IEnumerable<Participant> LoadParty(String partyFileName)
+        public IEnumerable<ActionParticipant> LoadParty(String partyFileName)
         {
             this.partyFileName = partyFileName;
+            return LoadFile(partyFileName);
+        }
 
-            var party = new List<Participant>();
+        private IEnumerable<ActionParticipant> LoadFile(String fileName)
+        {
+            var db = new List<ActionParticipant>();
             var binary = new BinaryFormatter();
 
-            var path = Path.Combine(SaveDirectory, partyFileName);
+            var path = Path.Combine(SaveDirectory, fileName);
             using (var input = new FileStream(path, FileMode.Open, FileAccess.Read))
             {
                 while (true)
                 {
+                    Object deserialized;
+
                     try
                     {
-                        var newParticipant = (Participant)binary.Deserialize(input);
-                        party.Add(newParticipant);
+                        deserialized = binary.Deserialize(input);
                     }
-                    catch (SerializationException)
+                    catch (SerializationException ex)
                     {
-                        break;
+                        if (ex.Message.Contains("End of Stream"))
+                            break;
+
+                        throw;
                     }
+
+                    var participant = GetActionParticipant(deserialized);
+
+                    db.Add(participant);
                 }
             }
 
-            return party;
+            return db;
         }
 
-        public void SaveMonsterDatabase(IEnumerable<Participant> dbToSave)
+        private ActionParticipant GetActionParticipant(Object rawObject)
         {
-            var binary = new BinaryFormatter();
-            
-            using (var output = new FileStream(monsterDbLocation, FileMode.OpenOrCreate, FileAccess.Write))
-                foreach (var databaseEntry in dbToSave)
-                    binary.Serialize(output, databaseEntry);
+            try
+            {
+                return (ActionParticipant)rawObject;
+            }
+            catch (InvalidCastException)
+            {
+                var oldParticipant = (Participant)rawObject;
+                var participant = new ActionParticipant(oldParticipant.Name, oldParticipant.IsEnemy, oldParticipant.IsNpc);
+                participant.Enabled = oldParticipant.Enabled;
+
+                var actions = ConvertAttacks(oldParticipant.Attacks);
+                participant.AddActions(actions);
+
+                return participant;
+            }
         }
 
-        public void SaveParty(IEnumerable<Participant> partyToSave)
+        private IEnumerable<BattleAction> ConvertAttacks(IEnumerable<Attack> attacks)
         {
-            var binary = new BinaryFormatter();
-            var path = Path.Combine(SaveDirectory, partyFileName);
+            var actions = new List<BattleAction>();
 
-            using (var output = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write))
-                foreach (var goodguy in partyToSave)
-                    binary.Serialize(output, goodguy);
+            foreach (var attack in attacks)
+            {
+                var action = new BattleAction(attack.Name, attack.PerRound, attack.Speed, attack.Prepped);
+                actions.Add(action);
+            }
+
+            return actions;
         }
 
-        public void SaveParty(IEnumerable<Participant> partyToSave, String newPartyFileName)
+        public void SaveMonsterDatabase(IEnumerable<ActionParticipant> dbToSave)
+        {
+            SaveFile(monsterDbFileName, dbToSave);
+        }
+
+        public void SaveParty(IEnumerable<ActionParticipant> partyToSave, String newPartyFileName = "")
         {
             if (!String.IsNullOrEmpty(newPartyFileName)) 
                 partyFileName = newPartyFileName;
 
-            SaveParty(partyToSave);
+            SaveFile(partyFileName, partyToSave);
+        }
+
+        private void SaveFile(String fileName, IEnumerable<ActionParticipant> db)
+        {
+            var binary = new BinaryFormatter();
+            var path = Path.Combine(SaveDirectory, fileName);
+
+            using (var output = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write))
+                foreach (var entry in db)
+                    binary.Serialize(output, entry);
         }
     }
 }

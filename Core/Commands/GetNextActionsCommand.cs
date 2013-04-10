@@ -19,7 +19,7 @@ namespace BattleOrder.Core.Commands
 
         public override void Execute(Object parameter)
         {
-            roundViewModel.GetAttacks();
+            roundViewModel.GetActions();
         }
     }
 }

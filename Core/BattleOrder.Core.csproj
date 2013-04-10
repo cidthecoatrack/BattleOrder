@@ -17,7 +17,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <ApplicationIcon>
     </ApplicationIcon>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -49,6 +49,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,6 +58,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
@@ -67,8 +69,14 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="D20Dice">
+      <HintPath>..\..\packages\D20Dice.1.0.0\lib\D20Dice.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="protobuf-net">
+      <HintPath>..\packages\protobuf-net.2.0.0.621\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -94,20 +102,22 @@
     <Compile Include="Commands\GetNextInitiativeCommand.cs" />
     <Compile Include="Commands\IncrementInitiativeCommand.cs" />
     <Compile Include="Commands\SaveParticipantEditsCommand.cs" />
-    <Compile Include="Models\Attacks\Attack.cs" />
+    <Compile Include="Models\Actions\Attack.cs" />
     <Compile Include="Commands\SaveActionEditsCommand.cs" />
-    <Compile Include="ViewModels\AllParticipantsViewModel.cs" />
+    <Compile Include="Models\Actions\BattleAction.cs" />
+    <Compile Include="Models\Participants\ActionParticipant.cs" />
+    <Compile Include="ViewModels\PartyViewModel.cs" />
     <Compile Include="ViewModels\ActionViewModel.cs" />
     <Compile Include="Commands\GetNextActionsCommand.cs" />
     <Compile Include="ViewModels\ParticipantViewModel.cs" />
     <Compile Include="ViewModels\RoundViewModel.cs" />
-    <Compile Include="ViewModels\SetParticipantInitiativesViewModel.cs" />
+    <Compile Include="ViewModels\SetInitiativesViewModel.cs" />
     <Compile Include="ErrorHandler.cs" />
     <Compile Include="FileAccessor.cs" />
     <Compile Include="Models\Participants\Participant.cs" />
     <Compile Include="PlacementCalculator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\Attacks\QueueableAction.cs" />
+    <Compile Include="Models\Actions\QueueableAction.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -118,6 +128,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

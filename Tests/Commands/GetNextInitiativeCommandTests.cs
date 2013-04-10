@@ -2,6 +2,8 @@
 using BattleOrder.Core.Commands;
 using BattleOrder.Core.Models.Participants;
 using BattleOrder.Core.ViewModels;
+using D20Dice.Dice;
+using Moq;
 using NUnit.Framework;
 
 namespace BattleOrder.Tests.Commands
@@ -9,37 +11,38 @@ namespace BattleOrder.Tests.Commands
     [TestFixture]
     public class GetNextInitiativeCommandTests
     {
-        private SetParticipantInitiativesViewModel setParticipantInitiativesViewModel;
+        private SetInitiativesViewModel setInitiativesViewModel;
         private GetNextInitiativeCommand getNextInitiativeCommand;
 
         [SetUp]
         public void Setup()
         {
-            var participant = new Participant("name");
+            var participant = new ActionParticipant("name", isNpc: false);
             var participants = new[] { participant };
+            var dice = DiceFactory.Create(new Random());
 
-            setParticipantInitiativesViewModel = new SetParticipantInitiativesViewModel(participants);
+            setInitiativesViewModel = new SetInitiativesViewModel(participants, dice);
             participant.Initiative = 1;
 
-            getNextInitiativeCommand = new GetNextInitiativeCommand(setParticipantInitiativesViewModel);
+            getNextInitiativeCommand = new GetNextInitiativeCommand(setInitiativesViewModel);
         }
 
         [Test]
         public void InitiativeTooLow()
         {
             Assert.That(getNextInitiativeCommand.CanExecute(new Object()), Is.True);
-            setParticipantInitiativesViewModel.DecrementCurrentInitiative();
+            setInitiativesViewModel.DecrementCurrentInitiative();
             Assert.That(getNextInitiativeCommand.CanExecute(new Object()), Is.False);
         }
 
         [Test]
         public void InitiativeTooHigh()
         {
-            while (setParticipantInitiativesViewModel.CurrentInitiative < 10)
-                setParticipantInitiativesViewModel.IncrementCurrentInitiative();
+            while (setInitiativesViewModel.CurrentInitiative < 10)
+                setInitiativesViewModel.IncrementCurrentInitiative();
 
             Assert.That(getNextInitiativeCommand.CanExecute(new Object()), Is.True);
-            setParticipantInitiativesViewModel.IncrementCurrentInitiative();
+            setInitiativesViewModel.IncrementCurrentInitiative();
             Assert.That(getNextInitiativeCommand.CanExecute(new Object()), Is.False);
         }
 
@@ -47,7 +50,7 @@ namespace BattleOrder.Tests.Commands
         public void Execute()
         {
             getNextInitiativeCommand.Execute(new Object());
-            Assert.That(setParticipantInitiativesViewModel.AllInitiativesSet, Is.True);
+            Assert.That(setInitiativesViewModel.AllInitiativesSet, Is.True);
         }
     }
 }

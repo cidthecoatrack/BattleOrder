@@ -5,9 +5,9 @@ namespace BattleOrder.Core.Commands
 {
     public class RemoveEnemyActionCommand : BaseCommand
     {
-        private readonly AllParticipantsViewModel allParticipantsViewModel;
+        private readonly PartyViewModel allParticipantsViewModel;
 
-        public RemoveEnemyActionCommand(AllParticipantsViewModel allParticipantsViewModel)
+        public RemoveEnemyActionCommand(PartyViewModel allParticipantsViewModel)
         {
             this.allParticipantsViewModel = allParticipantsViewModel;
         }
@@ -15,7 +15,7 @@ namespace BattleOrder.Core.Commands
         public override Boolean CanExecute(Object parameter)
         {
             return allParticipantsViewModel.CurrentEnemy != null
-                && allParticipantsViewModel.CurrentEnemyAttack != null;
+                && allParticipantsViewModel.CurrentEnemyAction != null;
         }
 
         public override void Execute(Object parameter) { }

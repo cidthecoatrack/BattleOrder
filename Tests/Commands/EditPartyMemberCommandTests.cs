@@ -9,17 +9,17 @@ namespace BattleOrder.Tests.Commands
     [TestFixture]
     public class EditPartyMemberCommandTests
     {
-        private AllParticipantsViewModel allParticipantsViewModel;
+        private PartyViewModel allParticipantsViewModel;
         private EditPartyMemberCommand editPartyMemberCommand;
-        private Participant participant;
+        private ActionParticipant participant;
 
         [SetUp]
         public void Setup()
         {
-            participant = new Participant("name");
+            participant = new ActionParticipant("name");
             var participants = new[] { participant };
 
-            allParticipantsViewModel = new AllParticipantsViewModel(participants);
+            allParticipantsViewModel = new PartyViewModel(participants);
             editPartyMemberCommand = new EditPartyMemberCommand(allParticipantsViewModel);
         }
 

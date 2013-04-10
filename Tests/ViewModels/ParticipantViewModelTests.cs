@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using BattleOrder.Core.Models.Attacks;
+using BattleOrder.Core.Models.Actions;
 using BattleOrder.Core.Models.Participants;
 using BattleOrder.Core.ViewModels;
 using NUnit.Framework;
@@ -9,13 +9,13 @@ namespace BattleOrder.Tests.ViewModels
     [TestFixture]
     public class ParticipantViewModelTests
     {
-        Participant participant;
+        ActionParticipant participant;
         ParticipantViewModel participantViewModel;
 
         [SetUp]
         public void Setup()
         {
-            participant = new Participant("name", false, false);
+            participant = new ActionParticipant("name", false, false);
             participantViewModel = new ParticipantViewModel(participant);
         }
 
@@ -40,14 +40,14 @@ namespace BattleOrder.Tests.ViewModels
         }
 
         [Test]
-        public void AddsAttack()
+        public void AddsAction()
         {
-            var attack = new Attack("attack name", 1, 1);
-            var attackCount = participant.Attacks.Count();
-            participantViewModel.AddAttack(attack);
+            var action = new BattleAction("attack name", 1, 1);
+            var actionCount = participant.Actions.Count();
+            participantViewModel.AddAction(action);
 
-            Assert.That(participant.Attacks, Contains.Item(attack));
-            Assert.That(participant.Attacks.Count(), Is.EqualTo(attackCount + 1));
+            Assert.That(participant.Actions, Contains.Item(action));
+            Assert.That(participant.Actions.Count(), Is.EqualTo(actionCount + 1));
         }
     }
 }

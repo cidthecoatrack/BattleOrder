@@ -1,0 +1,12 @@
+﻿<Window x:Class="BattleOrder.UI.Views.RoundDisplayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding RoundTitle}" Height="300" Width="300" Icon="/BattleOrder.UI;component/Images/20 sided die.ico" ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow">
+    <Grid>
+        <Button Command="{Binding GetNextActionsCommand}" Content="Next" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75"/>
+        <ProgressBar Minimum="0" Value="{Binding CompletedActions}" Maximum="{Binding TotalActions}" HorizontalAlignment="Left" Height="22" Margin="90,10,0,0" VerticalAlignment="Top" Width="112"/>
+        <Button Click="EndRound" Content="End Round" HorizontalAlignment="Left" Margin="207,10,0,0" VerticalAlignment="Top" Width="75"/>
+        <TextBlock Text="{Binding CurrentActions}" HorizontalAlignment="Left" Margin="10,37,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="223" Width="272"/>
+
+    </Grid>
+</Window>
