@@ -24,8 +24,8 @@ namespace BattleOrder.Core.ViewModels
         public RoundViewModel(Int32 round, IEnumerable<ActionParticipant> participants)
         {
             this.round = round;
-
-            FillActionsQueue(participants);
+            var orderedActions = GetOrderedActions(participants);
+            actions = new Queue<QueueableAction>(orderedActions);
 
             TotalActions = this.actions.Count;
             GetNextActionsCommand = new GetNextActionsCommand(this);
@@ -33,8 +33,10 @@ namespace BattleOrder.Core.ViewModels
             GetActions();
         }
 
-        private void FillActionsQueue(IEnumerable<ActionParticipant> participants)
+        private IEnumerable<QueueableAction> GetOrderedActions(IEnumerable<ActionParticipant> participants)
         {
+            var list = new List<QueueableAction>();
+
             foreach (var p in participants)
             {
                 var preppedActions = p.Actions.Where(a => a.Prepped);
@@ -42,11 +44,11 @@ namespace BattleOrder.Core.ViewModels
                 foreach (var a in preppedActions)
                 {
                     var queueableAction = new QueueableAction(p.Name, a, p.Initiative);
-                    actions.Enqueue(queueableAction);
+                    list.Add(queueableAction);
                 }
             }
 
-            actions = actions.OrderBy(q => q.Placement) as Queue<QueueableAction>;
+            return list.OrderBy(q => q.Placement);
         }
 
         public void GetActions()

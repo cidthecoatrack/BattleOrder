@@ -13,19 +13,15 @@ namespace BattleOrder.Tests.ViewModels
         [SetUp]
         public void Setup()
         {
-            var action = new BattleAction("attack", 1, 1, true);
-            var participants = new[]
-                {
-                    new ActionParticipant("Name"),
-                    new ActionParticipant("Other Name")
-                };
+            var name = new ActionParticipant("Name");
+            var otherName = new ActionParticipant("Other Name");
+            var participants = new[] { name, otherName };
 
-            var initiative = 1;
-            foreach (var p in participants)
-            {
-                p.Initiative = initiative++;
-                p.AddAction(action);
-            }
+            var action = new BattleAction("attack", 1, 1, true);
+            name.Initiative = 2;
+            otherName.Initiative = 1;
+            name.AddAction(action);
+            otherName.AddAction(action);
 
             roundViewModel = new RoundViewModel(1, participants);
         }
