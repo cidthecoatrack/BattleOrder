@@ -5,7 +5,6 @@ using BattleOrder.Core.Models.Actions;
 
 namespace BattleOrder.Core.Models.Participants
 {
-    [Serializable]
     public class ActionParticipant
     {
         public String Name { get; private set; }

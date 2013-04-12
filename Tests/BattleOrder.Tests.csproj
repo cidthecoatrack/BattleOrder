@@ -38,6 +38,7 @@
     <Reference Include="D20Dice">
       <HintPath>..\..\packages\D20Dice.1.0.0\lib\D20Dice.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
@@ -56,51 +57,62 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Commands\DecrementPerRoundCommandTests.cs" />
-    <Compile Include="Commands\RemoveEnemyCommandTests.cs" />
-    <Compile Include="Commands\RemoveEnemyActionCommandTests.cs" />
-    <Compile Include="Commands\EditPartyMemberCommandTests.cs" />
-    <Compile Include="Commands\EditPartyMemberActionCommandTests.cs" />
-    <Compile Include="Commands\EditEnemyCommandTests.cs" />
-    <Compile Include="Commands\EditEnemyActionCommandTests.cs" />
-    <Compile Include="Commands\AddPartyMemberActionCommandTests.cs" />
-    <Compile Include="Commands\AddEnemyActionCommandTests.cs" />
-    <Compile Include="Commands\SaveActionEditsCommandTests.cs" />
-    <Compile Include="Commands\SaveParticipantEditsCommandTests.cs" />
-    <Compile Include="Commands\IncrementInitiativeCommandTests.cs" />
-    <Compile Include="Commands\DecrementInitiativeCommandTests.cs" />
-    <Compile Include="Commands\GetNextInitiativeCommandTests.cs" />
-    <Compile Include="Commands\GetNextActionsCommandTests.cs" />
-    <Compile Include="Commands\RemovePartyMemberCommandTests.cs" />
-    <Compile Include="Commands\RemovePartyMemberActionCommandTests.cs" />
-    <Compile Include="ErrorHandlerTests.cs" />
-    <Compile Include="FileAccessorTests.cs" />
-    <Compile Include="Models\Participants\ParticipantTests.cs" />
+    <Compile Include="Core\Commands\DecrementPerRoundCommandTests.cs" />
+    <Compile Include="Core\Commands\RemoveEnemyCommandTests.cs" />
+    <Compile Include="Core\Commands\RemoveEnemyActionCommandTests.cs" />
+    <Compile Include="Core\Commands\EditPartyMemberCommandTests.cs" />
+    <Compile Include="Core\Commands\EditPartyMemberActionCommandTests.cs" />
+    <Compile Include="Core\Commands\EditEnemyCommandTests.cs" />
+    <Compile Include="Core\Commands\EditEnemyActionCommandTests.cs" />
+    <Compile Include="Core\Commands\AddPartyMemberActionCommandTests.cs" />
+    <Compile Include="Core\Commands\AddEnemyActionCommandTests.cs" />
+    <Compile Include="Core\Commands\SaveActionEditsCommandTests.cs" />
+    <Compile Include="Core\Commands\SaveParticipantEditsCommandTests.cs" />
+    <Compile Include="Core\Commands\IncrementInitiativeCommandTests.cs" />
+    <Compile Include="Core\Commands\DecrementInitiativeCommandTests.cs" />
+    <Compile Include="Core\Commands\GetNextInitiativeCommandTests.cs" />
+    <Compile Include="Core\Commands\GetNextActionsCommandTests.cs" />
+    <Compile Include="Core\Commands\RemovePartyMemberCommandTests.cs" />
+    <Compile Include="Core\Commands\RemovePartyMemberActionCommandTests.cs" />
+    <Compile Include="Core\ErrorHandlerTests.cs" />
+    <Compile Include="Repository\Entities\ActionEntityTests.cs" />
+    <Compile Include="Repository\Entities\EntityConverterTests.cs" />
+    <Compile Include="Repository\Entities\ParticipantEntityTests.cs" />
+    <Compile Include="Core\Models\Participants\ParticipantTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\Actions\BattleActionTests.cs" />
-    <Compile Include="PlacementCalculatorTests.cs" />
-    <Compile Include="Models\Actions\QueueableActionTests.cs" />
-    <Compile Include="ViewModels\ActionViewModelTests.cs" />
-    <Compile Include="ViewModels\ParticipantViewModelTests.cs" />
-    <Compile Include="ViewModels\SetInitiativesViewModelTests.cs" />
-    <Compile Include="ViewModels\RoundViewModelTests.cs" />
-    <Compile Include="ViewModels\PartyViewModelTests.cs" />
+    <Compile Include="Core\Models\Actions\BattleActionTests.cs" />
+    <Compile Include="Core\PlacementCalculatorTests.cs" />
+    <Compile Include="Core\Models\Actions\QueueableActionTests.cs" />
+    <Compile Include="Core\ViewModels\ActionViewModelTests.cs" />
+    <Compile Include="Core\ViewModels\ParticipantViewModelTests.cs" />
+    <Compile Include="Core\ViewModels\SetInitiativesViewModelTests.cs" />
+    <Compile Include="Core\ViewModels\RoundViewModelTests.cs" />
+    <Compile Include="Core\ViewModels\PartyViewModelTests.cs" />
+    <Compile Include="Repository\Gateways\FileGatewayToOldFilesTests.cs" />
+    <Compile Include="Repository\Gateways\SaveDirectoryGatewayTests.cs" />
+    <Compile Include="Repository\Gateways\FileGatewayTests.cs" />
+    <Compile Include="Repository\Gateways\PartyGatewayTests.cs" />
+    <Compile Include="Repository\Gateways\MonsterDatabaseGatewayTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\BattleOrder.Core.csproj">
       <Project>{c370bfd6-d647-48e0-885b-700de6fff171}</Project>
       <Name>BattleOrder.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Repository\BattleOrder.Repository.csproj">
+      <Project>{6328440f-4bd3-4352-b7a3-594a28cb90dc}</Project>
+      <Name>BattleOrder.Repository</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Files\MonsterDatabase" />
-    <None Include="Files\Old\MonsterDatabase">
+    <None Include="Repository\Gateways\Files\MonsterDatabase" />
+    <None Include="Repository\Gateways\Files\Old\MonsterDatabase">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Files\Old\OldParty">
+    <None Include="Repository\Gateways\Files\Old\OldParty">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Files\Test Party" />
+    <None Include="Repository\Gateways\Files\Test Party" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

@@ -74,9 +74,6 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="protobuf-net">
-      <HintPath>..\packages\protobuf-net.2.0.0.621\lib\net40\protobuf-net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -113,7 +110,6 @@
     <Compile Include="ViewModels\RoundViewModel.cs" />
     <Compile Include="ViewModels\SetInitiativesViewModel.cs" />
     <Compile Include="ErrorHandler.cs" />
-    <Compile Include="FileAccessor.cs" />
     <Compile Include="Models\Participants\Participant.cs" />
     <Compile Include="PlacementCalculator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -2,7 +2,6 @@ using System;
 
 namespace BattleOrder.Core.Models.Actions
 {
-    [Serializable]
     public class BattleAction
     {
         private Int32 currentPartOfAction;
